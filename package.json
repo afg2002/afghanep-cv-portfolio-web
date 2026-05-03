@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist/client",
+    "build": "astro build && pagefind --site dist/client && node -e \"var f=require('fs'),p=require('path');function d(s,t){f.mkdirSync(t,{recursive:true});for(var e of f.readdirSync(s)){var a=p.join(s,e),b=p.join(t,e);f.statSync(a).isDirectory()?d(a,b):f.copyFileSync(a,b);}}d('dist/client/pagefind','.vercel/output/static/pagefind');\"",
     "preview": "astro preview",
     "start": "astro dev"
   },
