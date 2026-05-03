@@ -29,7 +29,7 @@
       <!-- Footer -->
       <div id="search-footer" class="hidden px-5 py-3 border-t border-border-subtle text-xs text-text-muted flex items-center justify-between">
         <span>🔍 <span id="result-count"></span></span>
-        <span>Powered by <a href="https://fusejs.io" target="_blank" rel="noopener" class="text-accent-primary hover:underline">Fuse.js</a></span>
+        <span>Powered by <a href="https://github.com/nextapps-de/flexsearch" target="_blank" rel="noopener" class="text-accent-primary hover:underline">FlexSearch</a></span>
       </div>
     </div>
   </div>
@@ -44,9 +44,6 @@
     const backdrop = document.getElementById("search-backdrop")!;
     const footer = document.getElementById("search-footer")!;
     const resultCount = document.getElementById("result-count")!;
-
-    let fuseInstance: any = null;
-    let indexLoaded = false;
 
     // ── Open/close ──
     (window as any).__toggleSearch = function() {
@@ -71,36 +68,35 @@
       }
     });
 
-    // ── Load Fuse index ──
-    async function loadFuseIndex() {
-      if (indexLoaded && fuseInstance) return fuseInstance;
-      try {
-        const [FuseModule, indexData] = await Promise.all([
-          import("fuse.js"),
-          fetch("/fuse.json").then(r => r.json()),
-        ]);
+    // ── FlexSearch index ──
+    let index: any = null;
 
-        const Fuse = FuseModule.default;
-        const { index, list } = indexData;
+    async function initIndex() {
+      if (index) return index;
 
-        fuseInstance = new Fuse(list, {
-          keys: [
-            { name: "content", weight: 0.5 },
-            { name: "frontmatter.title", weight: 0.3 },
-            { name: "frontmatter.description", weight: 0.2 },
-          ],
-          includeScore: true,
-          includeMatches: true,
-          threshold: 0.4,
-          minMatchCharLength: 2,
-        }, Fuse.parseIndex(index));
+      const [{ Index: FlexIndex }, pageData] = await Promise.all([
+        import("flexsearch").then(m => ({ Index: m.default })),
+        fetch("/search-index.json").then(r => r.json()).catch(() => []),
+      ]);
 
-        indexLoaded = true;
-        return fuseInstance;
-      } catch (e) {
-        console.warn("[search] Fuse index load failed:", e);
-        return null;
+      index = new FlexIndex({
+        preset: "match",
+        tokenize: "forward",
+        context: true,
+      });
+
+      // Add all pages to index
+      for (let i = 0; i < pageData.length; i++) {
+        const page = pageData[i];
+        const text = `${page.title} ${page.description} ${page.content}`.toLowerCase();
+        index.add(i, text);
+
+        // Store page data by index for retrieval
+        (index as any)._pages = (index as any)._pages || {};
+        (index as any)._pages[i] = page;
       }
+
+      return index;
     }
 
     // ── Search ──
@@ -118,44 +114,42 @@
       debounceTimer = window.setTimeout(async () => {
         results.innerHTML = `<div class="flex justify-center py-8"><div class="w-6 h-6 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div></div>`;
 
-        const fuse = await loadFuseIndex();
-        if (!fuse) {
-          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search index not loaded. Run 'npm run build' first.</p>`;
-          return;
-        }
-
         try {
-          const searchResults = fuse.search(q);
+          const idx = await initIndex();
+          if (!idx || !idx._pages) {
+            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search index not found. Run 'npm run build' first.</p>`;
+            return;
+          }
 
-          if (searchResults.length === 0) {
+          // Search — FlexSearch returns IDs directly
+          const ids: number[] = idx.search(q, { limit: 20 });
+
+          if (ids.length === 0) {
             results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">No results found for "<strong class="text-text-secondary">${escapeHtml(q)}</strong>"</p>`;
             return;
           }
 
           footer.classList.remove("hidden");
-          resultCount.textContent = `${searchResults.length} result${searchResults.length > 1 ? "s" : ""} for "${escapeHtml(q)}"`;
+          resultCount.textContent = `${ids.length} result${ids.length > 1 ? "s" : ""} for "${escapeHtml(q)}"`;
 
           const frag = document.createDocumentFragment();
-          for (const { item } of searchResults) {
-            const fm = item.frontmatter || {};
-            const title = fm.title || item.pathname || "Untitled";
-            const desc = fm.description || "";
-            const isBlog = item.pathname?.startsWith("/blog/");
+          for (const id of ids) {
+            const page = (idx as any)._pages[id];
+            if (!page) continue;
 
-            const snippet = desc
-              ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${escapeHtml(desc)}</div>`
-              : `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2 text-text-muted/60">${escapeHtml(item.content?.slice(0, 120) || "No description")}...</div>`;
+            const isBlog = page.url?.includes("/blog/");
+            const excerpt = page.description || page.content?.slice(0, 120) || "";
 
             const itemEl = document.createElement("a");
-            itemEl.href = item.pathname || "/";
+            itemEl.href = page.url || "/";
             itemEl.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
             itemEl.innerHTML = `
               <div class="flex items-start gap-3">
                 <span class="text-base mt-0.5 shrink-0">${isBlog ? "📝" : "📄"}</span>
                 <div class="min-w-0">
-                  <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(title)}</p>
-                  ${snippet}
-                  <div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${item.pathname || "/"}</div>
+                  <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(page.title || "Untitled")}</p>
+                  ${excerpt ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${escapeHtml(excerpt)}</div>` : ""}
+                  <div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${page.url || "/"}</div>
                 </div>
               </div>
             `;
@@ -163,7 +157,7 @@
           }
           results.innerHTML = "";
           results.appendChild(frag);
-        } catch (e) {
+        } catch (e: any) {
           console.warn("[search] Error:", e);
           results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search error. Please try again.</p>`;
         }
