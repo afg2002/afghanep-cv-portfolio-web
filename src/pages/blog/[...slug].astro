@@ -3,6 +3,7 @@ import BlogLayout from "../../layouts/BlogLayout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import ScrollToTop from "../../components/ScrollToTop.astro";
+import Giscus from "../../components/Giscus.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -209,6 +210,11 @@ const canonical = new URL(`/blog/${currentSlug}`, Astro.site).href;
           )}
         </article>
       )}
+    </div>
+
+    <!-- Comments -->
+    <div class="max-w-4xl mx-auto px-6">
+      <Giscus />
     </div>
   </main>
 
