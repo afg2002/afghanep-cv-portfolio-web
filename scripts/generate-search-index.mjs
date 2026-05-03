@@ -10,7 +10,7 @@
 import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
 import { join, extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadCheerio } from "cheerio";
+import { load } from "cheerio";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DIST_DIR = join(__dirname, "..", "dist");
@@ -37,7 +37,7 @@ async function getAllHtmlFiles(dir, base = "") {
 
 async function extractPageData(htmlPath, baseUrl = "https://aep.my.id") {
   const raw = await readFile(htmlPath, "utf-8");
-  const $ = await loadCheerio(raw, { html: true });
+  const $ = await load(raw);
 
   // Title
   const title = $("h1, title").first().text().trim();
