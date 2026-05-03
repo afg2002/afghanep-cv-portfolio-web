@@ -65,7 +65,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
   </head>
   <body class="min-h-screen flex flex-col bg-bg-primary text-text-primary antialiased">
     <a href="#main-content" class="skip-link">Skip to content</a>
-    <slot />
+    <div data-pagefind-body>
+      <slot />
+    </div>
     <SearchModal />
   </body>
 </html>

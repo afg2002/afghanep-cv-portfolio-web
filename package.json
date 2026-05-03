@@ -4,8 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "postbuild": "pagefind --site dist/client",
+    "build": "astro build && pagefind --site dist/client",
     "preview": "astro preview",
     "start": "astro dev"
   },

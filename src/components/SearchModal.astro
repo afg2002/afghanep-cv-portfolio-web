@@ -13,7 +13,7 @@
         <input
           id="search-input"
           type="text"
-          placeholder="Search blog posts..."
+          placeholder="Search pages &amp; blog posts..."
           class="flex-1 bg-transparent text-text-primary text-lg placeholder-text-muted focus:outline-none"
           autocomplete="off"
           autofocus
@@ -25,30 +25,40 @@
       <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
         <p class="text-sm text-text-muted text-center py-8">Start typing to search...</p>
       </div>
+
+      <!-- Footer -->
+      <div id="search-footer" class="hidden px-5 py-3 border-t border-border-subtle text-xs text-text-muted flex items-center justify-between">
+        <span>🔍 <span id="result-count"></span></span>
+        <span>Powered by <a href="https://pagefind.app" target="_blank" rel="noopener" class="text-accent-primary hover:underline">Pagefind</a></span>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
   (function() {
-    // ── Open/close ──
+    // ── DOM refs ──
     const modal = document.getElementById("search-modal")!;
     const input = document.getElementById("search-input") as HTMLInputElement;
     const results = document.getElementById("search-results")!;
     const backdrop = document.getElementById("search-backdrop")!;
+    const footer = document.getElementById("search-footer")!;
+    const resultCount = document.getElementById("result-count")!;
 
-    // Expose toggle globally for the header button
+    let pagefind: any = null;
+
+    // ── Open/close ──
     (window as any).__toggleSearch = function() {
       const isOpen = !modal.classList.contains("hidden");
       modal.classList.toggle("hidden", isOpen);
       if (!isOpen) {
         input.value = "";
         results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Start typing to search...</p>`;
+        footer.classList.add("hidden");
         input.focus();
       }
     };
 
-    // Close handlers
     backdrop.addEventListener("click", () => (window as any).__toggleSearch());
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !modal.classList.contains("hidden")) {
@@ -60,13 +70,11 @@
       }
     });
 
-    // ── Pagefind search ──
-    let pagefind: any = null;
-
+    // ── Load Pagefind ──
     async function loadPagefind() {
       if (pagefind) return pagefind;
       try {
-        // Load pagefind via dynamic script injection (avoids Vite build-time resolution)
+        // Load pagefind script dynamically
         if (!document.querySelector('script[src*="pagefind.js"]')) {
           await new Promise((resolve, reject) => {
             const s = document.createElement("script");
@@ -76,10 +84,13 @@
             document.head.appendChild(s);
           });
         }
-        // Wait a tick for the module to register
-        await new Promise(r => setTimeout(r, 100));
-        // @ts-ignore
-        pagefind = window.__pagefind__ || window.pagefind;
+        // Wait for module to register
+        let tries = 0;
+        while (!(window as any).pagefind && tries < 20) {
+          await new Promise(r => setTimeout(r, 100));
+          tries++;
+        }
+        pagefind = (window as any).pagefind;
         return pagefind;
       } catch (e) {
         console.warn("[search] Pagefind load failed:", e);
@@ -87,6 +98,7 @@
       }
     }
 
+    // ── Search ──
     let debounceTimer: number | null = null;
 
     input.addEventListener("input", () => {
@@ -94,52 +106,67 @@
       const q = input.value.trim();
       if (q.length < 2) {
         results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Type at least 2 characters to search...</p>`;
+        footer.classList.add("hidden");
         return;
       }
 
       debounceTimer = window.setTimeout(async () => {
-        results.innerHTML = `<div class="flex justify-center py-8"><div class="w-5 h-5 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div></div>`;
+        results.innerHTML = `<div class="flex justify-center py-8"><div class="w-6 h-6 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div></div>`;
 
         const pf = await loadPagefind();
         if (!pf) {
-          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search index not loaded. Try again later.</p>`;
+          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search index not loaded. Refresh the page and try again.</p>`;
           return;
         }
 
-        const search = await pf.search(q);
-        if (!search || !search.results || search.results.length === 0) {
-          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">No results found for "<strong class="text-text-secondary">${escapeHtml(q)}</strong>"</p>`;
-          return;
-        }
+        try {
+          const search = await pf.search(q);
+          const hits = search?.results || [];
 
-        const frag = document.createDocumentFragment();
-        for (const r of search.results.slice(0, 20)) {
-          const data = await r.data();
-          const excerpt = data.excerpt?.replace(/<mark>/g, '<mark class="text-accent-primary bg-accent-primary/10 rounded px-0.5">')
-            .replace(/<\/mark>/g, "</mark>") || "";
+          if (hits.length === 0) {
+            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">No results found for "<strong class="text-text-secondary">${escapeHtml(q)}</strong>"</p>`;
+            return;
+          }
 
-          const item = document.createElement("a");
-          item.href = data.url;
-          item.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
-          item.innerHTML = `
-            <div class="flex items-start gap-3">
-              <svg class="w-4 h-4 mt-1 text-text-muted shrink-0 group-hover:text-accent-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
-              </svg>
-              <div>
-                <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(data.meta?.title || data.url)}</p>
-                <div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${excerpt}</div>
+          footer.classList.remove("hidden");
+          resultCount.textContent = `${hits.length} result${hits.length > 1 ? "s" : ""} for "${escapeHtml(q)}"`;
+
+          const frag = document.createDocumentFragment();
+          for (const r of hits) {
+            const data = await r.data();
+            const excerpt = (data.excerpt || "").replace(
+              /<mark>/g,
+              '<mark class="text-accent-primary bg-accent-primary/10 rounded px-0.5 font-medium">'
+            ).replace(/<\/mark>/g, "</mark>");
+
+            const isBlog = data.url?.startsWith("/blog/");
+
+            const item = document.createElement("a");
+            item.href = data.url || "/";
+            item.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
+            item.innerHTML = `
+              <div class="flex items-start gap-3">
+                <span class="text-base mt-0.5 shrink-0">${isBlog ? "📝" : "📄"}</span>
+                <div class="min-w-0">
+                  <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(data.meta?.title || data.url || "")}</p>
+                  ${excerpt ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${excerpt}</div>` : ""}
+                  ${data.url ? `<div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${data.url}</div>` : ""}
+                </div>
               </div>
-            </div>
-          `;
-          frag.appendChild(item);
+            `;
+            frag.appendChild(item);
+          }
+          results.innerHTML = "";
+          results.appendChild(frag);
+        } catch (e) {
+          console.warn("[search] Error:", e);
+          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search error. Please try again.</p>`;
         }
-        results.innerHTML = "";
-        results.appendChild(frag);
       }, 300);
     });
 
     function escapeHtml(text: string): string {
+      if (!text) return "";
       const div = document.createElement("div");
       div.textContent = text;
       return div.innerHTML;
