@@ -1,0 +1,130 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import ScrollToTop from "../../components/ScrollToTop.astro";
+import { getCollection } from "astro:content";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+// Get all unique tags
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+
+<BaseLayout
+  title="Blog"
+  description="Thoughts on software development, architecture, and building for the web. Articles by Afghan Eka Pangestu."
+>
+  <Header />
+
+  <main id="main-content" class="pt-24 pb-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="mb-12">
+        <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">Writing</p>
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3">Blog</h1>
+        <p class="text-text-secondary max-w-xl">
+          Thoughts on software development, architecture, and building for the web.
+        </p>
+      </div>
+
+      <!-- Tag filters (client-side filtering via JS) -->
+      {allTags.length > 0 && (
+        <div id="tag-filters" class="flex flex-wrap gap-2 mb-8">
+          <a
+            href="/blog"
+            data-tag=""
+            class="tag-btn px-3 py-1.5 text-xs font-mono rounded-full border transition-colors text-text-secondary border-border-accent hover:border-accent-primary/30"
+          >
+            All
+          </a>
+          {allTags.map((tag) => (
+            <a
+              href={`/blog?tag=${tag}`}
+              data-tag={tag}
+              class="tag-btn px-3 py-1.5 text-xs font-mono rounded-full border transition-colors text-text-secondary border-border-accent hover:border-accent-primary/30"
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <!-- Posts grid -->
+      <div id="posts-grid" class="grid sm:grid-cols-2 gap-6">
+        {posts.map((post) => (
+          <div
+            class="post-card"
+            data-tags={post.data.tags.join(",")}
+          >
+            <BlogCard post={post} />
+          </div>
+        ))}
+      </div>
+
+      <!-- Empty state (hidden by default) -->
+      <div id="empty-state" class="text-center py-16 hidden">
+        <p class="text-text-muted">No articles found for this topic.</p>
+        <a href="/blog" class="inline-block mt-4 text-sm text-accent-primary hover:underline">
+          View all articles
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+  <ScrollToTop />
+</BaseLayout>
+
+<script>
+  (function() {
+    const tag = new URLSearchParams(window.location.search).get("tag") || "";
+
+    const cards = document.querySelectorAll("#posts-grid .post-card");
+    const empty = document.getElementById("empty-state");
+    const btns = document.querySelectorAll(".tag-btn");
+
+    function filterBy(selectedTag) {
+      let visible = 0;
+      cards.forEach((card) => {
+        const tags = (card.getAttribute("data-tags") || "").split(",");
+        const match = !selectedTag || tags.includes(selectedTag);
+        card.classList.toggle("hidden", !match);
+        if (match) visible++;
+      });
+      if (empty) empty.classList.toggle("hidden", visible > 0);
+    }
+
+    function updateActive(selectedTag) {
+      btns.forEach((btn) => {
+        const btnTag = btn.getAttribute("data-tag") || "";
+        const active = btnTag === selectedTag;
+        btn.classList.toggle("bg-accent-primary/10", active);
+        btn.classList.toggle("text-accent-primary", active);
+        btn.classList.toggle("border-accent-primary/30", active);
+        btn.classList.toggle("text-text-secondary", !active);
+        btn.classList.toggle("border-border-accent", !active);
+      });
+    }
+
+    // Apply initial filter from URL
+    if (tag) {
+      filterBy(tag);
+      updateActive(tag);
+    } else {
+      updateActive("");
+    }
+
+    // Intercept clicks on tag buttons to do client-side filtering
+    btns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const t = btn.getAttribute("data-tag") || "";
+        history.replaceState(null, "", t ? `/blog?tag=${t}` : "/blog");
+        filterBy(t);
+        updateActive(t);
+      });
+    });
+  })();
+</script>

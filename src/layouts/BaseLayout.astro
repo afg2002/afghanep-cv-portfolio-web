@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  article?: boolean;
+}
+
+const {
+  title,
+  description,
+  ogImage = "/images/og-default.png",
+  article = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <title>{title} | Afghan Eka Pangestu</title>
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:title" content={`${title} | Afghan Eka Pangestu`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={article ? "article" : "website"} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | Afghan Eka Pangestu`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Afghan Eka Pangestu",
+      jobTitle: "Software Developer",
+      url: Astro.site,
+      sameAs: [
+        "https://www.linkedin.com/in/afghan-eka-pangestu/",
+        "https://github.com/afg2002",
+      ],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Bogor",
+        addressCountry: "Indonesia",
+      },
+      email: "afghanekapangestu@gmail.com",
+      telephone: "085156283645",
+    })} />
+  </head>
+  <body class="min-h-screen flex flex-col bg-bg-primary text-text-primary antialiased">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <slot />
+  </body>
+</html>

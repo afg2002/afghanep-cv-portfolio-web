@@ -1,0 +1,305 @@
+---
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import ScrollToTop from "../../components/ScrollToTop.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.(md|mdx)$/, "") },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { title, date, excerpt, tags, coverImage } = post.data;
+const { Content, headings = [] } = await post.render();
+
+const formattedDate = new Date(date).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const body = post.body || "";
+const wordCount = body.split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+// Get related posts (same tags, excluding current)
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const currentSlug = post.id.replace(/\.(md|mdx)$/, "");
+const related = allPosts
+  .filter((p) => {
+    const pSlug = p.id.replace(/\.(md|mdx)$/, "");
+    return pSlug !== currentSlug && p.data.tags.some((t: string) => tags.includes(t));
+  })
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+const canonical = new URL(`/blog/${currentSlug}`, Astro.site).href;
+---
+
+<BlogLayout title={title} description={excerpt} date={date} tags={tags}>
+  <Header />
+
+  <main id="main-content" class="pb-24">
+    <!-- Reading progress bar -->
+    <div id="progress-bar" class="fixed top-16 left-0 h-0.5 bg-accent-primary z-40 transition-all" style="width: 0%"></div>
+
+    <!-- ── Cover Hero with Parallax ── -->
+    {coverImage && (
+      <section id="cover-hero" class="relative overflow-hidden h-[50vh] min-h-[400px] max-h-[600px]">
+        <img
+          src={coverImage}
+          alt={title}
+          class="parallax-cover absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+        />
+        <div class="absolute inset-0 bg-gradient-to-b from-bg-primary/10 via-bg-primary/40 to-bg-primary"></div>
+      </section>
+    )}
+
+    <!-- ── Article Header ── -->
+    <div class="max-w-4xl mx-auto px-6">
+      <header class={coverImage ? "-mt-24 relative z-10 mb-6" : "pt-24 mb-6"}>
+        <div class="flex flex-wrap gap-2 mb-4">
+          {tags.map((tag) => (
+            <a href={`/blog?tag=${tag}`} class="px-2.5 py-1 text-[11px] font-mono text-text-secondary border border-border-accent rounded-full hover:border-accent-primary/30 transition-colors no-underline">
+              {tag}
+            </a>
+          ))}
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight" itemprop="headline">{title}</h1>
+        <div class="flex items-center gap-3 text-sm text-text-muted font-mono">
+          <time datetime={new Date(date).toISOString()} itemprop="datePublished">{formattedDate}</time>
+          <span class="w-1 h-1 rounded-full bg-text-muted"></span>
+          <span>{readingTime} min read</span>
+          <span class="w-1 h-1 rounded-full bg-text-muted"></span>
+          <span class="text-accent-primary">{wordCount.toLocaleString()} words</span>
+        </div>
+      </header>
+    </div>
+
+    <!-- ── Content + TOC Layout ── -->
+    <div class="max-w-6xl mx-auto px-6">
+      <!-- Mobile TOC (at top of content on mobile) -->
+      {headings.length > 0 && (
+        <details class="mb-8 lg:hidden bg-bg-secondary border border-border-subtle rounded-xl">
+          <summary class="px-5 py-3 text-sm font-medium text-text-secondary cursor-pointer hover:text-text-primary transition-colors select-none">
+            Table of Contents
+          </summary>
+          <div class="px-5 pb-4">
+            <nav class="border-l border-border-subtle pl-4 space-y-1.5">
+              {headings.filter((h: any) => h.depth >= 2 && h.depth <= 3).map((h: any) => (
+                <a
+                  href={`#${h.slug}`}
+                  class={`block text-sm transition-colors hover:text-accent-primary ${h.depth === 2 ? "text-text-secondary" : "pl-3 text-text-muted text-xs"}`}
+                >
+                  {h.text}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </details>
+      )}
+
+      <!-- Desktop: grid (1fr + 240px sidebar) only when headings exist -->
+      {headings.length > 0 ? (
+        <div class="grid lg:grid-cols-[1fr_240px] gap-12">
+          <article class="min-w-0" itemscope itemtype="https://schema.org/Article">
+            <!-- Content legend / separator -->
+            <div class="flex items-center gap-4 mb-8 pb-8 border-b border-border-subtle">
+              <div class="flex items-center gap-2 text-xs font-mono text-text-muted">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <span>Article</span>
+              </div>
+              <div class="h-px flex-1 bg-border-subtle"></div>
+              <div class="flex items-center gap-1 text-xs font-mono text-text-muted">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                {tags.slice(0, 3).join(" · ")}
+                {tags.length > 3 && ` +${tags.length - 3}`}
+              </div>
+            </div>
+
+            <div class="prose" itemprop="articleBody">
+              <Content />
+            </div>
+
+            <!-- Related articles -->
+            {related.length > 0 && (
+              <section class="mt-16 pt-12 border-t border-border-subtle">
+                <h2 class="text-xl font-bold mb-6">Related Articles</h2>
+                <div class="grid sm:grid-cols-3 gap-4">
+                  {related.map((r) => {
+                    const rSlug = r.id.replace(/\.(md|mdx)$/, "");
+                    return (
+                      <a href={`/blog/${rSlug}`} class="block p-4 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 transition-colors no-underline">
+                        <p class="text-sm font-semibold text-text-primary mb-1 line-clamp-2">{r.data.title}</p>
+                        <p class="text-xs text-text-muted font-mono">
+                          {new Date(r.data.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                        </p>
+                      </a>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+          </article>
+
+          <!-- Sidebar TOC (desktop) -->
+          <aside class="hidden lg:block" aria-label="Table of Contents">
+            <nav class="sticky top-24" id="toc-nav">
+              <h4 class="text-xs font-mono text-text-muted uppercase tracking-wider mb-3">On this page</h4>
+              <ul class="space-y-1.5 border-l border-border-subtle pl-4">
+                {headings.filter((h: any) => h.depth >= 2 && h.depth <= 3).map((h: any) => (
+                  <li>
+                    <a
+                      href={`#${h.slug}`}
+                      data-toc={h.slug}
+                      class={`block text-sm transition-colors hover:text-accent-primary toc-link ${h.depth === 2 ? "text-text-secondary" : "pl-3 text-text-muted text-xs"}`}
+                    >
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+        </div>
+      ) : (
+        <!-- Single column (no headings / no TOC) -->
+        <article class="max-w-4xl" itemscope itemtype="https://schema.org/Article">
+          <div class="flex items-center gap-4 mb-8 pb-8 border-b border-border-subtle">
+            <div class="flex items-center gap-2 text-xs font-mono text-text-muted">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+              <span>Article</span>
+            </div>
+            <div class="h-px flex-1 bg-border-subtle"></div>
+            <div class="flex items-center gap-1 text-xs font-mono text-text-muted">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+              {tags.slice(0, 3).join(" · ")}
+              {tags.length > 3 && ` +${tags.length - 3}`}
+            </div>
+          </div>
+
+          <div class="prose" itemprop="articleBody">
+            <Content />
+          </div>
+
+          <!-- Related articles -->
+          {related.length > 0 && (
+            <section class="mt-16 pt-12 border-t border-border-subtle">
+              <h2 class="text-xl font-bold mb-6">Related Articles</h2>
+              <div class="grid sm:grid-cols-3 gap-4">
+                {related.map((r) => {
+                  const rSlug = r.id.replace(/\.(md|mdx)$/, "");
+                  return (
+                    <a href={`/blog/${rSlug}`} class="block p-4 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 transition-colors no-underline">
+                      <p class="text-sm font-semibold text-text-primary mb-1 line-clamp-2">{r.data.title}</p>
+                      <p class="text-xs text-text-muted font-mono">
+                        {new Date(r.data.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                      </p>
+                    </a>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+        </article>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+  <ScrollToTop />
+</BlogLayout>
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description: excerpt,
+  datePublished: new Date(date).toISOString(),
+  author: {
+    "@type": "Person",
+    name: "Afghan Eka Pangestu",
+    url: Astro.site,
+  },
+  url: canonical,
+})} />
+
+<script>
+  const bar = document.getElementById("progress-bar");
+  if (bar) {
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    });
+  }
+
+  // TOC active state tracking
+  const tocLinks = document.querySelectorAll(".toc-link");
+  if (tocLinks.length > 0) {
+    const headings = Array.from(document.querySelectorAll(".prose h2[id], .prose h3[id]"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const link = document.querySelector(`[data-toc="${entry.target.id}"]`);
+          if (entry.isIntersecting) {
+            tocLinks.forEach((l) => {
+              l.classList.remove("text-accent-primary", "font-medium");
+            });
+            if (link) {
+              link.classList.add("text-accent-primary", "font-medium");
+            }
+          }
+        });
+      },
+      { rootMargin: "-80px 0px -70% 0px" }
+    );
+    headings.forEach((h) => observer.observe(h));
+  }
+
+  // ── Parallax cover image ──
+  const cover = document.querySelector(".parallax-cover");
+  if (cover) {
+    window.addEventListener("scroll", () => {
+      const scrolled = window.scrollY;
+      const hero = document.getElementById("cover-hero");
+      if (hero) {
+        const rect = hero.getBoundingClientRect();
+        // Only apply parallax while the hero is visible
+        if (rect.bottom > 0) {
+          const offset = scrolled * 0.35;
+          cover.style.transform = `translateY(${offset}px)`;
+        }
+      }
+    }, { passive: true });
+  }
+
+  // Add copy buttons to code blocks
+  document.querySelectorAll(".prose pre").forEach((pre) => {
+    const container = document.createElement("div");
+    container.className = "relative group/code";
+    pre.parentNode?.insertBefore(container, pre);
+    container.appendChild(pre);
+
+    const btn = document.createElement("button");
+    btn.className = "absolute top-2 right-2 p-1.5 rounded-md bg-bg-elevated border border-border-subtle text-text-muted hover:text-accent-primary hover:border-accent-primary/30 opacity-0 group-hover/code:opacity-100 transition-all";
+    btn.innerHTML = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+    btn.setAttribute("aria-label", "Copy code");
+    btn.addEventListener("click", async () => {
+      const code = pre.querySelector("code")?.textContent || "";
+      await navigator.clipboard.writeText(code);
+      btn.innerHTML = '<svg class="w-3.5 h-3.5 text-accent-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+      setTimeout(() => {
+        btn.innerHTML = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+      }, 2000);
+    });
+    container.appendChild(btn);
+  });
+</script>

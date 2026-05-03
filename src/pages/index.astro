@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
+import Skills from "../components/Skills.astro";
+import Experience from "../components/Experience.astro";
+import Projects from "../components/Projects.astro";
+import Education from "../components/Education.astro";
+import Certifications from "../components/Certifications.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import ScrollToTop from "../components/ScrollToTop.astro";
+import AIChat from "../components/AIChat.astro";
+---
+
+<BaseLayout
+  title="Software Developer"
+  description="Afghan Eka Pangestu — Software Developer based in Bogor, Indonesia. Specializing in web applications, APIs, and enterprise solutions with Vue.js, Laravel, Java Spring Boot, and more."
+>
+  <Header />
+  <main id="main-content">
+    <Hero />
+    <About />
+    <Skills />
+    <Experience />
+    <Projects />
+    <Education />
+    <Certifications />
+    <Contact />
+  </main>
+  <Footer />
+  <ScrollToTop />
+  <AIChat />
+</BaseLayout>

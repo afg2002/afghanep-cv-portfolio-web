@@ -1,0 +1,93 @@
+---
+const isHome = Astro.url.pathname === "/";
+const base = isHome ? "" : "/";
+
+const navLinks = [
+  { href: `${base}#home`, label: "Home" },
+  { href: `${base}#about`, label: "About" },
+  { href: `${base}#skills`, label: "Skills" },
+  { href: `${base}#experience`, label: "Experience" },
+  { href: `${base}#projects`, label: "Projects" },
+  { href: `${base}#education`, label: "Education" },
+  { href: `${base}#certifications`, label: "Certifications" },
+  { href: `${base}#contact`, label: "Contact" },
+];
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-bg-primary/80 border-b border-border-subtle">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+    <a href="/" class="font-mono font-bold text-lg text-accent-primary tracking-tight hover:text-accent-secondary transition-colors">
+      AEP
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden lg:flex items-center gap-1">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="px-3 py-2 text-sm text-text-secondary hover:text-text-primary transition-colors rounded-md hover:bg-bg-elevated"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="hidden lg:flex items-center gap-2">
+      <a href="/blog" class="px-4 py-2 text-sm font-medium bg-accent-primary/10 text-accent-primary rounded-full hover:bg-accent-primary/20 transition-colors">
+        Blog
+      </a>
+    </div>
+
+    <!-- Mobile nav trigger -->
+    <button id="mobile-menu-btn" class="lg:hidden p-2 text-text-secondary hover:text-text-primary transition-colors" aria-label="Toggle menu">
+      <svg class="w-6 h-6 block" id="menu-icon-open" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="w-6 h-6 hidden" id="menu-icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-border-subtle bg-bg-primary/95 backdrop-blur-xl">
+    <ul class="px-6 py-4 space-y-1">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="block px-3 py-2.5 text-sm text-text-secondary hover:text-text-primary transition-colors rounded-md hover:bg-bg-elevated mobile-nav-link"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li class="pt-2">
+        <a href="/blog" class="block px-4 py-2.5 text-sm font-medium bg-accent-primary/10 text-accent-primary rounded-lg text-center hover:bg-accent-primary/20 transition-colors mobile-nav-link">
+          Blog
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById("mobile-menu-btn")!;
+  const menu = document.getElementById("mobile-menu")!;
+  const iconOpen = document.getElementById("menu-icon-open")!;
+  const iconClose = document.getElementById("menu-icon-close")!;
+  const links = menu.querySelectorAll(".mobile-nav-link");
+
+  btn.addEventListener("click", () => {
+    const isOpen = !menu.classList.contains("hidden");
+    menu.classList.toggle("hidden", isOpen);
+    iconOpen.classList.toggle("hidden", !isOpen);
+    iconClose.classList.toggle("hidden", isOpen);
+  });
+
+  links.forEach((link) => {
+    link.addEventListener("click", () => {
+      menu.classList.add("hidden");
+      iconOpen.classList.remove("hidden");
+      iconClose.classList.add("hidden");
+    });
+  });
+</script>

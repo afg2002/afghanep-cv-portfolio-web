@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aep.my.id/sitemap.xml

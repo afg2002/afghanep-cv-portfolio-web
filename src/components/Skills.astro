@@ -1,0 +1,72 @@
+---
+const categories = [
+  {
+    label: "Frontend",
+    skills: ["HTML", "CSS", "JavaScript", "Vue.js", "Vue.js 2", "Vuetify", "React"],
+    accent: "accent-primary",
+  },
+  {
+    label: "Backend",
+    skills: ["PHP", "Laravel", "Java", "Spring Boot", "Golang", "Express"],
+    accent: "accent-secondary",
+  },
+  {
+    label: "Database & Tools",
+    skills: ["MongoDB", "MySQL", "Git", "Terminal", "VS Code"],
+    accent: "accent-primary",
+  },
+  {
+    label: "Professional Strengths",
+    skills: ["Clean Architecture", "Scalability", "Maintainability", "Teamwork", "Communication", "Problem Solving", "Adaptation"],
+    accent: "accent-secondary",
+  },
+  {
+    label: "Languages",
+    skills: ["Indonesia (Active)", "English (Passive)"],
+    accent: "accent-primary",
+  },
+];
+---
+
+<section id="skills" class="py-24 border-t border-border-subtle">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-12">
+      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">02.</p>
+      <h2 class="text-3xl sm:text-4xl font-bold">Skills</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {categories.map((cat) => (
+        <div class="group p-6 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/30 transition-colors">
+          <div class="flex items-center gap-3 mb-4">
+            <div class={cat.accent === "accent-primary" ? "p-2 rounded-lg bg-accent-primary/10 text-accent-primary" : "p-2 rounded-lg bg-accent-secondary/10 text-accent-secondary"}>
+              {cat.label === "Frontend" && (
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              )}
+              {cat.label === "Backend" && (
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+              )}
+              {cat.label === "Database & Tools" && (
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+              )}
+              {cat.label === "Professional Strengths" && (
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              )}
+              {cat.label === "Languages" && (
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+              )}
+            </div>
+            <h3 class="font-semibold text-text-primary">{cat.label}</h3>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {cat.skills.map((skill) => (
+              <span class="inline-block px-3 py-1.5 text-xs font-mono text-text-secondary border border-border-subtle rounded-full group-hover:border-accent-primary/20 transition-colors">
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

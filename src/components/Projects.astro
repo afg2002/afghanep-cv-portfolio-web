@@ -1,0 +1,103 @@
+---
+const projects = [
+  {
+    title: "SehatSegar.my.id",
+    year: "",
+    summary: "Laravel-based point-of-sale web application for product management, inventory tracking, cashier transactions, and sales reporting with dashboard and multi-user access.",
+    tags: ["Laravel", "MySQL", "POS"],
+    featured: true,
+  },
+  {
+    title: "Movie Ticket Booking Web",
+    year: "2024",
+    summary: "Movie ticket booking web application with intuitive browsing and booking flow.",
+    tags: ["Vue.js 2", "Vuetify", "MongoDB"],
+    featured: true,
+  },
+  {
+    title: "Web Zero Waste Massive",
+    year: "2024",
+    summary: "Developed API for a cleaning service booking application.",
+    tags: ["React", "Express", "API"],
+    featured: true,
+  },
+  {
+    title: "Project Management Application",
+    year: "2023",
+    summary: "Laravel application with budgeting, project calculation, and vendor management features.",
+    tags: ["Laravel", "PHP", "MySQL"],
+    featured: true,
+  },
+  {
+    title: "Router Dashboard Application",
+    year: "2024",
+    summary: "Built with Spring Boot and Vue.js 2 for dashboard listing and log monitoring.",
+    tags: ["Spring Boot", "Vue.js 2", "Java"],
+    featured: true,
+  },
+  {
+    title: "Baca Komik",
+    year: "2020",
+    summary: "Python-based comic scraping and PDF conversion tool with search feature.",
+    tags: ["Python", "Web Scraping"],
+    featured: true,
+  },
+];
+
+const moreProjects = [
+  "Digital Library Web",
+  "GYM Information System",
+  "Boarding House Selection DSS with AHP",
+  "Inventory Management Information System",
+  "Major Selection Expert System",
+  "Best Employee DSS with SAW",
+  "Dengue Fever and Typhoid Diagnosis Expert System",
+  "Java Swing Academic Information System",
+];
+---
+
+<section id="projects" class="py-24 border-t border-border-subtle">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-12">
+      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">04.</p>
+      <h2 class="text-3xl sm:text-4xl font-bold">Featured Projects</h2>
+    </div>
+
+    <!-- Featured -->
+    <div class="grid md:grid-cols-2 gap-6 mb-12">
+      {projects.map((p) => (
+        <div class="group p-6 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 hover:-translate-y-1 transition-all duration-300">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="text-lg font-bold text-text-primary group-hover:text-accent-primary transition-colors">{p.title}</h3>
+            {p.year && <span class="text-xs font-mono text-text-muted shrink-0 ml-2">{p.year}</span>}
+          </div>
+          <p class="text-sm text-text-secondary leading-relaxed mb-4">{p.summary}</p>
+          <div class="flex flex-wrap gap-2">
+            {p.tags.map((t) => (
+              <span class="px-2.5 py-1 text-[11px] font-mono text-text-secondary border border-border-accent rounded-full group-hover:border-accent-primary/30 transition-colors">
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- More Projects -->
+    <details class="group">
+      <summary class="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-text-secondary border border-border-accent rounded-full hover:border-accent-primary hover:text-accent-primary transition-colors select-none">
+        More Projects
+        <svg class="w-4 h-4 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </summary>
+      <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {moreProjects.map((mp) => (
+          <div class="p-4 bg-bg-secondary border border-border-subtle rounded-lg text-sm text-text-secondary hover:border-accent-primary/20 transition-colors">
+            {mp}
+          </div>
+        ))}
+      </div>
+    </details>
+  </div>
+</section>

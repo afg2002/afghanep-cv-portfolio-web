@@ -1,0 +1,31 @@
+---
+interface Heading {
+  depth: number;
+  text: string;
+  slug: string;
+}
+export interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{toc.length > 0 && (
+  <nav class="sticky top-24" aria-label="Table of Contents">
+    <h4 class="text-xs font-mono text-text-muted uppercase tracking-wider mb-3">On this page</h4>
+    <ul class="space-y-1.5 border-l border-border-subtle pl-4">
+      {toc.map((h) => (
+        <li>
+          <a
+            href={`#${h.slug}`}
+            class={`block text-sm transition-colors hover:text-accent-primary ${h.depth === 2 ? "text-text-secondary" : "pl-3 text-text-muted text-xs"}`}
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

@@ -1,0 +1,114 @@
+---
+const experiences = [
+  {
+    company: "PT Inmotion Inovasi Teknologi",
+    role: "Web Developer",
+    type: "Full Time",
+    period: "Oct 2024 – Present",
+    highlights: [
+      "Developed applications using Java and MVEL for chatbot, omni-channel, Generative AI, and SRM solutions",
+      "Integrated Salesforce with chat platforms for a major national bank",
+      "Built chatbot solutions for financial institution automation",
+      "Designed WhatsApp Flows integrated with hospital scheduling and digital services",
+      "Provided technical consultation directly to clients",
+    ],
+  },
+  {
+    company: "PT BTPN Syariah Tbk",
+    role: "Web Developer",
+    type: "Internship",
+    period: "Feb 2024 – Jun 2024",
+    highlights: [
+      "Developed a router application using Spring Boot and Vue.js 2 for dashboard listing and log monitoring",
+      "Assisted the Product Owner in documenting user feedback surveys",
+      "Participated in the MSIB Batch 6 program",
+    ],
+  },
+  {
+    company: "PT Ciptanusa Nuansa Mulia",
+    role: "Web Developer",
+    type: "Freelance",
+    period: "Sep 2023 – Dec 2023",
+    highlights: [
+      "Developed a project management application using Laravel",
+      "Implemented project calculation, budgeting (RAB), and vendor management features",
+      "Improved workflow efficiency across the project management process",
+    ],
+  },
+  {
+    company: "PT Bintang Bahagia Selalu — Royal Star",
+    role: "Web Developer",
+    type: "Freelance",
+    period: "Sep 2022 – Oct 2022",
+    highlights: [
+      "Improved the front-end user interface by enhancing slider, video display, navigation menu, and WhatsApp button",
+      "Improved the overall user experience and visual appearance",
+    ],
+  },
+  {
+    company: "CV Mitrasoft Global",
+    role: "Web Developer",
+    type: "Internship",
+    period: "Jan 2019 – Mar 2019",
+    highlights: [
+      "Developed and migrated a desktop-based customer back-office application to a web platform using Java Spring",
+      "Improved operational efficiency by implementing new features and a more responsive user interface",
+    ],
+  },
+];
+
+const typeColors: Record<string, string> = {
+  "Full Time": "bg-accent-primary/10 text-accent-primary border-accent-primary/20",
+  "Freelance": "bg-accent-secondary/10 text-accent-secondary border-accent-secondary/20",
+  "Internship": "bg-text-muted/20 text-text-secondary border-text-muted/20",
+};
+---
+
+<section id="experience" class="py-24 border-t border-border-subtle">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-12">
+      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">03.</p>
+      <h2 class="text-3xl sm:text-4xl font-bold">Experience</h2>
+    </div>
+
+    <div class="relative">
+      <!-- Timeline line -->
+      <div class="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-border-subtle hidden sm:block"></div>
+
+      <div class="space-y-8">
+        {experiences.map((exp) => (
+          <div class="relative pl-0 sm:pl-16">
+            <!-- Timeline dot -->
+            <div class="hidden sm:block absolute left-[30px] top-6 w-[5px] h-[5px] rounded-full bg-accent-primary ring-4 ring-bg-primary z-10"></div>
+
+            <div class="group p-6 sm:p-8 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 transition-colors">
+              <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+                <div>
+                  <h3 class="text-lg font-bold text-text-primary group-hover:text-accent-primary transition-colors">{exp.company}</h3>
+                  <p class="text-text-secondary text-sm mt-0.5">{exp.role}</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class={`px-2.5 py-1 text-[11px] font-mono font-medium border rounded-full ${typeColors[exp.type] || ""}`}>
+                    {exp.type}
+                  </span>
+                  <span class="text-xs font-mono text-text-muted">{exp.period}</span>
+                </div>
+              </div>
+
+              <ul class="space-y-2">
+                {exp.highlights.map((h) => (
+                  <li class="flex items-start gap-2 text-sm text-text-secondary">
+                    <svg class="w-4 h-4 mt-0.5 shrink-0 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

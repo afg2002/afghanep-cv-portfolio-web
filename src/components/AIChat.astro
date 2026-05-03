@@ -1,0 +1,578 @@
+---
+
+---
+
+<div id="ai-chat-widget" class="fixed bottom-4 right-4 z-50">
+    <div class="relative flex items-end flex-col">
+        <button
+            id="ai-chat-toggle"
+            class="p-3.5 bg-accent-primary text-black rounded-full shadow-xl shadow-accent-primary/20 hover:bg-accent-secondary transition-all duration-300 hover:scale-105 active:scale-95"
+            aria-label="AI Chat"
+        >
+            <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                ></path>
+            </svg>
+        </button>
+        <div
+            id="ai-chat-hint"
+            class="absolute bottom-0 right-16 flex items-center gap-1.5 pointer-events-none transition-all duration-500"
+        >
+            <span class="text-[13px] font-medium text-text-primary bg-bg-secondary border border-border-subtle rounded-xl px-3.5 py-2 shadow-lg shadow-black/30 whitespace-nowrap">
+                ✦ Ask AI
+            </span>
+            <svg class="w-5 h-5 text-accent-primary -ml-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
+            </svg>
+        </div>
+    </div>
+
+    <div
+        id="ai-chat-panel"
+        class="hidden absolute bottom-20 right-0 w-[calc(100vw-2rem)] max-w-[380px] sm:w-96 bg-bg-secondary border border-border-subtle rounded-2xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
+        style="max-height:560px;height:70vh"
+    >
+        <div
+            class="p-4 border-b border-border-subtle flex items-center justify-between bg-bg-elevated shrink-0"
+        >
+            <div class="flex items-center gap-2.5">
+                <div
+                    class="w-2.5 h-2.5 rounded-full bg-accent-secondary animate-pulse"
+                >
+                </div>
+                <span class="text-sm font-semibold text-text-primary"
+                    >Ask Afghan's AI</span
+                >
+                <span id="ai-remaining" class="text-[11px] text-text-muted font-mono hidden"></span>
+            </div>
+            <button
+                id="ai-chat-close"
+                class="p-1.5 text-text-muted hover:text-text-primary hover:bg-bg-primary rounded-lg transition-colors"
+                aria-label="Close"
+    >
+                <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    ><path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"></path></svg
+                >
+            </button>
+        </div>
+
+        <div id="ai-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+            <div class="flex gap-2.5">
+                <div
+                    class="w-7 h-7 rounded-full bg-accent-primary/15 flex items-center justify-center shrink-0 mt-0.5"
+                >
+                    <svg
+                        class="w-3.5 h-3.5 text-accent-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        ><path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
+                        ></path></svg
+                    >
+                </div>
+                <div
+                    class="bg-bg-elevated rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-text-secondary leading-relaxed"
+                >
+                    Hi! Ask me about Afghan — skills, experience, projects, or
+                    contact.
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="ai-suggestions"
+            class="px-4 pb-2 flex flex-wrap gap-1.5 shrink-0"
+        >
+            <button
+                data-q="What is Afghan's tech stack?"
+                class="px-3 py-1.5 text-[11px] font-mono text-text-muted bg-bg-elevated border border-border-subtle rounded-full hover:border-accent-primary/30 hover:text-accent-primary transition-colors"
+                >Tech stack</button
+            >
+            <button
+                data-q="Tell me about Afghan's work experience"
+                class="px-3 py-1.5 text-[11px] font-mono text-text-muted bg-bg-elevated border border-border-subtle rounded-full hover:border-accent-primary/30 hover:text-accent-primary transition-colors"
+                >Experience</button
+            >
+            <button
+                data-q="What projects has Afghan built?"
+                class="px-3 py-1.5 text-[11px] font-mono text-text-muted bg-bg-elevated border border-border-subtle rounded-full hover:border-accent-primary/30 hover:text-accent-primary transition-colors"
+                >Projects</button
+            >
+            <button
+                data-q="How can I contact or hire Afghan?"
+                class="px-3 py-1.5 text-[11px] font-mono text-text-muted bg-bg-elevated border border-border-subtle rounded-full hover:border-accent-primary/30 hover:text-accent-primary transition-colors"
+                >Contact</button
+            >
+        </div>
+
+        <div class="p-3 border-t border-border-subtle shrink-0">
+            <div class="flex gap-2">
+                <input
+                    id="ai-input"
+                    type="text"
+                    placeholder="Ask something..."
+                    class="flex-1 bg-bg-primary border border-border-accent rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-primary transition-colors"
+                    autocomplete="off"
+                />
+                <button
+                    id="ai-send"
+                    class="px-4 py-2.5 bg-accent-primary text-black rounded-xl text-sm font-semibold hover:bg-accent-secondary transition-colors shrink-0"
+                >
+                    <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        ><path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 19V5m-7 7l7-7 7 7"></path></svg
+                    >
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── Config ──────────────────────────────────────
+    const MAX_TURNS = Number(
+      (typeof import.meta !== "undefined" && import.meta.env?.PUBLIC_AI_CHAT_LIMIT)
+        || "5"
+    );
+    const IS_DEV = (typeof import.meta !== "undefined" && import.meta.env?.DEV === true) || window.location.search.includes("dev");
+
+    // ── Chat state (persisted in localStorage) ──────
+    const STORAGE_KEY = "ai_chat_state";
+    let messages: Array<{ role: string; content: string }> = [];
+    let turnCount = 0;
+    let systemLoaded = false;
+    let sessionLocked = false;
+
+    // Restore persisted session (with daily reset)
+    function getTodayKey(): string {
+      return new Date().toISOString().slice(0, 10); // "2026-05-04"
+    }
+
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const state = JSON.parse(saved);
+        const today = getTodayKey();
+        // Reset count if it's a new day
+        if (state.date !== today) {
+          turnCount = 0;
+          messages = [];
+          sessionLocked = false;
+          systemLoaded = false;
+        } else {
+          turnCount = state.turnCount || 0;
+          messages = state.messages || [];
+          sessionLocked = state.sessionLocked || false;
+          systemLoaded = state.systemLoaded || false;
+        }
+      }
+    } catch {}
+
+    function persistState() {
+      try {
+        const today = getTodayKey();
+        // Merge with existing to preserve date across calls
+        const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          ...existing,
+          date: existing.date || today,
+          turnCount,
+          messages,
+          sessionLocked,
+          systemLoaded,
+        }));
+      } catch {}
+    }
+
+    // ── Helpers ─────────────────────────────────────
+    function renderMarkdown(text: string): string {
+        if (!text) return "";
+        let html = text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+        // Strip markdown tables — convert to plain text lines
+        html = html.replace(
+            /^\|(.+)\|\n\|[-:| ]+\|\n((?:^\|.+\|\n?)*)/gm,
+            (match: string, headerLine: string, bodyLines: string) => {
+                const headers = headerLine.split("|").map((h: string) => h.trim()).filter(Boolean);
+                const rows = bodyLines.trim().split("\n").map((row: string) =>
+                    row.split("|").map((c: string) => c.trim()).filter(Boolean)
+                );
+                let plain = "";
+                plain += headers.join("  ·  ") + "\n";
+                for (const row of rows) {
+                    plain += row.join("  ·  ") + "\n";
+                }
+                return plain;
+            }
+        );
+
+        // Headings — ##, ###
+        html = html.replace(
+            /^###\s+(.+)$/gm,
+            "<div class='font-semibold text-text-primary text-sm mt-3 mb-1'>$1</div>",
+        );
+        html = html.replace(
+            /^##\s+(.+)$/gm,
+            "<div class='font-semibold text-text-primary text-base mt-3 mb-1'>$1</div>",
+        );
+
+        // Bold, italic, code
+        html = html.replace(
+            /\*\*(.+?)\*\*/g,
+            "<strong class='font-semibold text-text-primary'>$1</strong>",
+        );
+        html = html.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, "<em>$1</em>");
+        html = html.replace(
+            /`([^`\n]+?)`/g,
+            "<code class='px-1.5 py-0.5 bg-bg-primary rounded-md text-xs font-mono text-accent-secondary'>$1</code>",
+        );
+
+        // Markdown links [text](url)
+        html = html.replace(
+            /\[([^\]]+)\]\(([^)]+)\)/g,
+            "<a href='$2' target='_blank' rel='noopener' class='text-accent-primary hover:underline'>$1</a>",
+        );
+        // Bare URLs (after markdown links to avoid double-conversion)
+        html = html.replace(
+            /(^|[\s>])(https?:\/\/[^\s<>"'）]+)/g,
+            "$1<a href='$2' target='_blank' rel='noopener' class='text-accent-primary hover:underline'>$2</a>",
+        );
+
+        // Lists
+        html = html.replace(
+            /^[-•]\s+(.+)$/gm,
+            "<div class='flex gap-2'><span class='text-accent-primary shrink-0 mt-0.5'>•</span><span>$1</span></div>",
+        );
+        html = html.replace(
+            /^(\d+)\.\s+(.+)$/gm,
+            "<div class='flex gap-2'><span class='text-text-muted shrink-0 font-mono text-xs mt-0.5'>$1.</span><span>$2</span></div>",
+        );
+
+        // Line breaks
+        html = html.replace(/\n\n/g, "<br><br>").replace(/\n/g, "<br>");
+        return html;
+    }
+
+    function escapeHtml(text: string): string {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    function lockSession() {
+        sessionLocked = true;
+        persistState();
+        input.disabled = true;
+        input.placeholder = "Session ended — refresh to chat again";
+        sendBtn.disabled = true;
+        sendBtn.classList.add("opacity-40", "cursor-not-allowed");
+        if (!IS_DEV) updateRemainingUI(0);
+    }
+
+    // ── DOM refs ────────────────────────────────────
+    const toggle = document.getElementById("ai-chat-toggle")!;
+    const panel = document.getElementById("ai-chat-panel")!;
+    const closeBtn = document.getElementById("ai-chat-close")!;
+    const input = document.getElementById("ai-input") as HTMLInputElement;
+    const sendBtn = document.getElementById("ai-send")!;
+    const msgContainer = document.getElementById("ai-messages")!;
+    const hint = document.getElementById("ai-chat-hint")!;
+    const remainingSpan = document.getElementById("ai-remaining")!;
+    let isOpen = false;
+
+    // ── Hint badge ──────────────────────────────────
+    // Start hidden, slide in after 2s, auto-hide after 15s or on first click
+    hint.classList.add("opacity-0", "translate-x-2");
+    setTimeout(() => {
+        hint.classList.remove("opacity-0", "translate-x-2");
+        hint.classList.add("opacity-100", "translate-x-0");
+    }, 2000);
+    setTimeout(() => {
+        hint.classList.remove("opacity-100", "translate-x-0");
+        hint.classList.add("opacity-0", "translate-x-2");
+    }, 15000);
+
+    // ── Bubble helpers ──────────────────────────────
+    function addBubble(role: "user" | "assistant", html: string) {
+        const div = document.createElement("div");
+        div.className =
+            "flex gap-2.5" + (role === "user" ? " justify-end" : "");
+        if (role === "assistant") {
+            div.innerHTML = `<div class="w-7 h-7 rounded-full bg-accent-primary/15 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3.5 h-3.5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg></div><div class="bg-bg-elevated rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-text-secondary leading-relaxed">${html}</div>`;
+        } else {
+            div.innerHTML = `<div class="bg-accent-primary/10 rounded-2xl rounded-tr-sm px-4 py-3 text-sm text-text-primary leading-relaxed">${html}</div>`;
+        }
+        msgContainer.appendChild(div);
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+        return div;
+    }
+
+    function addStreamingBubble() {
+        const div = document.createElement("div");
+        div.className = "flex gap-2.5";
+        div.innerHTML = `<div class="w-7 h-7 rounded-full bg-accent-primary/15 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3.5 h-3.5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg></div><div class="bg-bg-elevated rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-text-secondary leading-relaxed streaming-cursor"></div>`;
+        const bubble = div.querySelector(".streaming-cursor")!;
+        msgContainer.appendChild(div);
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+        return {
+            update(text: string) {
+                bubble.innerHTML = renderMarkdown(text);
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            },
+            finalize(html: string) {
+                bubble.innerHTML = html;
+                bubble.classList.remove("streaming-cursor");
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            },
+        };
+    }
+
+    // ── Main send ───────────────────────────────────
+    async function sendMessage() {
+        const text = input.value.trim();
+        if (!text || sessionLocked) return;
+
+        // ── Session limit ──
+        if (turnCount >= MAX_TURNS && !IS_DEV) {
+            addBubble(
+                "assistant",
+                renderMarkdown(
+                    `**Session limit reached.** Maximum ${MAX_TURNS} messages per session. Refresh the page to start a new chat.`,
+                ),
+            );
+            lockSession();
+            return;
+        }
+
+        addBubble("user", escapeHtml(text));
+        input.value = "";
+        const stream = addStreamingBubble();
+
+        try {
+            // Load system prompt once (first message)
+            if (!systemLoaded) {
+                const { AFGHAN_SYSTEM_PROMPT } =
+                    await import("../data/afghan-prompt.ts");
+                messages.push({
+                    role: "system",
+                    content: AFGHAN_SYSTEM_PROMPT,
+                });
+                systemLoaded = true;
+                persistState();
+            }
+
+            // Append user message to history & increment turn
+            messages.push({ role: "user", content: text });
+            turnCount++;
+            persistState();
+            if (!IS_DEV) {
+                const remaining = MAX_TURNS - turnCount;
+                updateRemainingUI(remaining);
+            }
+
+            let full = "";
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ messages, turnCount }),
+            });
+
+            // Sync remaining count from server headers
+            const serverRemaining = res.headers.get("X-RateLimit-Remaining");
+            if (serverRemaining !== null && !IS_DEV) {
+                const sRem = parseInt(serverRemaining, 10);
+                if (!isNaN(sRem)) updateRemainingUI(sRem);
+            }
+
+            // Handle JSON error responses (including 429 rate limit)
+            const contentType = res.headers.get("content-type") || "";
+            if (!res.ok || contentType.includes("application/json")) {
+                const errBody = await res.json().catch(() => ({}));
+                console.warn("[ai-chat] Server error:", res.status, errBody);
+
+                // Server-enforced rate limit → lock session
+                if (res.status === 429) {
+                    turnCount = MAX_TURNS; // force lock
+                    sessionLocked = true;
+                    persistState();
+                    lockSession();
+                    throw new Error("Daily limit reached");
+                }
+
+                throw new Error(errBody.error || "API unavailable");
+            }
+
+            const reader = res.body?.getReader();
+            if (!reader) throw new Error("No stream");
+
+            const decoder = new TextDecoder();
+            let buffer = "";
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n");
+                buffer = lines.pop() || "";
+                for (const line of lines) {
+                    if (line.startsWith("data: ")) {
+                        const data = line.slice(6);
+                        if (data === "[DONE]") continue;
+                        try {
+                            const parsed = JSON.parse(data);
+                            const delta =
+                                parsed?.choices?.[0]?.delta?.content || "";
+                            if (delta) {
+                                full += delta;
+                                stream.update(full);
+                            }
+                        } catch {}
+                    }
+                }
+            }
+
+            // Push assistant response to history so next turn has context
+            messages.push({ role: "assistant", content: full });
+            persistState();
+
+            stream.finalize(
+                renderMarkdown(full || "I couldn't process that."),
+            );
+
+            // Lock session after last turn (dev mode unlimited)
+            if (turnCount >= MAX_TURNS && !IS_DEV) {
+                lockSession();
+            }
+        } catch (e) {
+            console.warn("[ai-chat] Request failed:", e);
+            // Remove the user message from history since it failed
+            messages.pop();
+            turnCount--;
+            persistState();
+            stream.finalize(
+                renderMarkdown(
+                    "Sorry, try contacting directly:\n\n- 📞 [085156283645](tel:085156283645)\n- 💬 [WhatsApp](https://wa.me/6285156283645)\n- ✉️ [afghanekapangestu@gmail.com](mailto:afghanekapangestu@gmail.com)",
+                ),
+            );
+        }
+    }
+
+    // ── Update remaining UI ─────────────────────────
+    function updateRemainingUI(remaining: number) {
+        remainingSpan.classList.remove("hidden");
+        if (remaining <= 0) {
+            remainingSpan.textContent = `0/${MAX_TURNS}`;
+            remainingSpan.classList.add("text-red-400");
+        } else {
+            remainingSpan.textContent = `${remaining}/${MAX_TURNS}`;
+            remainingSpan.classList.remove("text-red-400");
+        }
+        if (remaining > 0 && remaining <= 3) {
+            input.placeholder = `${remaining} message${remaining > 1 ? "s" : ""} remaining`;
+        }
+    }
+
+    // ── Restore UI state from persisted session ─────
+    if (sessionLocked) {
+        lockSession();
+        if (!IS_DEV) updateRemainingUI(0);
+    } else if (!IS_DEV) {
+        updateRemainingUI(MAX_TURNS - turnCount);
+    }
+
+    // ── Event listeners ─────────────────────────────
+    toggle.addEventListener("click", () => {
+        isOpen = !isOpen;
+        panel.classList.toggle("hidden", !isOpen);
+        // Hide badge permanently on first click
+        hint.classList.remove("opacity-100", "translate-x-0");
+        hint.classList.add("opacity-0", "translate-x-2");
+        if (isOpen) input.focus();
+    });
+    closeBtn.addEventListener("click", () => {
+        isOpen = false;
+        panel.classList.add("hidden");
+    });
+    sendBtn.addEventListener("click", sendMessage);
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
+    document.querySelectorAll("#ai-suggestions button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            if (sessionLocked) {
+                // Show limit reached message
+                if (!IS_DEV) {
+                    addBubble(
+                        "assistant",
+                        renderMarkdown(
+                            `**Daily limit reached.** Maximum ${MAX_TURNS} messages per day. Come back tomorrow or contact Afghan directly.`,
+                        ),
+                    );
+                }
+                return;
+            }
+            const q = btn.getAttribute("data-q");
+            if (q) {
+                input.value = q;
+                input.focus();
+            }
+        });
+    });
+</script>
+
+<style is:global>
+    .streaming-cursor::after {
+        content: "▊";
+        animation: blink 0.8s infinite;
+        color: #14b8a6;
+        margin-left: 1px;
+    }
+    @keyframes blink {
+        0%,
+        50% {
+            opacity: 1;
+        }
+        51%,
+        100% {
+            opacity: 0;
+        }
+    }
+    @keyframes badge-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.3); }
+        50% { box-shadow: 0 0 0 6px rgba(20, 184, 166, 0); }
+    }
+    #ai-chat-hint.opacity-100 {
+        animation: badge-pulse 2s ease-in-out 3;
+    }
+</style>

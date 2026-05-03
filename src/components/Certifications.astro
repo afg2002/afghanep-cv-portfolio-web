@@ -1,0 +1,32 @@
+---
+const certs = [
+  { title: "Theoretical Understanding of HTML", issuer: "Sololearn", year: "2018" },
+  { title: "Theoretical Understanding of PHP", issuer: "Sololearn", year: "2018" },
+  { title: "Pemrograman Go-Lang: Pemula sampai Mahir", issuer: "Udemy", year: "2022" },
+  { title: "Kampus Merdeka MSIB Batch 6", issuer: "PT BTPN Syariah Tbk", year: "2024" },
+];
+---
+
+<section id="certifications" class="py-24 border-t border-border-subtle">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-12">
+      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">06.</p>
+      <h2 class="text-3xl sm:text-4xl font-bold">Certifications</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {certs.map((cert) => (
+        <div class="group p-5 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 transition-colors">
+          <div class="mb-3 p-2 w-fit rounded-lg bg-accent-primary/10 text-accent-primary">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+          </div>
+          <h4 class="text-sm font-semibold text-text-primary mb-1.5 leading-snug">{cert.title}</h4>
+          <p class="text-xs text-text-muted">{cert.issuer}</p>
+          <p class="text-xs text-text-muted">{cert.year}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
