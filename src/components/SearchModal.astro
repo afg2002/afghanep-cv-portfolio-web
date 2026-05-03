@@ -74,23 +74,10 @@
     async function loadPagefind() {
       if (pagefind) return pagefind;
       try {
-        // Load pagefind script dynamically
-        if (!document.querySelector('script[src*="pagefind.js"]')) {
-          await new Promise((resolve, reject) => {
-            const s = document.createElement("script");
-            s.src = "/pagefind/pagefind.js";
-            s.onload = resolve;
-            s.onerror = () => reject(new Error("Failed to load pagefind"));
-            document.head.appendChild(s);
-          });
-        }
-        // Wait for module to register
-        let tries = 0;
-        while (!(window as any).pagefind && tries < 20) {
-          await new Promise(r => setTimeout(r, 100));
-          tries++;
-        }
-        pagefind = (window as any).pagefind;
+        // Dynamic import — Pagefind is an ES module
+        // Needs ?_=cachebuster to avoid stale modules
+        const mod = await import(/* @vite-ignore */ `/pagefind/pagefind.js?_=${Date.now()}`);
+        pagefind = mod;
         return pagefind;
       } catch (e) {
         console.warn("[search] Pagefind load failed:", e);
@@ -120,6 +107,11 @@
         }
 
         try {
+          // Pagefind needs to be initialized before first search
+          if (!pf._initialized) {
+            await pf.init();
+            pf._initialized = true;
+          }
           const search = await pf.search(q);
           const hits = search?.results || [];
 
