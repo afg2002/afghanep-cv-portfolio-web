@@ -13,7 +13,7 @@
         <input
           id="search-input"
           type="text"
-          placeholder="Search pages &amp; blog posts..."
+          placeholder="Search pages & blog posts..."
           class="flex-1 bg-transparent text-text-primary text-lg placeholder-text-muted focus:outline-none"
           autocomplete="off"
           autofocus
@@ -29,7 +29,7 @@
       <!-- Footer -->
       <div id="search-footer" class="hidden px-5 py-3 border-t border-border-subtle text-xs text-text-muted flex items-center justify-between">
         <span>🔍 <span id="result-count"></span></span>
-        <span>Powered by <a href="https://pagefind.app" target="_blank" rel="noopener" class="text-accent-primary hover:underline">Pagefind</a></span>
+        <span>Powered by <a href="https://fusejs.io" target="_blank" rel="noopener" class="text-accent-primary hover:underline">Fuse.js</a></span>
       </div>
     </div>
   </div>
@@ -45,7 +45,8 @@
     const footer = document.getElementById("search-footer")!;
     const resultCount = document.getElementById("result-count")!;
 
-    let pagefind: any = null;
+    let fuseInstance: any = null;
+    let indexLoaded = false;
 
     // ── Open/close ──
     (window as any).__toggleSearch = function() {
@@ -70,17 +71,34 @@
       }
     });
 
-    // ── Load Pagefind ──
-    async function loadPagefind() {
-      if (pagefind) return pagefind;
+    // ── Load Fuse index ──
+    async function loadFuseIndex() {
+      if (indexLoaded && fuseInstance) return fuseInstance;
       try {
-        // Dynamic import — Pagefind is an ES module
-        // Needs ?_=cachebuster to avoid stale modules
-        const mod = await import(/* @vite-ignore */ `/pagefind/pagefind.js?_=${Date.now()}`);
-        pagefind = mod;
-        return pagefind;
+        const [FuseModule, indexData] = await Promise.all([
+          import("fuse.js"),
+          fetch("/fuse.json").then(r => r.json()),
+        ]);
+
+        const Fuse = FuseModule.default;
+        const { index, list } = indexData;
+
+        fuseInstance = new Fuse(list, {
+          keys: [
+            { name: "content", weight: 0.5 },
+            { name: "frontmatter.title", weight: 0.3 },
+            { name: "frontmatter.description", weight: 0.2 },
+          ],
+          includeScore: true,
+          includeMatches: true,
+          threshold: 0.4,
+          minMatchCharLength: 2,
+        }, Fuse.parseIndex(index));
+
+        indexLoaded = true;
+        return fuseInstance;
       } catch (e) {
-        console.warn("[search] Pagefind load failed:", e);
+        console.warn("[search] Fuse index load failed:", e);
         return null;
       }
     }
@@ -100,53 +118,48 @@
       debounceTimer = window.setTimeout(async () => {
         results.innerHTML = `<div class="flex justify-center py-8"><div class="w-6 h-6 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div></div>`;
 
-        const pf = await loadPagefind();
-        if (!pf) {
-          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search index not loaded. Refresh the page and try again.</p>`;
+        const fuse = await loadFuseIndex();
+        if (!fuse) {
+          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search index not loaded. Run 'npm run build' first.</p>`;
           return;
         }
 
         try {
-          // Pagefind needs to be initialized before first search
-          if (!pf._initialized) {
-            await pf.init();
-            pf._initialized = true;
-          }
-          const search = await pf.search(q);
-          const hits = search?.results || [];
+          const searchResults = fuse.search(q);
 
-          if (hits.length === 0) {
+          if (searchResults.length === 0) {
             results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">No results found for "<strong class="text-text-secondary">${escapeHtml(q)}</strong>"</p>`;
             return;
           }
 
           footer.classList.remove("hidden");
-          resultCount.textContent = `${hits.length} result${hits.length > 1 ? "s" : ""} for "${escapeHtml(q)}"`;
+          resultCount.textContent = `${searchResults.length} result${searchResults.length > 1 ? "s" : ""} for "${escapeHtml(q)}"`;
 
           const frag = document.createDocumentFragment();
-          for (const r of hits) {
-            const data = await r.data();
-            const excerpt = (data.excerpt || "").replace(
-              /<mark>/g,
-              '<mark class="text-accent-primary bg-accent-primary/10 rounded px-0.5 font-medium">'
-            ).replace(/<\/mark>/g, "</mark>");
+          for (const { item } of searchResults) {
+            const fm = item.frontmatter || {};
+            const title = fm.title || item.pathname || "Untitled";
+            const desc = fm.description || "";
+            const isBlog = item.pathname?.startsWith("/blog/");
 
-            const isBlog = data.url?.startsWith("/blog/");
+            const snippet = desc
+              ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${escapeHtml(desc)}</div>`
+              : `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2 text-text-muted/60">${escapeHtml(item.content?.slice(0, 120) || "No description")}...</div>`;
 
-            const item = document.createElement("a");
-            item.href = data.url || "/";
-            item.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
-            item.innerHTML = `
+            const itemEl = document.createElement("a");
+            itemEl.href = item.pathname || "/";
+            itemEl.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
+            itemEl.innerHTML = `
               <div class="flex items-start gap-3">
                 <span class="text-base mt-0.5 shrink-0">${isBlog ? "📝" : "📄"}</span>
                 <div class="min-w-0">
-                  <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(data.meta?.title || data.url || "")}</p>
-                  ${excerpt ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${excerpt}</div>` : ""}
-                  ${data.url ? `<div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${data.url}</div>` : ""}
+                  <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(title)}</p>
+                  ${snippet}
+                  <div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${item.pathname || "/"}</div>
                 </div>
               </div>
             `;
-            frag.appendChild(item);
+            frag.appendChild(itemEl);
           }
           results.innerHTML = "";
           results.appendChild(frag);
