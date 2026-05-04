@@ -46,12 +46,9 @@
     const resultCount = document.getElementById("result-count")!;
 
     // ── Para config ─────────────────────────────────────────────────
-    // Replace with your Para app credentials from https://paraio.com
-    const PARA_APP_ID = "YOUR_APP_ID";      // e.g. "afghan-portfolio"
-    const PARA_ENDPOINT = "https://para.io"; // or your self-hosted Para instance
+    const PARA_APP_ID = "cv-portfolio";
+    const PARA_ENDPOINT = "https://para.io";
     // ─────────────────────────────────────────────────────────────────
-
-    const searchUrl = `${PARA_ENDPOINT}/v1/search?q=`;
 
     // ── Open/close ──
     (window as any).__toggleSearch = function() {
@@ -102,15 +99,14 @@
         const signal = abortController.signal;
 
         try {
-          const url = `${searchUrl}${encodeURIComponent(q)}&type=page,blogpost&appId=${PARA_APP_ID}&limit=20`;
+          // Para search API endpoint
+          const searchUrl = `${PARA_ENDPOINT}/v1/search`;
+          const url = `${searchUrl}?q=${encodeURIComponent(q)}&type=page,blogpost&appId=${PARA_APP_ID}&limit=20`;
+
           const res = await fetch(url, { signal });
 
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
           const data = await res.json();
-
-          // Parse Para search response
-          // Para returns { results: [...], total: N }
           const hits = data?.results || [];
 
           if (hits.length === 0) {
@@ -125,11 +121,11 @@
           for (const hit of hits) {
             const title = hit.title || hit.name || "Untitled";
             const desc = hit.description || "";
-            const url = hit.url || hit.uri || "/";
-            const isBlog = url?.includes("/blog/");
+            const pageUrl = hit.url || hit.uri || "/";
+            const isBlog = pageUrl?.includes("/blog/");
 
             const itemEl = document.createElement("a");
-            itemEl.href = url;
+            itemEl.href = pageUrl;
             itemEl.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
             itemEl.innerHTML = `
               <div class="flex items-start gap-3">
@@ -137,7 +133,7 @@
                 <div class="min-w-0">
                   <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(title)}</p>
                   ${desc ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${escapeHtml(desc)}</div>` : ""}
-                  <div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${url}</div>
+                  <div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${pageUrl}</div>
                 </div>
               </div>
             `;
@@ -146,13 +142,9 @@
           results.innerHTML = "";
           results.appendChild(frag);
         } catch (err: any) {
-          if (err.name === "AbortError") return; // cancelled, ignore
+          if (err.name === "AbortError") return;
           console.warn("[search] Error:", err);
-          if (PARA_APP_ID === "YOUR_APP_ID") {
-            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Para not configured. Get free credentials at <a href="https://para.io" target="_blank" rel="noopener" class="text-accent-primary hover:underline">para.io</a></p>`;
-          } else {
-            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search error. Please try again.</p>`;
-          }
+          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search error. Please try again.</p>`;
         }
       }, 300);
     });
