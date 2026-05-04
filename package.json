@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/generate-search-index.mjs",
+    "build": "astro build",
     "preview": "astro preview",
     "start": "astro dev"
   },
@@ -12,6 +12,8 @@
     "@astrojs/mdx": "^4.0.0",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^8.0.0",
+    "@docsearch/css": "^3.0.0",
+    "@docsearch/js": "^3.0.0",
     "@fontsource/jetbrains-mono": "^5.0.0",
     "@fontsource/plus-jakarta-sans": "^5.0.0",
     "@phosphor-icons/web": "^2.1.0",
@@ -19,8 +21,6 @@
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^5.0.0",
     "astro-mermaid": "^2.0.1",
-    "cheerio": "^1.0.0",
-    "flexsearch": "^0.7.43",
     "mermaid": "^11.14.0",
     "rehype-pretty-code": "^0.14.0",
     "shiki": "^1.0.0",
