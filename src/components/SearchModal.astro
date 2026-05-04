@@ -37,49 +37,55 @@
 
 <script>
   (function() {
-    // ── DOM refs ──
-    const modal = document.getElementById("search-modal")!;
-    const input = document.getElementById("search-input") as HTMLInputElement;
-    const results = document.getElementById("search-results")!;
-    const backdrop = document.getElementById("search-backdrop")!;
-    const footer = document.getElementById("search-footer")!;
-    const resultCount = document.getElementById("result-count")!;
+    var modal = document.getElementById("search-modal");
+    var input = document.getElementById("search-input");
+    var results = document.getElementById("search-results");
+    var backdrop = document.getElementById("search-backdrop");
+    var footer = document.getElementById("search-footer");
+    var resultCount = document.getElementById("result-count");
 
-    // ── Para config ─────────────────────────────────────────────────
-    const PARA_APP_ID = "cv-portfolio";
-    const PARA_ENDPOINT = "https://para.io";
-    // ─────────────────────────────────────────────────────────────────
+    // Para config - hardcoded for client-side search
+    var PARA_APP_ID = "cv-portfolio";
+    var PARA_ENDPOINT = "https://para.io";
 
-    // ── Open/close ──
-    (window as any).__toggleSearch = function() {
-      const isOpen = !modal.classList.contains("hidden");
+    function escapeHtml(text) {
+      if (!text) return "";
+      var div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function toggleSearch() {
+      var isOpen = modal.classList.contains("hidden");
       modal.classList.toggle("hidden", isOpen);
       if (!isOpen) {
         input.value = "";
-        results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Start typing to search...</p>`;
+        results.innerHTML = '<p class="text-sm text-text-muted text-center py-8">Start typing to search...</p>';
         footer.classList.add("hidden");
         input.focus();
       }
-    };
+    }
 
-    backdrop.addEventListener("click", () => (window as any).__toggleSearch());
-    document.addEventListener("keydown", (e) => {
+    backdrop.addEventListener("click", toggleSearch);
+    document.addEventListener("keydown", function(e) {
       if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-        (window as any).__toggleSearch();
+        toggleSearch();
       }
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
-        (window as any).__toggleSearch();
+        toggleSearch();
       }
     });
 
-    // ── Search ──
-    let debounceTimer: number | null = null;
-    let abortController: AbortController | null = null;
+    // Expose toggle globally for header button
+    window.__toggleSearch = toggleSearch;
 
-    input.addEventListener("input", () => {
+    var debounceTimer = null;
+    var abortController = null;
+
+    input.addEventListener("input", function() {
       if (debounceTimer) clearTimeout(debounceTimer);
-      const q = input.value.trim();
+      var q = input.value.trim();
 
       if (abortController) {
         abortController.abort();
@@ -87,73 +93,66 @@
       }
 
       if (q.length < 2) {
-        results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Type at least 2 characters to search...</p>`;
+        results.innerHTML = '<p class="text-sm text-text-muted text-center py-8">Type at least 2 characters to search...</p>';
         footer.classList.add("hidden");
         return;
       }
 
-      debounceTimer = window.setTimeout(async () => {
-        results.innerHTML = `<div class="flex justify-center py-8"><div class="w-6 h-6 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div></div>`;
+      debounceTimer = setTimeout(function() {
+        results.innerHTML = '<div class="flex justify-center py-8"><div class="w-6 h-6 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div></div>';
 
         abortController = new AbortController();
-        const signal = abortController.signal;
+        var signal = abortController.signal;
 
-        try {
-          // Para search API endpoint
-          const searchUrl = `${PARA_ENDPOINT}/v1/search`;
-          const url = `${searchUrl}?q=${encodeURIComponent(q)}&type=page,blogpost&appId=${PARA_APP_ID}&limit=20`;
+        var searchUrl = PARA_ENDPOINT + "/v1/search";
+        var url = searchUrl + "?q=" + encodeURIComponent(q) + "&type=page,blogpost&appId=" + PARA_APP_ID + "&limit=20";
 
-          const res = await fetch(url, { signal });
+        fetch(url, { signal: signal })
+          .then(function(res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(function(data) {
+            var hits = (data && data.results) || [];
 
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data = await res.json();
-          const hits = data?.results || [];
+            if (hits.length === 0) {
+              results.innerHTML = '<p class="text-sm text-text-muted text-center py-8">No results found for "<strong class="text-text-secondary">' + escapeHtml(q) + '</strong>"</p>';
+              return;
+            }
 
-          if (hits.length === 0) {
-            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">No results found for "<strong class="text-text-secondary">${escapeHtml(q)}</strong>"</p>`;
-            return;
-          }
+            footer.classList.remove("hidden");
+            resultCount.textContent = hits.length + " result" + (hits.length > 1 ? "s" : "") + ' for "' + escapeHtml(q) + '"';
 
-          footer.classList.remove("hidden");
-          resultCount.textContent = `${hits.length} result${hits.length > 1 ? "s" : ""} for "${escapeHtml(q)}"`;
+            var frag = document.createDocumentFragment();
+            for (var i = 0; i < hits.length; i++) {
+              var hit = hits[i];
+              var title = hit.title || hit.name || "Untitled";
+              var desc = hit.description || "";
+              var pageUrl = hit.url || hit.uri || "/";
+              var isBlog = pageUrl.indexOf("/blog/") !== -1;
 
-          const frag = document.createDocumentFragment();
-          for (const hit of hits) {
-            const title = hit.title || hit.name || "Untitled";
-            const desc = hit.description || "";
-            const pageUrl = hit.url || hit.uri || "/";
-            const isBlog = pageUrl?.includes("/blog/");
-
-            const itemEl = document.createElement("a");
-            itemEl.href = pageUrl;
-            itemEl.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
-            itemEl.innerHTML = `
-              <div class="flex items-start gap-3">
-                <span class="text-base mt-0.5 shrink-0">${isBlog ? "📝" : "📄"}</span>
-                <div class="min-w-0">
-                  <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(title)}</p>
-                  ${desc ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${escapeHtml(desc)}</div>` : ""}
-                  <div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${pageUrl}</div>
-                </div>
-              </div>
-            `;
-            frag.appendChild(itemEl);
-          }
-          results.innerHTML = "";
-          results.appendChild(frag);
-        } catch (err: any) {
-          if (err.name === "AbortError") return;
-          console.warn("[search] Error:", err);
-          results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search error. Please try again.</p>`;
-        }
+              var itemEl = document.createElement("a");
+              itemEl.href = pageUrl;
+              itemEl.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
+              itemEl.innerHTML =
+                '<div class="flex items-start gap-3">' +
+                '<span class="text-base mt-0.5 shrink-0">' + (isBlog ? "📝" : "📄") + '</span>' +
+                '<div class="min-w-0">' +
+                '<p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">' + escapeHtml(title) + '</p>' +
+                (desc ? '<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">' + escapeHtml(desc) + '</div>' : "") +
+                '<div class="text-[10px] font-mono text-text-muted/60 mt-1">' + (isBlog ? "Blog" : "Page") + " · " + pageUrl + '</div>' +
+                '</div></div>';
+              frag.appendChild(itemEl);
+            }
+            results.innerHTML = "";
+            results.appendChild(frag);
+          })
+          .catch(function(err) {
+            if (err.name === "AbortError") return;
+            console.warn("[search] Error:", err);
+            results.innerHTML = '<p class="text-sm text-text-muted text-center py-8">Search error. Please try again.</p>';
+          });
       }, 300);
     });
-
-    function escapeHtml(text: string): string {
-      if (!text) return "";
-      const div = document.createElement("div");
-      div.textContent = text;
-      return div.innerHTML;
-    }
   })();
 </script>
