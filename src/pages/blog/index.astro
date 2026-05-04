@@ -19,11 +19,11 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 >
   <Header />
 
-  <main id="main-content" class="pt-24 pb-24">
+  <main id="main-content" class="pt-24 pb-24" data-pagefind-body>
     <div class="max-w-4xl mx-auto px-6">
       <div class="mb-12">
         <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">Writing</p>
-        <h1 class="text-3xl sm:text-4xl font-bold mb-3">Blog</h1>
+        <h1 class="text-3xl sm:text-4xl font-bold mb-3" data-pagefind-meta="title">Blog</h1>
         <p class="text-text-secondary max-w-xl">
           Thoughts on software development, architecture, and building for the web.
         </p>

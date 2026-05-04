@@ -1,3 +1,23 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  article?: boolean;
+}
+
+import CommandPalette from "../components/CommandPalette.astro";
+import "../styles/global.css";
+
+const {
+  title,
+  description,
+  canonical = new URL(Astro.url.pathname, Astro.site).href,
+  ogImage = "/og-default.png",
+  article = false,
+} = Astro.props;
+---
 <!doctype html>
 <html lang="en">
   <head>
@@ -46,6 +66,6 @@
   <body class="min-h-screen flex flex-col bg-bg-primary text-text-primary antialiased">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
-    <SearchModal />
+    <CommandPalette />
   </body>
 </html>

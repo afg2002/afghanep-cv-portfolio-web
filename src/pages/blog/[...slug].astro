@@ -45,7 +45,7 @@ const canonical = new URL(`/blog/${currentSlug}`, Astro.site).href;
 <BlogLayout title={title} description={excerpt} date={date} tags={tags}>
   <Header />
 
-  <main id="main-content" class="pb-24">
+  <main id="main-content" class="pb-24" data-pagefind-body>
     <!-- Reading progress bar -->
     <div id="progress-bar" class="fixed top-16 left-0 h-0.5 bg-accent-primary z-40 transition-all" style="width: 0%"></div>
 
@@ -72,7 +72,7 @@ const canonical = new URL(`/blog/${currentSlug}`, Astro.site).href;
             </a>
           ))}
         </div>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight" itemprop="headline">{title}</h1>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight" itemprop="headline" data-pagefind-meta="title">{title}</h1>
         <div class="flex items-center gap-3 text-sm text-text-muted font-mono">
           <time datetime={new Date(date).toISOString()} itemprop="datePublished">{formattedDate}</time>
           <span class="w-1 h-1 rounded-full bg-text-muted"></span>

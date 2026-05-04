@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && npm run index",
+    "build": "astro build",
     "preview": "astro preview",
     "start": "astro dev",
-    "index": "node scripts/index-to-para.mjs"
+    "index": "npx pagefind --site dist/client"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
@@ -20,12 +20,10 @@
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^5.0.0",
     "astro-mermaid": "^2.0.1",
+    "astro-pagefind": "^1.8.6",
     "mermaid": "^11.14.0",
     "rehype-pretty-code": "^0.14.0",
     "shiki": "^1.0.0",
     "tailwindcss": "^4.0.0"
-  },
-  "devDependencies": {
-    "para-cli": "^1.3.0"
   }
 }
