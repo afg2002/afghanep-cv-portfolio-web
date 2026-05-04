@@ -59,6 +59,76 @@ const PROVIDER_CONFIGS = [
       };
     },
   },
+  // ── OpenCode Zen fallback chain (OpenAI-compatible) ──
+  // Docs: https://opencode.ai/docs/zen/
+  // Free models: Big Pickle, MiniMax M2.5 Free, Ling 2.6 Flash Free,
+  //              Hy3 Preview Free, Nemotron 3 Super Free
+  {
+    name: "Zen Ling",
+    envKeys: ["ZEN_API_KEY"],
+    buildFetch: (messages: unknown[], key: string): Provider["fetch"] => {
+      const model = getEnv("ZEN_LING_MODEL") || "ling-2.6-flash";
+      return async () => {
+        return fetch("https://opencode.ai/zen/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${key}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model,
+            messages,
+            stream: true,
+            max_tokens: 4096,
+          }),
+        });
+      };
+    },
+  },
+  {
+    name: "Zen MiniMax",
+    envKeys: ["ZEN_API_KEY"],
+    buildFetch: (messages: unknown[], key: string): Provider["fetch"] => {
+      const model = getEnv("ZEN_MINIMAX_MODEL") || "minimax-m2.5-free";
+      return async () => {
+        return fetch("https://opencode.ai/zen/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${key}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model,
+            messages,
+            stream: true,
+            max_tokens: 4096,
+          }),
+        });
+      };
+    },
+  },
+  {
+    name: "Zen Nemotron",
+    envKeys: ["ZEN_API_KEY"],
+    buildFetch: (messages: unknown[], key: string): Provider["fetch"] => {
+      const model = getEnv("ZEN_NEMOTRON_MODEL") || "nemotron-3-super-free";
+      return async () => {
+        return fetch("https://opencode.ai/zen/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${key}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model,
+            messages,
+            stream: true,
+            max_tokens: 4096,
+          }),
+        });
+      };
+    },
+  },
   {
     name: "OpenRouter",
     envKeys: ["OPENROUTER_API_KEY"],
