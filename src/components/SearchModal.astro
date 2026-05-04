@@ -5,163 +5,163 @@
   <!-- Panel -->
   <div class="relative max-w-2xl mx-auto mt-[15vh] px-4">
     <div class="bg-bg-secondary border border-border-subtle rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
-      <!-- Input (DocSearch will inject its UI here) -->
-      <div id="docsearch-container">
-        <!-- DocSearch will replace this entire innerHTML -->
-        <div class="flex items-center gap-3 px-5 py-4 border-b border-border-subtle">
-          <svg class="w-5 h-5 text-text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-          <input
-            id="search-input"
-            type="text"
-            placeholder="Search with Algolia DocSearch..."
-            class="flex-1 bg-transparent text-text-primary text-lg placeholder-text-muted focus:outline-none"
-            autocomplete="off"
-            disabled
-          />
-          <kbd class="hidden sm:inline-flex px-2 py-1 text-[11px] font-mono text-text-muted bg-bg-elevated border border-border-subtle rounded-md">ESC</kbd>
-        </div>
-        <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
-          <p class="text-sm text-text-muted text-center py-8">
-            Search is being set up. Apply for free DocSearch at
-            <a href="https://docsearch.algolia.com/apply" target="_blank" rel="noopener" class="text-accent-primary hover:underline">docsearch.algolia.com</a>
-          </p>
-        </div>
+      <!-- Input -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-border-subtle">
+        <svg class="w-5 h-5 text-text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search pages & blog posts..."
+          class="flex-1 bg-transparent text-text-primary text-lg placeholder-text-muted focus:outline-none"
+          autocomplete="off"
+          autofocus
+        />
+        <kbd class="hidden sm:inline-flex px-2 py-1 text-[11px] font-mono text-text-muted bg-bg-elevated border border-border-subtle rounded-md">ESC</kbd>
+      </div>
+
+      <!-- Results -->
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
+        <p class="text-sm text-text-muted text-center py-8">Start typing to search...</p>
       </div>
 
       <!-- Footer -->
       <div id="search-footer" class="hidden px-5 py-3 border-t border-border-subtle text-xs text-text-muted flex items-center justify-between">
         <span>🔍 <span id="result-count"></span></span>
-        <span>Powered by <a href="https://docsearch.algolia.com" target="_blank" rel="noopener" class="text-accent-primary hover:underline">Algolia DocSearch</a></span>
+        <span>Powered by <a href="https://para.io" target="_blank" rel="noopener" class="text-accent-primary hover:underline">Para</a></span>
       </div>
     </div>
   </div>
 </div>
 
-<!--
-  ╔══════════════════════════════════════════════════════╗
-  ║  SETUP INSTRUCTIONS — DO NOT DELETE THIS COMMENT    ║
-  ╠══════════════════════════════════════════════════════╣
-  ║                                                      ║
-  ║  After your DocSearch application is approved,       ║
-  ║  Algolia will email you a script snippet like:       ║
-  ║                                                      ║
-  ║  <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3 ..."></script>
-  ║  <link rel="stylesheet" href="https://cdn.jsdelivr.net/...">
-  ║                                                      ║
-  ║  1. Add the CSS <link> to your BaseLayout.astro      ║
-  ║     (in the <head> section)                         ║
-  ║                                                      ║
-  ║  2. Replace the ALGOLIA_CONFIG below with your      ║
-  ║     credentials from the email:                      ║
-  ║                                                      ║
-  ║     appId: "YOUR_APP_ID",                           ║
-  ║     apiKey: "YOUR_SEARCH_ONLY_API_KEY",             ║
-  ║     indexName: "YOUR_INDEX_NAME",                   ║
-  ║                                                      ║
-  ║  3. Remove these comments after setup               ║
-  ║                                                      ║
-  ╚══════════════════════════════════════════════════════╝
--->
-
-<!-- DocSearch CSS (add to BaseLayout.astro head) -->
-<!--
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
--->
-
-<!-- DocSearch JS -->
-<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
-
 <script>
   (function() {
     // ── DOM refs ──
     const modal = document.getElementById("search-modal")!;
+    const input = document.getElementById("search-input") as HTMLInputElement;
+    const results = document.getElementById("search-results")!;
     const backdrop = document.getElementById("search-backdrop")!;
     const footer = document.getElementById("search-footer")!;
-    const container = document.getElementById("docsearch-container")!;
+    const resultCount = document.getElementById("result-count")!;
 
-    // ── Algolia/DocSearch config ─────────────────────────────────────
-    // REPLACE these with credentials from your DocSearch approval email
-    const ALGOLIA_APP_ID = "YOUR_APP_ID";         // e.g. "X1234567890"
-    const ALGOLIA_API_KEY = "YOUR_SEARCH_KEY";     // e.g. "a1b2c3d4e5f6..."
-    const ALGOLIA_INDEX_NAME = "YOUR_INDEX_NAME";  // e.g. "afghan-portfolio"
+    // ── Para config ─────────────────────────────────────────────────
+    // Replace with your Para app credentials from https://paraio.com
+    const PARA_APP_ID = "YOUR_APP_ID";      // e.g. "afghan-portfolio"
+    const PARA_ENDPOINT = "https://para.io"; // or your self-hosted Para instance
     // ─────────────────────────────────────────────────────────────────
 
-    let dsInitialized = false;
-
-    function initDocSearch() {
-      if (dsInitialized) return;
-      dsInitialized = true;
-
-      if (
-        ALGOLIA_APP_ID === "YOUR_APP_ID" ||
-        ALGOLIA_API_KEY === "YOUR_SEARCH_KEY"
-      ) {
-        return; // Not configured yet
-      }
-
-      // Replace container content with DocSearch button
-      container.innerHTML = `
-        <div id="docsearch-btn" class="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-bg-elevated transition-colors">
-          <svg class="w-5 h-5 text-text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-          <span class="text-text-muted text-lg">Click to search...</span>
-          <kbd class="ml-auto px-2 py-1 text-[11px] font-mono text-text-muted bg-bg-elevated border border-border-subtle rounded-md">Ctrl+K</kbd>
-        </div>
-      `;
-
-      // Initialize DocSearch
-      window.docsearch({
-        appId: ALGOLIA_APP_ID,
-        apiKey: ALGOLIA_API_KEY,
-        indexName: ALGOLIA_INDEX_NAME,
-        container: "#docsearch-btn",
-        debug: false,
-      });
-
-      // When DocSearch opens, also show our modal
-      document.addEventListener("keydown", (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-          e.preventDefault();
-          document.getElementById("docsearch-btn")?.click();
-        }
-      });
-    }
+    const searchUrl = `${PARA_ENDPOINT}/v1/search?q=`;
 
     // ── Open/close ──
     (window as any).__toggleSearch = function() {
       const isOpen = !modal.classList.contains("hidden");
       modal.classList.toggle("hidden", isOpen);
       if (!isOpen) {
-        initDocSearch();
         input.value = "";
+        results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Start typing to search...</p>`;
+        footer.classList.add("hidden");
         input.focus();
       }
     };
 
-    backdrop.addEventListener("click", () => (window as any).__toggleSearch?.());
+    backdrop.addEventListener("click", () => (window as any).__toggleSearch());
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !modal.classList.contains("hidden")) {
         (window as any).__toggleSearch();
       }
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        (window as any).__toggleSearch();
+      }
     });
 
-    const input = document.getElementById("search-input") as HTMLInputElement;
+    // ── Search ──
+    let debounceTimer: number | null = null;
+    let abortController: AbortController | null = null;
+
+    input.addEventListener("input", () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      const q = input.value.trim();
+
+      if (abortController) {
+        abortController.abort();
+        abortController = null;
+      }
+
+      if (q.length < 2) {
+        results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Type at least 2 characters to search...</p>`;
+        footer.classList.add("hidden");
+        return;
+      }
+
+      debounceTimer = window.setTimeout(async () => {
+        results.innerHTML = `<div class="flex justify-center py-8"><div class="w-6 h-6 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div></div>`;
+
+        abortController = new AbortController();
+        const signal = abortController.signal;
+
+        try {
+          const url = `${searchUrl}${encodeURIComponent(q)}&type=page,blogpost&appId=${PARA_APP_ID}&limit=20`;
+          const res = await fetch(url, { signal });
+
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+          const data = await res.json();
+
+          // Parse Para search response
+          // Para returns { results: [...], total: N }
+          const hits = data?.results || [];
+
+          if (hits.length === 0) {
+            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">No results found for "<strong class="text-text-secondary">${escapeHtml(q)}</strong>"</p>`;
+            return;
+          }
+
+          footer.classList.remove("hidden");
+          resultCount.textContent = `${hits.length} result${hits.length > 1 ? "s" : ""} for "${escapeHtml(q)}"`;
+
+          const frag = document.createDocumentFragment();
+          for (const hit of hits) {
+            const title = hit.title || hit.name || "Untitled";
+            const desc = hit.description || "";
+            const url = hit.url || hit.uri || "/";
+            const isBlog = url?.includes("/blog/");
+
+            const itemEl = document.createElement("a");
+            itemEl.href = url;
+            itemEl.className = "block p-4 rounded-xl hover:bg-bg-elevated transition-colors no-underline group";
+            itemEl.innerHTML = `
+              <div class="flex items-start gap-3">
+                <span class="text-base mt-0.5 shrink-0">${isBlog ? "📝" : "📄"}</span>
+                <div class="min-w-0">
+                  <p class="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">${escapeHtml(title)}</p>
+                  ${desc ? `<div class="text-xs text-text-muted mt-1 leading-relaxed line-clamp-2">${escapeHtml(desc)}</div>` : ""}
+                  <div class="text-[10px] font-mono text-text-muted/60 mt-1">${isBlog ? "Blog" : "Page"} · ${url}</div>
+                </div>
+              </div>
+            `;
+            frag.appendChild(itemEl);
+          }
+          results.innerHTML = "";
+          results.appendChild(frag);
+        } catch (err: any) {
+          if (err.name === "AbortError") return; // cancelled, ignore
+          console.warn("[search] Error:", err);
+          if (PARA_APP_ID === "YOUR_APP_ID") {
+            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Para not configured. Get free credentials at <a href="https://para.io" target="_blank" rel="noopener" class="text-accent-primary hover:underline">para.io</a></p>`;
+          } else {
+            results.innerHTML = `<p class="text-sm text-text-muted text-center py-8">Search error. Please try again.</p>`;
+          }
+        }
+      }, 300);
+    });
+
+    function escapeHtml(text: string): string {
+      if (!text) return "";
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
   })();
 </script>
-
-<style is:global>
-  /* DocSearch modal customization */
-  .docsearch-container {
-    z-index: 200 !important;
-  }
-  .docsearch-modal {
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-  .docsearch-modal-content {
-    background: transparent !important;
-  }
-</style>

@@ -21,9 +21,6 @@
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
 
-    <!-- DocSearch CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
-
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
@@ -42,6 +39,9 @@
       email: "afghanekapangestu@gmail.com",
       telephone: "085156283645",
     })} />
+
+    <!-- Umami Analytics -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="8fa27ba0-d8e1-4347-958d-54a5e0052177"></script>
   </head>
   <body class="min-h-screen flex flex-col bg-bg-primary text-text-primary antialiased">
     <a href="#main-content" class="skip-link">Skip to content</a>

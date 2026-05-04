@@ -4,16 +4,15 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm run index",
     "preview": "astro preview",
-    "start": "astro dev"
+    "start": "astro dev",
+    "index": "node scripts/index-to-para.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^8.0.0",
-    "@docsearch/css": "^3.0.0",
-    "@docsearch/js": "^3.0.0",
     "@fontsource/jetbrains-mono": "^5.0.0",
     "@fontsource/plus-jakarta-sans": "^5.0.0",
     "@phosphor-icons/web": "^2.1.0",
@@ -26,5 +25,7 @@
     "shiki": "^1.0.0",
     "tailwindcss": "^4.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "para-cli": "^1.3.0"
+  }
 }
