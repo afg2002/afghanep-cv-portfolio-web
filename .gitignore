@@ -29,4 +29,4 @@ Thumbs.db
 *.log
 npm-debug.log*
 package-lock.json
-bun.lockb
+# bun.lock intentionally tracked — required for reproducible builds on Vercel
