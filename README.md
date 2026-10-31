@@ -10,19 +10,21 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 
 ---
 
-## ✨ Features
+## Features
 
-- **Hero** — Oversized display headline, live terminal profile card, stat strip and tech marquee
-- **Work** — Featured project grid (lead card spans full width) + expandable list of eight more builds
-- **Stack** — Capability grid on an ink band, with language proficiency bars
-- **Experience** — Rule-separated ledger of roles with type chips and highlights
-- **About** — Statement block + profile facts table
-- **Education / Certifications** — Score-badged cards and credential list
-- **Contact** — Acid CTA band with direct channel table and email/CV actions
-- **Blog** — Grid-paper masthead, tag filtering, card grid, and rich article pages (TOC, reading progress, code copy)
+- **Hero** — Swiss-style display headline, mono spec panel with live profile facts, and direct contact rails
+- **Work** — Rule-separated project index (6 featured) plus an expandable list of 8 more builds
+- **Stack** — Capability grid with language proficiency bars
+- **Experience** — Spec-sheet rows with dotted leaders, employment type, and "Current" marker
+- **About** — Statement block + facts table
+- **Education / Certifications** — Score-badged cards and a two-column credential list
+- **Contact** — Direct channel table + CTA panel with email and CV actions
+- **Blog** — Tag filtering, card grid, and article pages with TOC, reading progress, and copy-code buttons
 - **Command palette** — `Ctrl/Cmd + K` search across pages and articles (Pagefind)
-- **Design system** — Neo-brutalist: paper canvas, 2px black rules, hard offset shadows, acid/coral/lilac accents (see `DESIGN.md`)
-- **Responsive** — Mobile-first, fluid display type via `clamp()`, reduced-motion support
+- **Dark mode** — Dark by default, light supported; 3-state toggle (dark → system → light) with no first-paint flash
+- **SEO** — Canonical URLs, OG/Twitter cards, JSON-LD (`Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `BreadcrumbList`), sitemap, `noindex` on filtered views
+- **Responsive** — Mobile-first, fluid `clamp()` type, ≥44px touch targets, reduced-motion support
+- **Design system** — Swiss + monospace spec-sheet: hairline rules, one accent, zero decoration (see `DESIGN.md`)
 
 ## 🛠 Tech Stack
 
@@ -30,7 +32,7 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 |-------|-----------|
 | **Framework** | [Astro](https://astro.build) 5 |
 | **Styling** | [Tailwind CSS](https://tailwindcss.com) 4 |
-| **UI** | Custom components, `@fontsource/archivo-black`, `@fontsource/plus-jakarta-sans`, `@fontsource/jetbrains-mono` |
+| **UI** | Custom components, `@fontsource/space-grotesk`, `@fontsource/inter`, `@fontsource/jetbrains-mono` |
 | **Content** | Astro Content Collections (Markdown) |
 | **Deployment** | [Vercel](https://vercel.com) (static + serverless functions) |
 | **Package Manager** | [Bun](https://bun.sh) |

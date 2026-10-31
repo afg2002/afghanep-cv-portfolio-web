@@ -40,75 +40,67 @@ const related = allPosts
 
 const canonical = new URL(`/blog/${currentSlug}`, Astro.site).href;
 const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
+const ogImage = coverImage || "/og-default.png";
 ---
 
 <BlogLayout title={title} description={excerpt} date={date} tags={tags}>
   <Header />
 
   <main id="main-content" class="flex-1" data-pagefind-body>
-    <!-- Reading progress -->
-    <div id="progress-bar" class="fixed left-0 top-16 z-40 h-1 bg-ink md:top-[72px]" style="width: 0%"></div>
+    <div id="progress-bar" class="fixed left-0 top-14 z-40 h-[2px] bg-accent md:top-16" style="width: 0%"></div>
 
-    <!-- Article masthead -->
-    <section class="border-b-2 border-ink bg-paper">
-      <div class="u-container py-10 md:py-16">
-        <!-- Breadcrumb -->
-        <nav class="mb-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3" aria-label="Breadcrumb">
-          <a href="/" class="text-ink-3 no-underline hover:text-ink">Home</a>
+    <!-- Masthead -->
+    <section class="border-b border-line">
+      <div class="u-container py-10 md:py-14">
+        <nav class="mb-6 flex items-center gap-2 mono-meta" aria-label="Breadcrumb">
+          <a href="/" class="text-muted no-underline hover:text-text">Home</a>
           <span aria-hidden="true">/</span>
-          <a href="/blog" class="text-ink-3 no-underline hover:text-ink">Writing</a>
+          <a href="/blog" class="text-muted no-underline hover:text-text">Writing</a>
           <span aria-hidden="true">/</span>
-          <span class="text-ink">Article</span>
+          <span class="text-text-2">Article</span>
         </nav>
 
-        <div class="grid gap-8 lg:grid-cols-[1fr_260px] lg:items-end">
+        <div class="grid gap-8 lg:grid-cols-[1fr_260px] lg:items-end lg:gap-12">
           <div class="min-w-0">
             {tags.length > 0 && (
               <div class="mb-5 flex flex-wrap gap-1.5">
                 {tags.map((tag) => (
-                  <a
-                    href={`/blog?tag=${encodeURIComponent(tag)}`}
-                    class="chip no-underline hover:bg-acid"
-                  >
+                  <a href={`/blog?tag=${encodeURIComponent(tag)}`} class="tag no-underline transition-colors hover:border-accent hover:text-accent">
                     {tag}
                   </a>
                 ))}
               </div>
             )}
 
-            <h1
-              class="display text-[clamp(2rem,6vw,4rem)] leading-[0.94]"
-              itemprop="headline"
-              data-pagefind-meta="title"
-            >
+            <h1 class="display text-[clamp(1.85rem,5vw,3.25rem)] text-text" itemprop="headline" data-pagefind-meta="title">
               {title}
             </h1>
 
-            {excerpt && (
-              <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink-2 md:text-lg">{excerpt}</p>
-            )}
+            {excerpt && <p class="lead mt-5 max-w-[56ch]">{excerpt}</p>}
           </div>
 
-          <!-- Meta block -->
-          <div class="border-2 border-ink bg-paper-2 p-4">
-            <dl class="space-y-2.5 font-mono text-[10px] uppercase tracking-[0.08em]">
-              <div class="flex items-center justify-between gap-3">
-                <dt class="text-ink-3">Published</dt>
-                <dd class="text-ink">
+          <div class="border border-line bg-surface">
+            <div class="border-b border-line px-4 py-2.5">
+              <p class="mono-label">Metadata</p>
+            </div>
+            <dl class="divide-y divide-line">
+              <div class="flex items-center justify-between gap-3 px-4 py-2.5">
+                <dt class="mono-meta uppercase tracking-[0.08em]">Published</dt>
+                <dd class="mono-meta text-text-2">
                   <time datetime={new Date(date).toISOString()} itemprop="datePublished">{formattedDate}</time>
                 </dd>
               </div>
-              <div class="flex items-center justify-between gap-3 border-t border-dashed border-ink/30 pt-2.5">
-                <dt class="text-ink-3">Reading</dt>
-                <dd class="text-ink">{readingTime} min</dd>
+              <div class="flex items-center justify-between gap-3 px-4 py-2.5">
+                <dt class="mono-meta uppercase tracking-[0.08em]">Reading</dt>
+                <dd class="mono-meta text-text-2">{readingTime} min</dd>
               </div>
-              <div class="flex items-center justify-between gap-3 border-t border-dashed border-ink/30 pt-2.5">
-                <dt class="text-ink-3">Length</dt>
-                <dd class="text-ink">{wordCount.toLocaleString()} words</dd>
+              <div class="flex items-center justify-between gap-3 px-4 py-2.5">
+                <dt class="mono-meta uppercase tracking-[0.08em]">Length</dt>
+                <dd class="mono-meta text-text-2">{wordCount.toLocaleString()} words</dd>
               </div>
-              <div class="flex items-center justify-between gap-3 border-t border-dashed border-ink/30 pt-2.5">
-                <dt class="text-ink-3">Author</dt>
-                <dd class="text-ink">Afghan Eka</dd>
+              <div class="flex items-center justify-between gap-3 px-4 py-2.5">
+                <dt class="mono-meta uppercase tracking-[0.08em]">Author</dt>
+                <dd class="mono-meta text-text-2">Afghan Eka</dd>
               </div>
             </dl>
           </div>
@@ -116,37 +108,30 @@ const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
       </div>
     </section>
 
-    <!-- Cover -->
     {coverImage && (
-      <div class="border-b-2 border-ink bg-paper">
-        <div class="u-container py-6 md:py-8">
-          <img
-            src={coverImage}
-            alt={title}
-            class="max-h-[440px] w-full border-2 border-ink object-cover shadow-brut"
-            loading="eager"
-          />
+      <div class="border-b border-line">
+        <div class="u-container py-6">
+          <img src={coverImage} alt={title} class="max-h-[420px] w-full border border-line object-cover" loading="eager" />
         </div>
       </div>
     )}
 
     <!-- Content -->
-    <section class="bg-paper py-10 md:py-14">
+    <section class="py-10 md:py-14">
       <div class="u-container">
-        <!-- Mobile TOC -->
         {tocHeadings.length > 0 && (
-          <details class="mb-8 border-2 border-ink bg-paper-2 lg:hidden">
-            <summary class="flex cursor-pointer select-none items-center justify-between px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink">
-              On this page
-              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="square" d="M6 9l6 6 6-6" />
+          <details class="mb-8 border border-line bg-surface lg:hidden">
+            <summary class="flex min-h-[44px] cursor-pointer select-none items-center justify-between px-4 py-3">
+              <span class="mono-label !text-text-2">On this page</span>
+              <svg class="h-3.5 w-3.5 text-muted" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </summary>
-            <nav class="border-t-2 border-ink px-4 py-3">
+            <nav class="border-t border-line px-4 py-3">
               <ul class="space-y-2">
                 {tocHeadings.map((h: any) => (
                   <li class={h.depth === 3 ? "pl-4" : ""}>
-                    <a href={`#${h.slug}`} class="font-mono text-[11px] leading-snug text-ink-3 no-underline hover:text-ink">
+                    <a href={`#${h.slug}`} class="text-[12.5px] leading-snug text-muted no-underline hover:text-text">
                       {h.text}
                     </a>
                   </li>
@@ -156,57 +141,49 @@ const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
           </details>
         )}
 
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-14">
-          <!-- Article body -->
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-14">
           <article class="min-w-0" itemscope itemtype="https://schema.org/Article">
             <div class="prose" itemprop="articleBody">
               <Content />
             </div>
 
-            <!-- Tags footer -->
             {tags.length > 0 && (
-              <div class="mt-12 flex flex-wrap items-center gap-2 border-t-2 border-ink pt-6">
-                <span class="mono-label mr-1 text-ink-3">Filed under</span>
+              <div class="mt-12 flex flex-wrap items-center gap-2 border-t border-line pt-6">
+                <span class="mono-label mr-1">Filed under</span>
                 {tags.map((tag) => (
-                  <a href={`/blog?tag=${encodeURIComponent(tag)}`} class="chip no-underline hover:bg-acid">
+                  <a href={`/blog?tag=${encodeURIComponent(tag)}`} class="tag no-underline transition-colors hover:border-accent hover:text-accent">
                     {tag}
                   </a>
                 ))}
               </div>
             )}
 
-            <!-- Author card -->
-            <div class="mt-8 flex flex-wrap items-center justify-between gap-4 border-2 border-ink bg-paper-2 p-5">
-              <div class="flex items-center gap-4">
-                <span class="flex h-11 w-11 items-center justify-center border-2 border-ink bg-acid font-display text-[13px]">AEP</span>
+            <div class="mt-8 flex flex-wrap items-center justify-between gap-4 border border-line bg-surface p-4 md:p-5">
+              <div class="flex items-center gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-[2px] bg-text font-mono text-[11px] text-bg">AE</span>
                 <div>
-                  <p class="text-sm font-bold text-ink">Afghan Eka Pangestu</p>
-                  <p class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">
-                    Software developer — Bogor, Indonesia
-                  </p>
+                  <p class="text-[13px] font-medium text-text">Afghan Eka Pangestu</p>
+                  <p class="mono-meta">Software developer — Bogor, Indonesia</p>
                 </div>
               </div>
-              <a href="/#contact" class="btn btn-sm btn-ink">Get in touch</a>
+              <a href="/#contact" class="btn btn-sm">Get in touch</a>
             </div>
 
-            <!-- Related -->
             {related.length > 0 && (
-              <section class="mt-14 border-t-2 border-ink pt-8">
-                <h2 class="mono-label mb-5 flex items-center gap-2 text-ink-3">
-                  <span class="index-num">→</span> Keep reading
-                </h2>
-                <div class="grid gap-4 sm:grid-cols-3">
+              <section class="mt-14 border-t border-line pt-8">
+                <h2 class="mono-label mb-4">Keep reading</h2>
+                <div class="grid gap-3 sm:grid-cols-3">
                   {related.map((r) => {
                     const rSlug = r.id.replace(/\.(md|mdx)$/, "");
                     return (
                       <a
                         href={`/blog/${rSlug}`}
-                        class="group flex flex-col border-2 border-ink bg-paper p-4 no-underline transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brut-sm"
+                        class="group flex flex-col border border-line bg-surface p-4 no-underline transition-colors hover:border-line-strong hover:bg-surface-2"
                       >
-                        <p class="display-tight mb-3 line-clamp-3 text-sm leading-[1.15] text-ink group-hover:text-electric">
+                        <p class="heading mb-3 line-clamp-3 text-[13px] leading-snug text-text transition-colors group-hover:text-accent">
                           {r.data.title}
                         </p>
-                        <p class="mt-auto font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">
+                        <p class="mono-meta mt-auto">
                           {new Date(r.data.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                         </p>
                       </a>
@@ -217,18 +194,17 @@ const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
             )}
           </article>
 
-          <!-- Desktop TOC -->
           <aside class="hidden lg:block" aria-label="Table of contents">
             {tocHeadings.length > 0 && (
-              <nav class="sticky top-28 border-t-2 border-ink pt-4">
-                <h2 class="mono-label mb-3 text-ink-3">On this page</h2>
-                <ul class="space-y-2">
+              <nav class="sticky top-24">
+                <h2 class="mono-label mb-3">On this page</h2>
+                <ul class="space-y-2 border-l border-line">
                   {tocHeadings.map((h: any) => (
                     <li class={h.depth === 3 ? "pl-3" : ""}>
                       <a
                         href={`#${h.slug}`}
                         data-toc={h.slug}
-                        class="toc-link block border-l-2 border-transparent pl-3 font-mono text-[11px] leading-snug text-ink-3 no-underline transition-colors hover:text-ink"
+                        class="toc-link block -ml-px border-l border-transparent pl-3 text-[12.5px] leading-snug text-muted no-underline transition-colors hover:text-text"
                       >
                         {h.text}
                       </a>
@@ -242,8 +218,7 @@ const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
       </div>
     </section>
 
-    <!-- Comments -->
-    <section class="border-t-2 border-ink bg-paper-2 py-12 md:py-16">
+    <section class="section !py-10 md:!py-14">
       <div class="u-container">
         <Giscus />
       </div>
@@ -256,35 +231,54 @@ const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
 
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
-  "@type": "Article",
+  "@type": "BlogPosting",
+  mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
   headline: title,
   description: excerpt,
+  image: [new URL(ogImage, Astro.site).href],
   datePublished: new Date(date).toISOString(),
+  dateModified: new Date(date).toISOString(),
+  wordCount,
+  keywords: tags.join(", "),
+  inLanguage: "en",
   author: {
     "@type": "Person",
+    "@id": `${Astro.site}#person`,
     name: "Afghan Eka Pangestu",
     url: Astro.site,
+  },
+  publisher: {
+    "@type": "Person",
+    "@id": `${Astro.site}#person`,
+    name: "Afghan Eka Pangestu",
   },
   url: canonical,
 })} />
 
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: new URL("/", Astro.site).href },
+    { "@type": "ListItem", position: 2, name: "Writing", item: new URL("/blog", Astro.site).href },
+    { "@type": "ListItem", position: 3, name: title, item: canonical },
+  ],
+})} />
+
 <script>
-  // ── Progress bar ──
   const bar = document.getElementById("progress-bar");
   if (bar) {
     window.addEventListener(
       "scroll",
       () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        bar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        const top = window.scrollY;
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = `${Math.min(100, Math.max(0, height > 0 ? (top / height) * 100 : 0))}%`;
       },
       { passive: true }
     );
   }
 
-  // ── TOC active state ──
   const tocLinks = document.querySelectorAll<HTMLAnchorElement>(".toc-link");
   if (tocLinks.length > 0) {
     const headings = Array.from(document.querySelectorAll<HTMLElement>(".prose h2[id], .prose h3[id]"));
@@ -294,21 +288,20 @@ const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
           if (!entry.isIntersecting) return;
           const active = document.querySelector(`[data-toc="${entry.target.id}"]`);
           tocLinks.forEach((l) => {
-            l.classList.remove("text-ink", "border-ink", "font-medium");
-            l.classList.add("text-ink-3", "border-transparent");
+            l.classList.remove("text-text", "border-accent");
+            l.classList.add("text-muted", "border-transparent");
           });
           if (active) {
-            active.classList.add("text-ink", "border-ink", "font-medium");
-            active.classList.remove("text-ink-3", "border-transparent");
+            active.classList.add("text-text", "border-accent");
+            active.classList.remove("text-muted", "border-transparent");
           }
         });
       },
-      { rootMargin: "-96px 0px -65% 0px" }
+      { rootMargin: "-88px 0px -65% 0px" }
     );
     headings.forEach((h) => observer.observe(h));
   }
 
-  // ── Copy buttons for code blocks ──
   document.querySelectorAll<HTMLPreElement>(".prose pre").forEach((pre) => {
     const container = document.createElement("div");
     container.className = "relative group/code";
@@ -317,17 +310,16 @@ const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
 
     const btn = document.createElement("button");
     btn.className =
-      "absolute top-2 right-2 border-2 border-paper/40 bg-ink px-2 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-paper/70 transition-colors hover:border-acid hover:text-acid opacity-0 group-hover/code:opacity-100 focus-visible:opacity-100";
+      "absolute right-2 top-2 rounded-[2px] border border-line bg-surface px-2 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-muted opacity-0 transition-all hover:border-accent hover:text-accent group-hover/code:opacity-100 focus-visible:opacity-100";
     btn.textContent = "Copy";
     btn.setAttribute("aria-label", "Copy code to clipboard");
     btn.addEventListener("click", async () => {
-      const code = pre.querySelector("code")?.textContent || "";
-      await navigator.clipboard.writeText(code);
+      await navigator.clipboard.writeText(pre.querySelector("code")?.textContent || "");
       btn.textContent = "Copied";
-      btn.classList.add("text-acid", "border-acid");
+      btn.classList.add("text-accent", "border-accent");
       setTimeout(() => {
         btn.textContent = "Copy";
-        btn.classList.remove("text-acid", "border-acid");
+        btn.classList.remove("text-accent", "border-accent");
       }, 2000);
     });
     container.appendChild(btn);

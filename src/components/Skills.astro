@@ -1,112 +1,74 @@
 ---
 const groups = [
   {
-    num: "A",
-    label: "Frontend",
-    blurb: "Interfaces that stay fast under real data.",
-    skills: ["HTML", "CSS", "JavaScript", "Vue.js 2", "Vuetify", "React"],
-    bg: "bg-acid",
-  },
-  {
-    num: "B",
+    num: "01",
     label: "Backend",
     blurb: "Services, integrations, and business logic.",
     skills: ["PHP", "Laravel", "Java", "Spring Boot", "Golang", "Express"],
-    bg: "bg-paper",
   },
   {
-    num: "C",
-    label: "Data & Tooling",
+    num: "02",
+    label: "Frontend",
+    blurb: "Interfaces that stay fast under real data.",
+    skills: ["HTML", "CSS", "JavaScript", "Vue.js 2", "Vuetify", "React"],
+  },
+  {
+    num: "03",
+    label: "Data & tooling",
     blurb: "Storage, versioning, and the daily workflow.",
     skills: ["MySQL", "MongoDB", "Git", "Terminal", "VS Code"],
-    bg: "bg-paper",
   },
   {
-    num: "D",
+    num: "04",
     label: "Engineering craft",
     blurb: "How the work actually gets done.",
     skills: ["Clean Architecture", "Scalability", "Maintainability", "Problem Solving", "Teamwork"],
-    bg: "bg-paper",
   },
 ];
 
 const languages = [
-  { name: "Indonesian", level: "Native / Active", pct: 100 },
-  { name: "English", level: "Passive / Reading", pct: 65 },
+  { name: "Indonesian", level: "Native", pct: 100 },
+  { name: "English", level: "Professional reading", pct: 65 },
 ];
 ---
 
-<section id="skills" class="scroll-mt-24 border-b-2 border-ink bg-ink py-16 text-paper md:py-24">
+<section id="stack" class="section">
   <div class="u-container">
-    <!-- Section head -->
-    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-paper/25 pb-6 md:mb-14">
+    <div class="section-head">
       <div>
-        <p class="mono-label mb-3 flex items-center gap-2 text-paper/50">
-          <span class="index-num">02</span> Capabilities
-        </p>
-        <h2 class="display text-[clamp(2.25rem,6.5vw,4.5rem)] text-paper">
-          The stack<br class="sm:hidden" /> I work in
-        </h2>
+        <p class="index-label mb-2" data-index="02">Capabilities</p>
+        <h2 class="heading text-[clamp(1.75rem,4.5vw,2.75rem)]">The stack I work in</h2>
       </div>
-      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-paper/45">
-        Pragmatic choices over hype.<br />
-        Boring, proven tools that hold up<br />
-        in production for years.
+      <p class="mono-meta max-w-[34ch] leading-relaxed">
+        Pragmatic choices over hype — boring, proven tools that hold up in production.
       </p>
     </div>
 
-    <!-- Capability grid -->
-    <div class="grid border-2 border-paper/30 md:grid-cols-2">
-      {groups.map((g, i) => (
-        <div
-          class:list={[
-            "group relative border-b-2 border-paper/30 p-6 transition-colors duration-200 last:border-b-0 md:border-b-0 md:p-8 hover:bg-paper/5",
-            i < 2 && "md:border-b-2",
-            i % 2 === 0 && "md:border-r-2 md:border-paper/30",
-          ]}
-        >
-          <div class="mb-5 flex items-baseline gap-3">
-            <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center border-2 border-paper/40 font-mono text-[11px] text-paper/70">
-              {g.num}
-            </span>
-            <h3 class="display-tight text-xl text-paper md:text-2xl">{g.label}</h3>
+    <div class="grid gap-x-12 gap-y-8 sm:grid-cols-2">
+      {groups.map((g) => (
+        <div class="border-t border-line pt-4">
+          <div class="mb-2 flex items-baseline gap-3">
+            <span class="tnum text-[11px] text-muted">{g.num}</span>
+            <h3 class="heading text-[15px] text-text">{g.label}</h3>
           </div>
-
-          <p class="mb-5 max-w-sm text-sm leading-relaxed text-paper/55">{g.blurb}</p>
-
+          <p class="mb-4 text-[13px] leading-relaxed text-muted">{g.blurb}</p>
           <ul class="flex flex-wrap gap-1.5">
-            {g.skills.map((s) => (
-              <li class="border-2 border-paper/35 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-paper/85 transition-colors group-hover:border-paper/60">
-                {s}
-              </li>
-            ))}
+            {g.skills.map((s) => <li class="tag">{s}</li>)}
           </ul>
-
-          <span
-            class:list={[
-              "pointer-events-none absolute right-6 top-6 hidden h-10 w-10 items-center justify-center border-2 border-ink opacity-0 transition-opacity duration-200 group-hover:opacity-100 md:flex",
-              g.bg,
-            ]}
-            aria-hidden="true"
-          >
-            <svg class="h-4 w-4 text-ink" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="square" d="M7 17L17 7M9 7h8v8" />
-            </svg>
-          </span>
         </div>
       ))}
     </div>
 
-    <!-- Languages strip -->
-    <div class="mt-8 grid gap-6 border-2 border-paper/30 p-6 sm:grid-cols-2 md:p-8">
+    <!-- Languages -->
+    <div class="mt-12 grid gap-6 border-t border-line pt-6 sm:grid-cols-2">
       {languages.map((l) => (
         <div>
           <div class="mb-2 flex items-baseline justify-between gap-3">
-            <p class="font-mono text-[11px] uppercase tracking-[0.1em] text-paper">{l.name}</p>
-            <p class="font-mono text-[10px] uppercase tracking-[0.08em] text-paper/45">{l.level}</p>
+            <p class="text-[13px] font-medium text-text">{l.name}</p>
+            <p class="mono-meta">{l.level}</p>
           </div>
-          <div class="h-3 w-full border-2 border-paper/40 p-[2px]" role="presentation">
-            <div class="h-full bg-acid" style={`width: ${l.pct}%`}></div>
+          <div class="h-1 w-full bg-line" role="presentation">
+            <div class="h-full bg-accent" style={`width: ${l.pct}%`}></div>
           </div>
         </div>
       ))}

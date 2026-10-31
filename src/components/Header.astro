@@ -1,125 +1,160 @@
 ---
 const isHome = Astro.url.pathname === "/";
 const base = isHome ? "" : "/";
+const currentPath = Astro.url.pathname;
 
 const navLinks = [
-  { href: `${base}#work`, label: "Work" },
-  { href: `${base}#skills`, label: "Stack" },
-  { href: `${base}#experience`, label: "Experience" },
-  { href: `${base}#about`, label: "About" },
-  { href: `${base}#contact`, label: "Contact" },
+  { href: `${base}#work`, label: "Work", section: "work" },
+  { href: `${base}#stack`, label: "Stack", section: "stack" },
+  { href: `${base}#experience`, label: "Experience", section: "experience" },
+  { href: `${base}#about`, label: "About", section: "about" },
+  { href: `${base}#contact`, label: "Contact", section: "contact" },
 ];
 ---
 
 <header
-  class="sticky top-0 z-50 bg-paper/95 backdrop-blur-sm border-b-2 border-ink"
+  class="sticky top-0 z-50 border-b border-line bg-bg/85 backdrop-blur-md supports-[backdrop-filter]:bg-bg/70"
   data-pagefind-ignore
 >
-  <nav class="u-container flex h-16 items-center justify-between gap-4 md:h-[72px]" aria-label="Main navigation">
-    <!-- Logo -->
-    <a
-      href="/"
-      class="group flex items-center gap-2.5 no-underline"
-      aria-label="Afghan Eka Pangestu — home"
-    >
+  <nav class="u-container flex h-14 items-center justify-between gap-3 md:h-16" aria-label="Main navigation">
+    <!-- Wordmark -->
+    <a href="/" class="group flex items-center gap-2.5 no-underline" aria-label="Afghan Eka Pangestu — home">
       <span
-        class="flex h-9 w-9 items-center justify-center border-2 border-ink bg-acid font-display text-[13px] leading-none text-ink shadow-brut-xs transition-transform duration-150 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 md:h-10 md:w-10 md:text-sm"
+        class="flex h-7 w-7 items-center justify-center rounded-[2px] bg-text font-mono text-[11px] font-medium text-bg transition-colors group-hover:bg-accent group-hover:text-[var(--on-accent)]"
+        aria-hidden="true"
       >
-        AEP
+        AE
       </span>
-      <span class="hidden leading-[1.05] sm:block">
-        <span class="block font-mono text-[10px] uppercase tracking-[0.16em] text-ink-3">Afghan Eka</span>
-        <span class="block font-mono text-[10px] uppercase tracking-[0.16em] text-ink">Pangestu</span>
+      <span class="hidden leading-tight sm:block">
+        <span class="block text-[13px] font-semibold tracking-[-0.01em] text-text">Afghan Eka Pangestu</span>
+        <span class="block font-mono text-[10px] uppercase tracking-[0.12em] text-muted">Software Developer</span>
       </span>
     </a>
 
     <!-- Desktop nav -->
-    <ul class="hidden items-center gap-1 lg:flex">
+    <ul class="hidden items-center gap-0.5 lg:flex">
       {navLinks.map((link) => (
         <li>
           <a
             href={link.href}
-            class="nav-link group px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3 no-underline transition-colors hover:text-ink"
-            data-section={link.href.split("#")[1]}
+            data-section={link.section}
+            class="nav-link relative block px-2.5 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-muted no-underline transition-colors hover:text-text"
           >
-            <span class="block border-b-2 border-transparent pb-px transition-colors group-hover:border-ink">{link.label}</span>
+            {link.label}
           </a>
         </li>
       ))}
+      <li>
+        <a
+          href="/blog"
+          class:list={[
+            "block px-2.5 py-2 font-mono text-[11px] uppercase tracking-[0.1em] no-underline transition-colors",
+            currentPath.startsWith("/blog") ? "text-text" : "text-muted hover:text-text",
+          ]}
+        >
+          Writing
+        </a>
+      </li>
     </ul>
 
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-1.5">
+      <!-- Theme toggle -->
       <button
-        id="search-btn"
-        class="hidden h-9 w-9 items-center justify-center border-2 border-ink bg-paper text-ink transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-acid hover:shadow-brut-xs md:flex"
-        aria-label="Search site (Ctrl+K)"
-        title="Search (Ctrl+K)"
+        id="theme-toggle"
+        type="button"
+        class="flex h-9 w-9 items-center justify-center rounded-[2px] border border-transparent text-muted transition-colors hover:border-line hover:bg-surface hover:text-text"
+        aria-label="Switch theme"
+        title="Switch theme"
       >
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" /><path stroke-linecap="square" d="M20 20l-3.6-3.6" />
+        <svg id="icon-system" class="hidden h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="12" rx="1.5" /><path d="M8 20h8M12 16v4" stroke-linecap="round" />
+        </svg>
+        <svg id="icon-light" class="hidden h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke-linecap="round" />
+        </svg>
+        <svg id="icon-dark" class="hidden h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z" stroke-linejoin="round" />
         </svg>
       </button>
 
-      <a href="/blog" class="hidden md:inline-flex btn btn-sm btn-ink">
-        Writing
-        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="square" d="M7 17L17 7M9 7h8v8" />
+      <button
+        id="search-btn"
+        class="hidden h-9 w-9 items-center justify-center rounded-[2px] border border-transparent text-muted transition-colors hover:border-line hover:bg-surface hover:text-text md:flex"
+        aria-label="Search site (Ctrl+K)"
+        title="Search (Ctrl+K)"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" /><path d="M20 20l-3.8-3.8" stroke-linecap="round" />
         </svg>
-      </a>
+      </button>
 
-      <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" rel="noopener" class="hidden btn btn-sm btn-acid lg:inline-flex">
+      <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" rel="noopener" class="hidden btn btn-sm md:inline-flex">
         CV
-        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="square" d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14" />
+        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
 
       <!-- Mobile trigger -->
       <button
         id="mobile-menu-btn"
-        class="flex h-9 w-9 items-center justify-center border-2 border-ink bg-acid text-ink lg:hidden"
+        class="flex h-9 w-9 items-center justify-center rounded-[2px] border border-line text-text lg:hidden"
         aria-label="Toggle menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
       >
-        <svg id="menu-icon-open" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="square" d="M3 6h18M3 12h18M3 18h18" />
+        <svg id="menu-icon-open" class="h-4.5 w-4.5" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 7h18M3 12h18M3 17h18" stroke-linecap="round" />
         </svg>
-        <svg id="menu-icon-close" class="hidden h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="square" d="M5 5l14 14M19 5L5 19" />
+        <svg id="menu-icon-close" class="hidden" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 5l14 14M19 5L5 19" stroke-linecap="round" />
         </svg>
       </button>
     </div>
   </nav>
 
   <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden border-t-2 border-ink bg-paper lg:hidden">
-    <ul class="u-container grid grid-cols-2 gap-2 py-4">
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-line bg-bg lg:hidden"
+    style="overscroll-behavior: contain;"
+  >
+    <ul class="u-container py-3">
       {navLinks.map((link, i) => (
-        <li class={i === navLinks.length - 1 ? "col-span-2" : ""}>
+        <li class="border-b border-line/60 last:border-0">
           <a
             href={link.href}
-            class="mobile-nav-link flex items-center border-2 border-ink bg-paper px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink no-underline transition-colors hover:bg-acid"
+            class="mobile-nav-link flex min-h-[44px] items-center justify-between gap-3 py-3 text-[15px] font-medium text-text no-underline"
           >
             {link.label}
+            <span class="font-mono text-[10px] tracking-[0.1em] text-muted">{String(i + 1).padStart(2, "0")}</span>
           </a>
         </li>
       ))}
-      <li class="col-span-2 grid grid-cols-2 gap-2 pt-2">
+      <li class="border-b border-line/60">
+        <a href="/blog" class="mobile-nav-link flex min-h-[44px] items-center justify-between gap-3 py-3 text-[15px] font-medium text-text no-underline">
+          Writing
+          <span class="font-mono text-[10px] tracking-[0.1em] text-muted">06</span>
+        </a>
+      </li>
+      <li class="grid grid-cols-2 gap-2 pt-3">
         <button
           id="search-btn-mobile"
-          class="flex items-center justify-center gap-1.5 border-2 border-ink bg-paper px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-acid"
+          class="flex min-h-[44px] items-center justify-center gap-2 border border-line px-3 font-mono text-[11px] uppercase tracking-[0.08em] text-text"
         >
-          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" /><path stroke-linecap="square" d="M20 20l-3.6-3.6" />
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" /><path d="M20 20l-3.8-3.8" stroke-linecap="round" />
           </svg>
           Search
         </button>
         <a
-          href="/blog"
-          class="mobile-nav-link flex items-center justify-center gap-1.5 border-2 border-ink bg-ink px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-paper no-underline"
+          href="/cv-afghan-eka-pangestu.pdf"
+          target="_blank"
+          rel="noopener"
+          class="mobile-nav-link flex min-h-[44px] items-center justify-center gap-2 bg-text px-3 font-mono text-[11px] uppercase tracking-[0.08em] text-bg no-underline"
         >
-          Writing
+          CV
         </a>
       </li>
     </ul>
@@ -127,71 +162,108 @@ const navLinks = [
 </header>
 
 <script>
+  // ── Mobile menu ──
   const btn = document.getElementById("mobile-menu-btn");
   const menu = document.getElementById("mobile-menu");
   const iconOpen = document.getElementById("menu-icon-open");
   const iconClose = document.getElementById("menu-icon-close");
-  const links = menu?.querySelectorAll(".mobile-nav-link") ?? [];
 
-  btn?.addEventListener("click", () => {
-    const isOpen = !menu?.classList.contains("hidden");
-    menu?.classList.toggle("hidden", isOpen);
-    iconOpen?.classList.toggle("hidden", !isOpen);
-    iconClose?.classList.toggle("hidden", isOpen);
-    btn.setAttribute("aria-expanded", String(!isOpen));
-  });
-
-  links.forEach((link) => {
-    link.addEventListener("click", () => {
-      menu?.classList.add("hidden");
-      iconOpen?.classList.remove("hidden");
-      iconClose?.classList.add("hidden");
-      btn?.setAttribute("aria-expanded", "false");
-    });
-  });
-
-  document.getElementById("search-btn")?.addEventListener("click", () => (window as any).__toggleSearch?.());
-  document.getElementById("search-btn-mobile")?.addEventListener("click", () => {
+  const closeMenu = () => {
     menu?.classList.add("hidden");
     iconOpen?.classList.remove("hidden");
     iconClose?.classList.add("hidden");
     btn?.setAttribute("aria-expanded", "false");
+  };
+
+  btn?.addEventListener("click", () => {
+    const willOpen = menu?.classList.contains("hidden") ?? false;
+    if (willOpen) {
+      menu?.classList.remove("hidden");
+      iconOpen?.classList.add("hidden");
+      iconClose?.classList.remove("hidden");
+      btn.setAttribute("aria-expanded", "true");
+    } else {
+      closeMenu();
+    }
+  });
+
+  menu?.querySelectorAll(".mobile-nav-link").forEach((l) => l.addEventListener("click", closeMenu));
+
+  document.getElementById("search-btn")?.addEventListener("click", () => (window as any).__toggleSearch?.());
+  document.getElementById("search-btn-mobile")?.addEventListener("click", () => {
+    closeMenu();
     (window as any).__toggleSearch?.();
   });
 
-  // ── Scroll spy: highlight the section currently in view ──
+  // ── Theme toggle: system → light → dark ──
+  const themeBtn = document.getElementById("theme-toggle");
+  const icons = {
+    system: document.getElementById("icon-system"),
+    light: document.getElementById("icon-light"),
+    dark: document.getElementById("icon-dark"),
+  };
+  const labels = {
+    system: "Theme: system (click for light)",
+    light: "Theme: light (click for dark)",
+    dark: "Theme: dark (click for system)",
+  };
+  const order = ["system", "light", "dark"] as const;
+  const root = document.documentElement;
+
+  const applyTheme = (mode: "system" | "light" | "dark") => {
+    const dark = mode === "dark" || (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    root.classList.toggle("dark", dark);
+    (Object.keys(icons) as Array<keyof typeof icons>).forEach((k) => {
+      icons[k]?.classList.toggle("hidden", k !== mode);
+    });
+    if (themeBtn) {
+      themeBtn.setAttribute("aria-label", labels[mode]);
+      themeBtn.setAttribute("title", labels[mode]);
+    }
+  };
+
+  let current: "system" | "light" | "dark" = (localStorage.getItem("theme") as any) || "dark";
+  if (!order.includes(current)) current = "dark";
+  applyTheme(current);
+
+  themeBtn?.addEventListener("click", () => {
+    current = order[(order.indexOf(current) + 1) % order.length];
+    localStorage.setItem("theme", current);
+    applyTheme(current);
+  });
+
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (current === "system") applyTheme("system");
+  });
+
+  // ── Scroll spy ──
   const spyLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".nav-link"));
   const sections = spyLinks
     .map((l) => document.getElementById(l.dataset.section || ""))
     .filter((el): el is HTMLElement => Boolean(el));
 
-  const setActive = (id: string | null) => {
-    spyLinks.forEach((l) => {
-      const active = l.dataset.section === id;
-      l.classList.toggle("text-ink", active);
-      l.classList.toggle("text-ink-3", !active);
-      const underline = l.querySelector("span");
-      underline?.classList.toggle("border-ink", active);
-      underline?.classList.toggle("border-transparent", !active);
-    });
-  };
-
   if (sections.length && "IntersectionObserver" in window) {
-    const visible = new Map<string, number>();
+    const ratios = new Map<string, number>();
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => visible.set(e.target.id, e.isIntersecting ? e.intersectionRatio : 0));
+        entries.forEach((e) => ratios.set(e.target.id, e.isIntersecting ? e.intersectionRatio : 0));
         let best: string | null = null;
         let bestRatio = 0;
-        visible.forEach((ratio, id) => {
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
+        ratios.forEach((r, id) => {
+          if (r > bestRatio) {
+            bestRatio = r;
             best = id;
           }
         });
-        if (best) setActive(best);
+        if (best) {
+          spyLinks.forEach((l) => {
+            const active = l.dataset.section === best;
+            l.classList.toggle("text-text", active);
+            l.classList.toggle("text-muted", !active);
+          });
+        }
       },
-      { rootMargin: "-20% 0px -55% 0px", threshold: [0.05, 0.25, 0.5] }
+      { rootMargin: "-15% 0px -60% 0px", threshold: [0.05, 0.25, 0.5] }
     );
     sections.forEach((s) => observer.observe(s));
   }

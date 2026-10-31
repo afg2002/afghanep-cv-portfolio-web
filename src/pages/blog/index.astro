@@ -8,67 +8,72 @@ import { getCollection } from "astro:content";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-
-// Get all unique tags
 const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+
+// Tag-filtered views are client-side only; keep the canonical page indexable.
+const hasTagParam = Astro.url.searchParams.has("tag");
 ---
 
 <BaseLayout
   title="Writing"
-  description="Notes on software development, architecture, and building for the web — by Afghan Eka Pangestu."
+  description="Notes on software development, backend architecture, and building for the web — by Afghan Eka Pangestu, software developer in Bogor, Indonesia."
+  noindex={hasTagParam}
 >
   <Header />
 
   <main id="main-content" class="flex-1" data-pagefind-body>
     <!-- Masthead -->
-    <section class="border-b-2 border-ink bg-paper">
-      <div class="bg-grid">
-        <div class="u-container py-14 md:py-20">
-          <p class="mono-label mb-4 flex items-center gap-2 text-ink-3 animate-fade-up">
-            <span class="index-num">✎</span> The writing
+    <section class="border-b border-line">
+      <div class="u-container py-12 md:py-16">
+        <div class="mb-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-line pb-3">
+          <p class="mono-meta flex items-center gap-2">
+            <span class="dot" aria-hidden="true"></span>
+            Writing
           </p>
-          <h1 class="display text-[clamp(3rem,12vw,8rem)] animate-fade-up delay-1" data-pagefind-meta="title">
-            Notes <span class="text-outline">&amp;</span><br />writing
-          </h1>
-          <p class="mt-6 max-w-lg text-base leading-relaxed text-ink-2 animate-fade-up delay-2">
-            Long-form thinking on software development, architecture, and building for the web.
-            Written for developers who have to maintain the thing afterward.
-          </p>
+          <p class="mono-meta">{posts.length} {posts.length === 1 ? "entry" : "entries"}</p>
         </div>
+
+        <h1 class="display-lg text-[clamp(2.2rem,8vw,4.5rem)] animate-fade-up" data-pagefind-meta="title">
+          Notes on<br />
+          <span class="text-accent">building things.</span>
+        </h1>
+
+        <p class="lead mt-6 max-w-[54ch] animate-fade-up delay-1">
+          Long-form thinking on software development, architecture, and building for the web —
+          written for developers who have to maintain the thing afterward.
+        </p>
       </div>
     </section>
 
     <!-- Posts -->
-    <section class="border-b-2 border-ink bg-paper-2/50 py-12 md:py-16">
+    <section class="section !pt-10 md:!pt-12">
       <div class="u-container">
-        <!-- Filters -->
         {allTags.length > 0 && (
-          <div class="mb-8 flex flex-wrap items-center gap-2 border-b-2 border-ink pb-6">
-            <span class="mono-label mr-2 text-ink-3">Filter</span>
+          <div class="mb-8 flex flex-wrap items-center gap-1.5 border-b border-line pb-5">
+            <span class="mono-label mr-1">Filter</span>
             <a
               href="/blog"
               data-tag=""
-              class="tag-btn border-2 border-ink px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.06em] no-underline transition-colors"
+              class="tag-btn min-h-[30px] px-2.5 py-1 transition-colors"
             >
               All
             </a>
             {allTags.map((tag) => (
               <a
-                href={`/blog?tag=${tag}`}
+                href={`/blog?tag=${encodeURIComponent(tag)}`}
                 data-tag={tag}
-                class="tag-btn border-2 border-ink px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.06em] no-underline transition-colors"
+                class="tag-btn min-h-[30px] px-2.5 py-1 transition-colors"
               >
                 {tag}
               </a>
             ))}
-            <span id="post-count" class="mono-label ml-auto hidden text-ink-3 sm:block">
-              {posts.length} {posts.length === 1 ? "entry" : "entries"}
+            <span id="post-count" class="mono-meta ml-auto hidden sm:block">
+              {posts.length} shown
             </span>
           </div>
         )}
 
-        <!-- Grid -->
-        <div id="posts-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 md:gap-6">
+        <div id="posts-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-5">
           {posts.map((post) => (
             <div class="post-card" data-tags={post.data.tags.join(",")}>
               <BlogCard post={post} />
@@ -76,28 +81,29 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
           ))}
         </div>
 
-        <!-- Empty state -->
-        <div id="empty-state" class="hidden border-2 border-dashed border-ink px-6 py-16 text-center">
-          <p class="display-tight mb-2 text-xl">Nothing here yet</p>
-          <p class="mb-5 text-sm text-ink-3">No articles filed under that topic.</p>
-          <a href="/blog" class="btn btn-acid btn-sm">View all articles</a>
+        <div id="empty-state" class="hidden border border-dashed border-line-strong px-6 py-16 text-center">
+          <p class="heading mb-2 text-[16px] text-text">Nothing filed here yet</p>
+          <p class="mb-5 text-[13px] text-muted">No articles under that topic.</p>
+          <a href="/blog" class="btn btn-sm">View all articles</a>
         </div>
       </div>
     </section>
 
     <!-- CTA -->
-    <section class="bg-paper py-14 md:py-16">
-      <div class="u-container flex flex-wrap items-center justify-between gap-6 border-2 border-ink bg-acid p-6 shadow-brut md:p-10">
-        <div>
-          <p class="mono-label mb-2 text-ink/60">Want to talk shop?</p>
-          <p class="display-tight text-2xl md:text-3xl">Have a project in mind?</p>
+    <section class="section !py-12 md:!py-16">
+      <div class="u-container">
+        <div class="flex flex-wrap items-center justify-between gap-5 border border-line bg-surface p-5 md:p-8">
+          <div>
+            <p class="mono-label mb-2">Want to talk shop?</p>
+            <p class="heading text-[17px] text-text md:text-[20px]">Have a project in mind?</p>
+          </div>
+          <a href="/#contact" class="btn btn-primary">
+            Get in touch
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12h16m0 0l-6-6m6 6l-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
         </div>
-        <a href="/#contact" class="btn btn-ink">
-          Get in touch
-          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="square" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
-          </svg>
-        </a>
       </div>
     </section>
   </main>
@@ -107,9 +113,8 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 </BaseLayout>
 
 <script>
-  (function() {
+  (function () {
     const tag = new URLSearchParams(window.location.search).get("tag") || "";
-
     const cards = document.querySelectorAll("#posts-grid .post-card");
     const empty = document.getElementById("empty-state");
     const btns = document.querySelectorAll(".tag-btn");
@@ -123,18 +128,17 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
         card.classList.toggle("hidden", !match);
         if (match) visible++;
       });
-      if (empty) empty.classList.toggle("hidden", visible > 0);
-      if (count && selectedTag) count.textContent = `${visible} ${visible === 1 ? "entry" : "entries"}`;
+      empty?.classList.toggle("hidden", visible > 0);
+      if (count) count.textContent = `${visible} shown`;
     }
 
     function updateActive(selectedTag) {
       btns.forEach((btn) => {
-        const btnTag = btn.getAttribute("data-tag") || "";
-        const active = btnTag === selectedTag;
-        btn.classList.toggle("bg-ink", active);
-        btn.classList.toggle("text-paper", active);
-        btn.classList.toggle("bg-paper", !active);
-        btn.classList.toggle("text-ink", !active);
+        const active = (btn.getAttribute("data-tag") || "") === selectedTag;
+        btn.classList.toggle("border-accent", active);
+        btn.classList.toggle("text-accent", active);
+        btn.classList.toggle("border-line", !active);
+        btn.classList.toggle("text-muted", !active);
       });
     }
 

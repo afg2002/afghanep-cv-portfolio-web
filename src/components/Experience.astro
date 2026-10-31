@@ -3,8 +3,8 @@ const experiences = [
   {
     company: "Generali Indonesia",
     role: "Java Developer",
-    type: "Full Time",
-    period: "Present",
+    type: "Full time",
+    period: "2024 — Present",
     current: true,
     highlights: [
       "Developing and maintaining Java-based applications for core insurance business needs",
@@ -14,14 +14,13 @@ const experiences = [
   {
     company: "PT Inmotion Inovasi Teknologi",
     role: "Web Developer",
-    type: "Former",
-    period: "Previous",
+    type: "Full time",
+    period: "2024",
     current: false,
     highlights: [
       "Built chatbot, omni-channel, Generative AI, and SRM solutions using Java and MVEL",
       "Integrated Salesforce with chat platforms for a major national bank",
       "Designed WhatsApp Flows connected to hospital scheduling and digital services",
-      "Delivered chatbot automation for financial institutions",
       "Consulted directly with clients on technical solution design",
     ],
   },
@@ -72,89 +71,66 @@ const experiences = [
     ],
   },
 ];
-
-const typeChip: Record<string, string> = {
-  "Full Time": "chip-coral",
-  Internship: "chip-lilac",
-  Former: "chip",
-  Freelance: "chip-acid",
-};
 ---
 
-<section id="experience" class="scroll-mt-24 border-b-2 border-ink bg-paper py-16 md:py-24">
+<section id="experience" class="section">
   <div class="u-container">
-    <!-- Section head -->
-    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6 md:mb-14">
+    <div class="section-head">
       <div>
-        <p class="mono-label mb-3 flex items-center gap-2 text-ink-3">
-          <span class="index-num">03</span> Track record
-        </p>
-        <h2 class="display text-[clamp(2.25rem,6.5vw,4.5rem)]">
-          Where I've<br class="sm:hidden" /> worked
-        </h2>
+        <p class="index-label mb-2" data-index="03">Track record</p>
+        <h2 class="heading text-[clamp(1.75rem,4.5vw,2.75rem)]">Where I've worked</h2>
       </div>
-      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-ink-3">
-        Six roles across insurance, banking,<br />
-        agency work, and freelance builds.<br />
-        Newest first.
+      <p class="mono-meta max-w-[34ch] leading-relaxed">
+        Professional roles from 2024, plus freelance and internship work before that. Newest first.
       </p>
     </div>
 
-    <!-- Ledger -->
-    <ol class="border-t-2 border-ink">
-      {experiences.map((exp, i) => (
-        <li class="group border-b-2 border-ink">
-          <div class="grid gap-4 py-6 md:grid-cols-[56px_1fr_220px] md:gap-8 md:py-8">
-            <!-- Index -->
-            <div class="flex items-start gap-3 md:block">
-              <span class="font-display text-lg leading-none text-ink-3/50 transition-colors group-hover:text-ink">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              {exp.current && (
-                <span class="md:mt-2 md:block">
-                  <span class="mono-label inline-flex items-center gap-1.5 text-ink">
-                    <span class="h-1.5 w-1.5 bg-coral" aria-hidden="true"></span>Now
-                  </span>
-                </span>
-              )}
-            </div>
-
-            <!-- Main -->
-            <div>
-              <div class="mb-3 flex flex-wrap items-center gap-2">
-                <h3 class="display-tight text-xl transition-colors group-hover:text-electric md:text-[26px]">
-                  {exp.company}
-                </h3>
-                <span class:list={["chip", typeChip[exp.type] ?? "chip"]}>{exp.type}</span>
+    <ol class="border-t border-line">
+      {experiences.map((exp) => (
+        <li class="group border-b border-line">
+          <div class="grid gap-x-8 gap-y-3 py-6 md:grid-cols-[1fr_168px] md:py-7">
+            <div class="min-w-0">
+              <!-- Company + dotted leader + period (spec-sheet row) -->
+              <div class="mb-2 flex flex-wrap items-baseline gap-x-2">
+                <h3 class="heading text-[17px] text-text md:text-[19px]">{exp.company}</h3>
+                <span class="leader hidden md:block" aria-hidden="true"></span>
+                <span class="mono-meta whitespace-nowrap">{exp.period}</span>
               </div>
-              <p class="mb-4 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3">{exp.role}</p>
+
+              <div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <p class="text-[13px] font-medium text-text-2">{exp.role}</p>
+                <span class="text-muted" aria-hidden="true">·</span>
+                <span class="mono-meta">{exp.type}</span>
+                {exp.current && (
+                  <span class="tag tag-accent">
+                    <span class="dot pulse-dot" aria-hidden="true"></span>
+                    Current
+                  </span>
+                )}
+              </div>
+
               <ul class="space-y-1.5">
                 {exp.highlights.map((h) => (
-                  <li class="flex gap-2.5 text-sm leading-relaxed text-ink-2">
-                    <span class="mt-[7px] h-1.5 w-1.5 shrink-0 bg-ink" aria-hidden="true"></span>
-                    <span>{h}</span>
+                  <li class="relative pl-4 text-[13.5px] leading-relaxed text-text-2">
+                    <span class="absolute left-0 top-[0.6em] h-[3px] w-[3px] rounded-full bg-accent" aria-hidden="true"></span>
+                    {h}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <!-- Period -->
-            <div class="md:text-right">
-              <p class="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3">{exp.period}</p>
-            </div>
+            <div class="hidden md:block" aria-hidden="true"></div>
           </div>
         </li>
       ))}
     </ol>
 
     <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
-      <p class="font-mono text-[11px] uppercase tracking-[0.08em] text-ink-3">
-        Full history available in the CV.
-      </p>
-      <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" rel="noopener" class="btn btn-acid btn-sm">
-        Download CV
-        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="square" d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14" />
+      <p class="mono-meta">Professional experience: 2+ years (since 2024)</p>
+      <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" rel="noopener" class="link-arrow">
+        Full history in the CV
+        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
     </div>

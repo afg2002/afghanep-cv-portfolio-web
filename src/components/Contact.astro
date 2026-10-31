@@ -1,95 +1,71 @@
 ---
 const channels = [
   { label: "Email", value: "afghanekapangestu@gmail.com", href: "mailto:afghanekapangestu@gmail.com", note: "Best for project briefs" },
-  { label: "Phone", value: "0851 5628 3645", href: "tel:085156283645", note: "Mon–Fri, 09:00–18:00 WIB" },
+  { label: "Phone", value: "+62 851 5628 3645", href: "tel:+6285156283645", note: "Mon–Fri, 09:00–18:00 WIB" },
   { label: "LinkedIn", value: "in/afghan-eka-pangestu", href: "https://www.linkedin.com/in/afghan-eka-pangestu/", note: "Professional enquiries" },
   { label: "GitHub", value: "github.com/afg2002", href: "https://github.com/afg2002", note: "Code & experiments" },
 ];
 ---
 
-<section id="contact" class="scroll-mt-24 border-b-2 border-ink bg-acid py-16 md:py-24">
+<section id="contact" class="section">
   <div class="u-container">
-    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6 md:mb-14">
+    <div class="section-head">
       <div>
-        <p class="mono-label mb-3 flex items-center gap-2 text-ink/70">
-          <span class="index-num border-ink bg-ink text-acid">07</span> Contact
-        </p>
-        <h2 class="display text-[clamp(2.25rem,7vw,5rem)]">
-          Let's build<br class="sm:hidden" /> something
-        </h2>
+        <p class="index-label mb-2" data-index="07">Contact</p>
+        <h2 class="heading text-[clamp(1.75rem,4.5vw,2.75rem)]">Let's build something</h2>
       </div>
-      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-ink/70">
-        Open to freelance projects,<br />
-        contract work, and full-time roles.<br />
-        Based in Bogor — remote friendly.
+      <p class="mono-meta max-w-[34ch] leading-relaxed">
+        Open to freelance projects, contract work, and full-time roles — remote friendly.
       </p>
     </div>
 
-    <div class="grid gap-8 lg:grid-cols-[1fr_380px] lg:gap-16">
+    <div class="grid gap-10 lg:grid-cols-[1fr_300px] lg:gap-16">
       <!-- Channels -->
-      <div class="border-2 border-ink bg-paper shadow-brut">
-        <div class="flex items-center justify-between border-b-2 border-ink bg-paper-2 px-4 py-3">
-          <p class="mono-label text-ink-3">Direct channels</p>
-          <p class="mono-label text-ink-3">04</p>
-        </div>
-        <ul>
-          {channels.map((c, i) => (
-            <li class:list={[i !== channels.length - 1 && "border-b-2 border-ink"]}>
-              <a
-                href={c.href}
-                target={c.href.startsWith("http") ? "_blank" : undefined}
-                rel={c.href.startsWith("http") ? "noopener" : undefined}
-                class="group flex items-center justify-between gap-4 px-4 py-4 no-underline transition-colors hover:bg-acid md:px-5 md:py-5"
-              >
-                <div class="flex min-w-0 items-baseline gap-4">
-                  <span class="w-16 shrink-0 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">{c.label}</span>
-                  <div class="min-w-0">
-                    <p class="truncate text-sm font-bold text-ink md:text-base">{c.value}</p>
-                    <p class="mt-0.5 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-3">{c.note}</p>
-                  </div>
-                </div>
-                <span class="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-ink bg-paper transition-all duration-150 group-hover:bg-ink group-hover:text-paper">
-                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="square" d="M7 17L17 7M9 7h8v8" />
-                  </svg>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul class="border-t border-line">
+        {channels.map((c) => (
+          <li class="border-b border-line">
+            <a
+              href={c.href}
+              target={c.href.startsWith("http") ? "_blank" : undefined}
+              rel={c.href.startsWith("http") ? "noopener" : undefined}
+              class="group grid grid-cols-[68px_1fr_auto] items-center gap-x-4 gap-y-1 py-4 no-underline"
+            >
+              <span class="mono-meta uppercase tracking-[0.1em]">{c.label}</span>
+              <div class="min-w-0">
+                <p class="truncate text-[14px] font-medium text-text transition-colors group-hover:text-accent">{c.value}</p>
+                <p class="mono-meta mt-0.5">{c.note}</p>
+              </div>
+              <svg class="h-3.5 w-3.5 text-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ul>
 
       <!-- CTA panel -->
-      <div class="flex flex-col justify-between border-2 border-ink bg-ink p-6 text-paper shadow-brut md:p-8">
-        <div>
-          <p class="mono-label mb-4 text-paper/45">Currently</p>
-          <p class="display-tight mb-4 text-2xl text-acid md:text-3xl">Open for<br />new work</p>
-          <p class="mb-6 text-sm leading-relaxed text-paper/60">
-            Building an internal tool, a customer-facing app, or an integration that has been
-            sitting on the backlog? Send me the short version — I'll reply with how I'd approach it.
-          </p>
-        </div>
-
-        <div class="space-y-3">
+      <div class="border border-line bg-surface p-5 md:p-6">
+        <p class="mono-label mb-3 flex items-center gap-2">
+          <span class="dot pulse-dot" aria-hidden="true"></span>
+          Available
+        </p>
+        <p class="heading mb-3 text-[17px] text-text">Have a backlog of half-finished specs?</p>
+        <p class="mb-5 text-[13px] leading-relaxed text-text-2">
+          Send the short version of your project — I'll reply with how I'd approach the architecture
+          and roughly what it takes.
+        </p>
+        <div class="space-y-2">
           <a
             href="mailto:afghanekapangestu@gmail.com?subject=Project%20enquiry"
-            class="flex w-full items-center justify-between border-2 border-paper bg-acid px-4 py-3.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink no-underline transition-colors hover:bg-paper"
+            class="btn btn-accent w-full"
           >
             Send an email
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="square" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12h16m0 0l-6-6m6 6l-6 6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </a>
-          <a
-            href="/cv-afghan-eka-pangestu.pdf"
-            target="_blank"
-            rel="noopener"
-            class="flex w-full items-center justify-between border-2 border-paper/40 px-4 py-3.5 font-mono text-[11px] uppercase tracking-[0.1em] text-paper no-underline transition-colors hover:border-paper hover:bg-paper/10"
-          >
+          <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" rel="noopener" class="btn w-full">
             Download CV (PDF)
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="square" d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14" />
-            </svg>
           </a>
         </div>
       </div>

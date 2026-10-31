@@ -1,7 +1,7 @@
 ---
 const navLinks = [
   { href: "/#work", label: "Work" },
-  { href: "/#skills", label: "Stack" },
+  { href: "/#stack", label: "Stack" },
   { href: "/#experience", label: "Experience" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
@@ -18,33 +18,29 @@ const socials = [
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-ink text-paper" data-pagefind-ignore>
-  <div class="u-container pt-14 pb-8 md:pt-20">
-    <!-- Top: link columns -->
-    <div class="grid gap-10 border-b-2 border-paper/20 pb-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
+<footer class="border-t border-line" data-pagefind-ignore>
+  <div class="u-container py-12 md:py-16">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
       <div>
-        <p class="display-tight mb-4 text-2xl text-paper">Afghan Eka<br />Pangestu</p>
-        <p class="max-w-xs text-sm leading-relaxed text-paper/55">
+        <p class="heading mb-3 text-[15px] text-text">Afghan Eka Pangestu</p>
+        <p class="max-w-[38ch] text-[13px] leading-relaxed text-muted">
           Software developer in Bogor, Indonesia. Backend systems, APIs, and enterprise
           applications that hold up in production.
         </p>
         <a
           href="mailto:afghanekapangestu@gmail.com"
-          class="mt-5 inline-flex items-center gap-2 border-b-2 border-paper/40 pb-0.5 font-mono text-[11px] uppercase tracking-[0.1em] text-paper no-underline transition-colors hover:border-acid hover:text-acid"
+          class="mono-meta mt-4 inline-block text-text-2 no-underline transition-colors hover:text-accent"
         >
           afghanekapangestu@gmail.com
         </a>
       </div>
 
       <div>
-        <p class="mono-label mb-4 text-paper/35">Navigate</p>
-        <ul class="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:grid-cols-1">
+        <p class="mono-label mb-3">Navigate</p>
+        <ul class="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-1">
           {navLinks.map((l) => (
             <li>
-              <a
-                href={l.href}
-                class="font-mono text-[11px] uppercase tracking-[0.08em] text-paper/70 no-underline transition-colors hover:text-acid"
-              >
+              <a href={l.href} class="text-[13px] text-muted no-underline transition-colors hover:text-text">
                 {l.label}
               </a>
             </li>
@@ -53,17 +49,16 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <p class="mono-label mb-4 text-paper/35">Elsewhere</p>
-        <ul class="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:grid-cols-1">
+        <p class="mono-label mb-3">Elsewhere</p>
+        <ul class="grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-1">
           {socials.map((s) => (
             <li>
               <a
                 href={s.href}
                 target={s.href.startsWith("http") ? "_blank" : undefined}
                 rel={s.href.startsWith("http") ? "noopener" : undefined}
-                class="group inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-paper/70 no-underline transition-colors hover:text-acid"
+                class="text-[13px] text-muted no-underline transition-colors hover:text-text"
               >
-                <span class="h-1 w-1 bg-paper/30 transition-colors group-hover:bg-acid" aria-hidden="true"></span>
                 {s.label}
               </a>
             </li>
@@ -72,38 +67,13 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <!-- Middle: availability + back to top -->
-    <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-paper/20 py-5">
-      <p class="mono-label flex items-center gap-2 text-paper/60">
-        <span class="inline-block h-2 w-2 bg-acid blink" aria-hidden="true"></span>
-        Available for freelance — {year}
+    <div class="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+      <p class="mono-meta">© {year} Afghan Eka Pangestu</p>
+      <p class="mono-meta flex items-center gap-2">
+        <span class="dot pulse-dot" aria-hidden="true"></span>
+        Available for freelance
       </p>
-      <a
-        href="#main-content"
-        class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-paper/50 no-underline transition-colors hover:text-acid"
-      >
-        Back to top
-        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="square" d="M12 20V4m0 0l-6 6m6-6l6 6" />
-        </svg>
-      </a>
+      <p class="mono-meta">Astro · Tailwind · Pagefind</p>
     </div>
-
-    <!-- Bottom meta -->
-    <div class="flex flex-wrap items-center justify-between gap-3 pt-5">
-      <p class="font-mono text-[10px] uppercase tracking-[0.08em] text-paper/35">
-        © {year} Afghan Eka Pangestu — All rights reserved
-      </p>
-      <p class="font-mono text-[10px] uppercase tracking-[0.08em] text-paper/35">
-        Built with Astro · Tailwind · Pagefind
-      </p>
-    </div>
-  </div>
-
-  <!-- Oversized wordmark -->
-  <div class="overflow-hidden border-t-2 border-paper/20 px-4 pb-2 pt-4 md:px-8" aria-hidden="true">
-    <p class="display select-none whitespace-nowrap text-[clamp(3.5rem,15.5vw,14rem)] leading-[0.8] text-paper/[0.07]">
-      Afghan Eka Pangestu
-    </p>
   </div>
 </footer>

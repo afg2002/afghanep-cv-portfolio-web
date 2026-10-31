@@ -5,6 +5,11 @@ export interface Props {
   canonical?: string;
   ogImage?: string;
   article?: boolean;
+  type?: "website" | "profile" | "article";
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  noindex?: boolean;
+  keywords?: string[];
 }
 
 import CommandPalette from "../components/CommandPalette.astro";
@@ -16,58 +21,137 @@ const {
   canonical = new URL(Astro.url.pathname, Astro.site).href,
   ogImage = "/og-default.png",
   article = false,
+  type = article ? "article" : "website",
+  publishedTime,
+  modifiedTime,
+  noindex = false,
+  keywords = [
+    "Afghan Eka Pangestu",
+    "software developer",
+    "backend developer",
+    "Java developer",
+    "Spring Boot",
+    "Laravel",
+    "API developer",
+    "Bogor Indonesia",
+  ],
 } = Astro.props;
+
+const siteName = "Afghan Eka Pangestu";
+const fullTitle = title.includes(siteName) ? title : `${title} — ${siteName}`;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
 ---
+
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Theme: resolve before first paint to avoid a flash -->
+    <script is:inline>
+      (function () {
+        try {
+          var mode = localStorage.getItem("theme") || "dark";
+          var dark =
+            mode === "dark" ||
+            (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#f4f1ea" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
 
-    <title>{title} | Afghan Eka Pangestu</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
-
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+    <meta name="author" content="Afghan Eka Pangestu" />
+    <meta
+      name="robots"
+      content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
+    />
     <link rel="canonical" href={canonical} />
 
-    <meta property="og:title" content={`${title} | Afghan Eka Pangestu`} />
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content={ogImage.endsWith('.svg') ? 'image/svg+xml' : 'image/png'} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:image:type" content={ogImage.endsWith(".svg") ? "image/svg+xml" : "image/png"} />
+    <meta property="og:image:alt" content={`${siteName} — Software Developer`} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} | Afghan Eka Pangestu`} />
+    <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={`${siteName} — Software Developer`} />
 
+    <!-- Structured data -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
+      "@id": `${Astro.site}#person`,
       name: "Afghan Eka Pangestu",
+      alternateName: "Afghan Eka",
       jobTitle: "Software Developer",
+      description:
+        "Software developer in Bogor, Indonesia focused on backend systems, APIs, and enterprise integrations.",
       url: Astro.site,
+      image: ogImageUrl,
       sameAs: [
         "https://www.linkedin.com/in/afghan-eka-pangestu/",
         "https://github.com/afg2002",
       ],
+      knowsAbout: [
+        "Java",
+        "Spring Boot",
+        "Laravel",
+        "PHP",
+        "Golang",
+        "Vue.js",
+        "React",
+        "REST APIs",
+        "Enterprise Integration",
+      ],
       address: {
         "@type": "PostalAddress",
         addressLocality: "Bogor",
-        addressCountry: "Indonesia",
+        addressRegion: "West Java",
+        addressCountry: "ID",
       },
       email: "afghanekapangestu@gmail.com",
-      telephone: "085156283645",
+      telephone: "+62-851-5628-3645",
+    })} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": `${Astro.site}#website`,
+      url: Astro.site,
+      name: siteName,
+      description: "Portfolio and writing by Afghan Eka Pangestu, software developer.",
+      inLanguage: "en",
+      publisher: { "@id": `${Astro.site}#person` },
     })} />
 
     <!-- Umami Analytics -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8fa27ba0-d8e1-4347-958d-54a5e0052177"></script>
   </head>
-  <body class="min-h-screen flex flex-col bg-paper text-ink antialiased">
+  <body class="min-h-screen flex flex-col bg-bg text-text antialiased">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
     <CommandPalette />
