@@ -25,6 +25,7 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 - **Dynamic OG images** — Per-article 1200×630 cards generated at build time with Satori + resvg (no headless browser), plus a site-wide card
 - **RSS feed** — `/rss.xml`, advertised via `<link rel="alternate">` and linked in the footer
 - **404 page** — On-brand not-found page with search and popular destinations, `noindex`
+- **Status page** — `/status` reports the site's real build telemetry: per-route page weight, source size, content stats. Nothing is hardcoded; an `astro:build:done` hook measures `dist/` and writes `/status.json`, which the page fetches. Metrics that cannot be verified (e.g. commit count in a shallow clone) are omitted rather than faked
 - **Image optimisation** — `astro:assets` + sharp: local blog covers are emitted as WebP with responsive `srcset`
 - **SEO** — Canonical URLs, OG/Twitter cards, JSON-LD (`Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `BreadcrumbList`), sitemap, `noindex` on filtered views and 404
 - **Responsive** — Mobile-first, fluid `clamp()` type, ≥44px touch targets, reduced-motion support

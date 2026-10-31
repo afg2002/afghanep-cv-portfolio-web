@@ -1,0 +1,248 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getSiteFacts, formatBytes } from "../lib/status";
+
+const facts = await getSiteFacts();
+
+const since = facts.firstCommitDate
+  ? Math.max(
+      1,
+      Math.round(
+        (Date.now() - new Date(facts.firstCommitDate).getTime()) / (1000 * 60 * 60 * 24 * 30.44),
+      ),
+    )
+  : null;
+
+const generated = new Date(facts.generatedAt);
+
+const summary = [
+  { label: "Updated", value: generated.toISOString().slice(0, 16).replace("T", " ") + "Z" },
+  { label: "Commit", value: facts.commit?.hash ?? "—" },
+  // history-derived numbers are only shown when the clone actually has history
+  ...(facts.historyComplete
+    ? [{ label: "Commits", value: facts.commitCount.toLocaleString("en-US") }]
+    : [{ label: "Stack", value: `${facts.packageCount} pkgs` }]),
+  { label: "Source", value: `${facts.sourceLines.toLocaleString("en-US")} lines` },
+];
+
+const factsGrid = [
+  {
+    label: "Tracked files",
+    value: facts.trackedFiles.toString(),
+    note: "src/ — components, pages, lib",
+  },
+  {
+    label: "Source lines",
+    value: facts.sourceLines.toLocaleString("en-US"),
+    note: "hand-written, no generated code",
+  },
+  {
+    label: "Published writing",
+    value: facts.posts.toString(),
+    note: `${facts.postWords.toLocaleString("en-US")} words across ${facts.tags.length} tags`,
+  },
+  {
+    label: "Dependencies",
+    value: facts.packageCount.toString(),
+    note: `${facts.dependencies} runtime · ${facts.devDependencies} build-time`,
+  },
+  ...(facts.historyComplete
+    ? [
+        {
+          label: "Commit history",
+          value: facts.commitCount.toLocaleString("en-US"),
+          note: since ? `~${since} months of recorded work` : "since first commit",
+        },
+      ]
+    : []),
+  {
+    label: "Unverified claims",
+    value: "0",
+    note: "every figure here is measured or absent",
+  },
+];
+---
+
+<BaseLayout
+  title="Status"
+  description="Live build telemetry for aep.my.id — page weight, bundle size, commit history and content stats, measured at build time."
+  ogImage="/og/status.png"
+  keywords={["site status", "build telemetry", "page weight", "web performance"]}
+>
+  <main id="main" class="u-container pb-24 pt-24 md:pt-32">
+    <!-- Masthead -->
+    <header class="border-b border-line pb-8">
+      <p class="mono-label mb-4 flex items-center gap-2">
+        <span class="dot pulse-dot" aria-hidden="true"></span>
+        Operational
+      </p>
+      <h1 class="heading max-w-[16ch] text-[clamp(2rem,6vw,3.5rem)]">
+        The site, reporting on itself.
+      </h1>
+      <p class="mt-5 max-w-[58ch] text-[15px] leading-relaxed text-text-2">
+        No fabricated uptime percentage. Everything below is read from the build output, the git
+        history, or the content collections — if it cannot be measured, it is not claimed.
+      </p>
+    </header>
+
+    <!-- Summary strip -->
+    <dl class="grid grid-cols-2 border-b border-line sm:grid-cols-4">
+      {
+        summary.map((item, i) => (
+          <div
+            class:list={[
+              "border-line px-0 py-5 sm:px-5",
+              i > 0 && "sm:border-l",
+              i % 2 === 1 && "border-l sm:border-l",
+              i >= 2 && "border-t sm:border-t-0",
+            ]}
+          >
+            <dt class="mono-label mb-1.5">{item.label}</dt>
+            <dd class="tnum text-[15px] text-text">{item.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <!-- Page weight: filled in from /status.json -->
+    <section class="mt-12" aria-labelledby="weight-heading">
+      <div class="mb-5 flex flex-wrap items-baseline justify-between gap-2">
+        <h2 id="weight-heading" class="heading text-[clamp(1.25rem,3vw,1.6rem)]">Page weight</h2>
+        <p class="mono-meta">HTML + CSS + JS per route, uncompressed, excluding lazy assets</p>
+      </div>
+
+      <div class="border border-line bg-surface" id="status-weight" data-pagefind-ignore>
+        <p class="mono-meta px-4 py-5">Measuring build output…</p>
+      </div>
+
+      <noscript>
+        <p class="mono-meta mt-3">
+          Per-route measurements are served as JSON at
+          <a href="/status.json" class="underline underline-offset-2 hover:text-accent">/status.json</a>.
+        </p>
+      </noscript>
+    </section>
+
+    <!-- Measured facts -->
+    <section class="mt-12" aria-labelledby="facts-heading">
+      <h2 id="facts-heading" class="heading mb-5 text-[clamp(1.25rem,3vw,1.6rem)]">
+        Measured facts
+      </h2>
+      <dl class="grid grid-cols-1 border-t border-line sm:grid-cols-2">
+        {
+          factsGrid.map((fact, i) => (
+            <div
+              class:list={[
+                "border-b border-line px-0 py-5 sm:px-5",
+                i % 2 === 1 && "sm:border-l",
+              ]}
+            >
+              <dt class="mono-label mb-1.5">{fact.label}</dt>
+              <dd>
+                <span class="heading block text-[22px] text-text">{fact.value}</span>
+                <span class="mono-meta mt-1 block">{fact.note}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- Last change -->
+    {
+      facts.commit && (
+        <section class="mt-12" aria-labelledby="commit-heading">
+          <h2 id="commit-heading" class="heading mb-5 text-[clamp(1.25rem,3vw,1.6rem)]">
+            Last change
+          </h2>
+          <div class="border border-line bg-surface p-5">
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <code class="mono-label !text-accent">{facts.commit.hash}</code>
+              <span class="text-[14px] text-text">{facts.commit.subject}</span>
+            </div>
+            <p class="mono-meta mt-2">
+              {facts.commit.relative} · {new Date(facts.commit.date).toISOString().slice(0, 10)}
+            </p>
+          </div>
+        </section>
+      )
+    }
+
+    <footer class="mt-12 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-line pt-6">
+      <a href="/status.json" class="link-arrow">Read the raw JSON</a>
+      <a href="/" class="mono-meta transition-colors hover:text-text">← Back to the work</a>
+    </footer>
+  </main>
+
+  <script>
+    type Weight = { route: string; label: string; html: number; js: number; css: number; total: number };
+
+    const bytes = (n: number) =>
+      n < 1024 ? `${n} B` : n < 1024 * 1024 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1024 / 1024).toFixed(2)} MB`;
+
+    const mount = document.getElementById("status-weight");
+    if (mount) {
+      fetch("/status.json", { cache: "no-store" })
+        .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+        .then((report: { pages: Weight[]; totals: { transfer: number }; dist: { files: number; bytes: number } }) => {
+          if (!report?.pages?.length) throw new Error("empty report");
+
+          const heaviest = Math.max(...report.pages.map((p) => p.total));
+
+          const rows = report.pages
+            .map((page) => {
+              const share = Math.max(2, Math.round((page.total / heaviest) * 100));
+              return `
+                <tr class="border-t border-line">
+                  <th scope="row" class="px-4 py-3 text-left font-normal">
+                    <span class="block text-[13.5px] text-text">${page.label}</span>
+                    <code class="mono-meta">${page.route}</code>
+                  </th>
+                  <td class="tnum px-3 py-3 text-right text-[13px] text-text-2">${bytes(page.html)}</td>
+                  <td class="tnum hidden px-3 py-3 text-right text-[13px] text-text-2 sm:table-cell">${bytes(page.css)}</td>
+                  <td class="tnum px-3 py-3 text-right text-[13px] text-text-2">${bytes(page.js)}</td>
+                  <td class="px-3 py-3">
+                    <span class="block h-1.5 w-full max-w-[160px] bg-line" aria-hidden="true">
+                      <span class="block h-full bg-accent" style="width:${share}%"></span>
+                    </span>
+                  </td>
+                  <td class="tnum px-4 py-3 text-right text-[13px] text-text">${bytes(page.total)}</td>
+                </tr>`;
+            })
+            .join("");
+
+          mount.innerHTML = `
+            <div class="overflow-x-auto">
+              <table class="w-full border-collapse">
+                <caption class="sr-only">Transfer size per route, in bytes</caption>
+                <thead>
+                  <tr class="mono-label">
+                    <th scope="col" class="px-4 py-2.5 text-left">Route</th>
+                    <th scope="col" class="px-3 py-2.5 text-right">HTML</th>
+                    <th scope="col" class="hidden px-3 py-2.5 text-right sm:table-cell">CSS</th>
+                    <th scope="col" class="px-3 py-2.5 text-right">JS</th>
+                    <th scope="col" class="px-3 py-2.5"><span class="sr-only">Relative</span></th>
+                    <th scope="col" class="px-4 py-2.5 text-right">Total</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+                <tfoot>
+                  <tr class="border-t border-line">
+                    <th scope="row" class="mono-label px-4 py-3 text-left">Full build</th>
+                    <td colspan="4" class="mono-meta px-3 py-3">${report.dist.files} files in dist/</td>
+                    <td class="tnum px-4 py-3 text-right text-[13px] text-text">${bytes(report.dist.bytes)}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>`;
+        })
+        .catch((error: Error) => {
+          // /status.json is produced by the build, so it does not exist in dev
+          const unavailable = /\b404\b/.test(error.message);
+          mount.innerHTML = unavailable
+            ? `<p class="mono-meta px-4 py-5">Page weight is measured after a production build — run <code class="text-text">npm run build</code> and <a href="/status.json" class="underline underline-offset-2 hover:text-accent">/status.json</a> will exist.</p>`
+            : `<p class="mono-meta px-4 py-5">Telemetry unavailable right now. The raw report is still at <a href="/status.json" class="underline underline-offset-2 hover:text-accent">/status.json</a>.</p>`;
+        });
+    }
+  </script>
+</BaseLayout>
