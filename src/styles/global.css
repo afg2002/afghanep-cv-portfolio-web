@@ -133,8 +133,9 @@ body {
   .hl {
     background: var(--color-acid);
     box-shadow: 4px 4px 0 var(--color-ink);
-    padding: 0 0.08em;
-    display: inline-block;
+    padding: 0.04em 0.12em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   /* ─────────────────────────── Primitives ─────────────────────────── */

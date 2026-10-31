@@ -145,7 +145,7 @@
     function togglePalette() {
       const isOpen = palette.classList.contains("hidden");
       palette.classList.toggle("hidden", !isOpen);
-      document.body.classList.toggle("overflow-hidden", !isOpen);
+      document.body.classList.toggle("overflow-hidden", isOpen);
       if (isOpen) {
         input.value = "";
         showCommands();

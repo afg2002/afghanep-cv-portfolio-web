@@ -60,11 +60,9 @@ const languages = [
       {groups.map((g, i) => (
         <div
           class:list={[
-            "group relative p-6 transition-colors duration-200 md:p-8",
+            "group relative border-b-2 border-paper/30 p-6 transition-colors duration-200 last:border-b-0 md:border-b-0 md:p-8 hover:bg-paper/5",
+            i < 2 && "md:border-b-2",
             i % 2 === 0 && "md:border-r-2 md:border-paper/30",
-            i < 2 && "border-b-2 border-paper/30",
-            i === 3 && "md:border-b-0",
-            "hover:bg-paper/5",
           ]}
         >
           <div class="mb-5 flex items-baseline gap-3">

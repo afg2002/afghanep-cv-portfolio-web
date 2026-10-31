@@ -3,11 +3,11 @@ const isHome = Astro.url.pathname === "/";
 const base = isHome ? "" : "/";
 
 const navLinks = [
-  { href: `${base}#work`, label: "Work", num: "01" },
-  { href: `${base}#skills`, label: "Stack", num: "02" },
-  { href: `${base}#experience`, label: "Experience", num: "03" },
-  { href: `${base}#about`, label: "About", num: "04" },
-  { href: `${base}#contact`, label: "Contact", num: "05" },
+  { href: `${base}#work`, label: "Work" },
+  { href: `${base}#skills`, label: "Stack" },
+  { href: `${base}#experience`, label: "Experience" },
+  { href: `${base}#about`, label: "About" },
+  { href: `${base}#contact`, label: "Contact" },
 ];
 ---
 
@@ -39,11 +39,10 @@ const navLinks = [
         <li>
           <a
             href={link.href}
-            class="nav-link group flex items-baseline gap-1.5 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3 no-underline transition-colors hover:text-ink"
+            class="nav-link group px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3 no-underline transition-colors hover:text-ink"
             data-section={link.href.split("#")[1]}
           >
-            <span class="text-[9px] text-ink-3/60 group-hover:text-ink-3">{link.num}</span>
-            <span class="border-b-2 border-transparent pb-px transition-colors group-hover:border-ink">{link.label}</span>
+            <span class="block border-b-2 border-transparent pb-px transition-colors group-hover:border-ink">{link.label}</span>
           </a>
         </li>
       ))}
@@ -100,9 +99,8 @@ const navLinks = [
         <li class={i === navLinks.length - 1 ? "col-span-2" : ""}>
           <a
             href={link.href}
-            class="mobile-nav-link flex items-center gap-2 border-2 border-ink bg-paper px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink no-underline transition-colors hover:bg-acid"
+            class="mobile-nav-link flex items-center border-2 border-ink bg-paper px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink no-underline transition-colors hover:bg-acid"
           >
-            <span class="text-[9px] text-ink-3">{link.num}</span>
             {link.label}
           </a>
         </li>
@@ -172,7 +170,7 @@ const navLinks = [
       const active = l.dataset.section === id;
       l.classList.toggle("text-ink", active);
       l.classList.toggle("text-ink-3", !active);
-      const underline = l.querySelector("span:last-child");
+      const underline = l.querySelector("span");
       underline?.classList.toggle("border-ink", active);
       underline?.classList.toggle("border-transparent", !active);
     });

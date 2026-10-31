@@ -168,7 +168,12 @@ const accentClass: Record<string, string> = {
       </summary>
       <ul class="grid grid-cols-1 border-t-2 border-ink sm:grid-cols-2">
         {moreProjects.map((mp, i) => (
-          <li class:list={["flex items-center gap-3 px-5 py-4 md:px-6", i % 2 === 1 && "sm:border-l-2 sm:border-ink", i >= 2 && "border-t-2 border-ink"]}>
+          <li class:list={[
+            "flex items-center gap-3 px-5 py-4 md:px-6",
+            i === 1 && "border-t-2 border-ink sm:border-t-0",
+            i >= 2 && "border-t-2 border-ink",
+            i % 2 === 1 && "sm:border-l-2 sm:border-ink",
+          ]}>
             <span class="font-mono text-[10px] text-ink-3">{String(i + 7).padStart(2, "0")}</span>
             <span class="text-sm font-medium text-ink-2">{mp}</span>
           </li>
