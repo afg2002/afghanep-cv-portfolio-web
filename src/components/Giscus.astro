@@ -1,5 +1,6 @@
 ---
 ---
+
 <section>
   <div class="mb-5 flex flex-wrap items-end justify-between gap-3 border-b border-line pb-3">
     <div>
@@ -15,28 +16,91 @@
 
 <script>
   (function () {
-    const script = document.createElement("script");
-    script.src = "https://giscus.app/client.js";
-    script.setAttribute("data-repo", "afg2002/afghanep-cv-portfolio-web");
-    script.setAttribute("data-repo-id", "R_kgDOSTWCUw");
-    script.setAttribute("data-category", "Announcements");
-    script.setAttribute("data-category-id", "DIC_kwDOSTWCUc4CfyPx");
-    script.setAttribute("data-mapping", "pathname");
-    script.setAttribute("data-strict", "0");
-    script.setAttribute("data-reactions-enabled", "1");
-    script.setAttribute("data-emit-metadata", "0");
-    script.setAttribute("data-input-position", "top");
-    script.setAttribute(
-      "data-theme",
-      document.documentElement.classList.contains("dark") ? "dark_dimmed" : "light"
-    );
-    script.setAttribute("data-lang", "en");
-    script.setAttribute("crossorigin", "anonymous");
-    script.async = true;
+    const REPO = "afg2002/afghanep-cv-portfolio-web";
+    const REPO_ID = "R_kgDOSTWCUw";
+    // "General" — a category every GitHub user can post in.
+    // NOTE: "Announcements" looks correct but only maintainers/admins may create
+    // discussions there, which giscus surfaces as "Unable to create discussion".
+    const CATEGORY = "General";
+    const CATEGORY_ID = "DIC_kwDOSTWCU84C8RSJ";
+
     const target = document.getElementById("giscus-comments");
-    if (target) {
+    if (!target) return;
+
+    const isDark = () => document.documentElement.classList.contains("dark");
+    const themeFor = () => (isDark() ? "dark_dimmed" : "light");
+
+    let lastTheme = themeFor();
+    let widgetLoaded = false;
+
+    function loadWidget() {
+      if (widgetLoaded) return;
+      widgetLoaded = true;
       target.innerHTML = "";
+
+      const script = document.createElement("script");
+      script.src = "https://giscus.app/client.js";
+      script.setAttribute("data-repo", REPO);
+      script.setAttribute("data-repo-id", REPO_ID);
+      script.setAttribute("data-category", CATEGORY);
+      script.setAttribute("data-category-id", CATEGORY_ID);
+      script.setAttribute("data-mapping", "pathname");
+      script.setAttribute("data-strict", "0");
+      script.setAttribute("data-reactions-enabled", "1");
+      script.setAttribute("data-emit-metadata", "0");
+      script.setAttribute("data-input-position", "top");
+      script.setAttribute("data-theme", themeFor());
+      script.setAttribute("data-lang", "en");
+      script.setAttribute("crossorigin", "anonymous");
+      script.async = true;
+      script.addEventListener("error", () => {
+        target.innerHTML =
+          '<p class="mono-meta">Comments failed to load. ' +
+          '<a href="mailto:afghanekapangestu@gmail.com" class="text-text underline">Email me instead</a>.</p>';
+      });
+
+      lastTheme = themeFor();
       target.appendChild(script);
+    }
+
+    // ── Theme sync ───────────────────────────────────────────────
+    // giscus accepts theme changes over postMessage; if the iframe is gone we
+    // simply reload the widget so it can never get stuck on the wrong theme.
+    function syncTheme() {
+      const next = themeFor();
+      if (next === lastTheme) return;
+      lastTheme = next;
+      if (!widgetLoaded) return;
+
+      const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+      if (iframe?.contentWindow) {
+        iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: next } } }, "https://giscus.app");
+      } else {
+        widgetLoaded = false;
+        loadWidget();
+      }
+    }
+
+    new MutationObserver(syncTheme).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncTheme);
+
+    // ── Load when the section approaches the viewport ────────────
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            observer.disconnect();
+            loadWidget();
+          }
+        },
+        { rootMargin: "400px 0px" }
+      );
+      observer.observe(target);
+    } else {
+      loadWidget();
     }
   })();
 </script>
