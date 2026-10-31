@@ -17,6 +17,7 @@ const hasTagParam = Astro.url.searchParams.has("tag");
 <BaseLayout
   title="Writing"
   description="Notes on software development, backend architecture, and building for the web — by Afghan Eka Pangestu, software developer in Bogor, Indonesia."
+  ogImage="/og/site.png"
   noindex={hasTagParam}
 >
   <Header />
@@ -33,7 +34,8 @@ const hasTagParam = Astro.url.searchParams.has("tag");
           <p class="mono-meta">{posts.length} {posts.length === 1 ? "entry" : "entries"}</p>
         </div>
 
-        <h1 class="display-lg text-[clamp(2.2rem,8vw,4.5rem)] animate-fade-up" data-pagefind-meta="title">
+        <span class="sr-only" data-pagefind-meta="title">Writing — Afghan Eka Pangestu</span>
+        <h1 class="display-lg text-[clamp(2.2rem,8vw,4.5rem)] animate-fade-up">
           Notes on<br />
           <span class="text-accent">building things.</span>
         </h1>

@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -16,6 +17,9 @@ const formattedDate = new Date(date).toLocaleDateString("en-US", {
 const body = post.body || "";
 const wordCount = body.split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+// Local imports (ImageMetadata) can be optimised; plain strings are remote paths.
+const isLocal = Boolean(coverImage) && typeof coverImage === "object";
+const coverSrc = typeof coverImage === "string" ? coverImage : (coverImage as any)?.src;
 ---
 
 <article class="group h-full">
@@ -25,14 +29,27 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
   >
     {coverImage && (
       <div class="aspect-[16/9] overflow-hidden border-b border-line">
-        <img
-          src={coverImage}
-          alt={title}
-          class="h-full w-full object-cover"
-          loading="lazy"
-          width="600"
-          height="338"
-        />
+        {isLocal ? (
+          <Image
+            src={coverImage as any}
+            alt={title}
+            widths={[400, 600, 800]}
+            sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw"
+            format="webp"
+            quality={72}
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        ) : (
+          <img
+            src={coverSrc}
+            alt={title}
+            class="h-full w-full object-cover"
+            loading="lazy"
+            width="600"
+            height="338"
+          />
+        )}
       </div>
     )}
 

@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ScrollToTop from "../components/ScrollToTop.astro";
+
+const links = [
+  { href: "/#work", label: "Selected work", note: "Six featured builds" },
+  { href: "/blog", label: "Writing", note: "Notes on building software" },
+  { href: "/#experience", label: "Experience", note: "Track record" },
+  { href: "/#contact", label: "Contact", note: "Available for freelance" },
+];
+---
+
+<BaseLayout
+  title="404 — Page not found"
+  description="This page does not exist. Browse selected work, writing, and contact details instead."
+  noindex={true}
+>
+  <Header />
+
+  <main id="main-content" class="flex-1">
+    <section class="border-b border-line">
+      <div class="u-container py-16 md:py-24">
+        <div class="mb-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-line pb-3">
+          <p class="mono-meta flex items-center gap-2">
+            <span class="dot" aria-hidden="true"></span>
+            Error 404
+          </p>
+          <p class="mono-meta">Not found</p>
+        </div>
+
+        <h1 class="display-lg text-[clamp(3rem,14vw,9rem)] text-accent animate-fade-up">
+          404
+        </h1>
+
+        <p class="lead mt-6 max-w-[48ch] animate-fade-up delay-1">
+          This page doesn't exist — it may have moved, or the link was mistyped.
+          Here's where to go instead.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-2.5 animate-fade-up delay-2">
+          <a href="/" class="btn btn-primary">
+            Back to home
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12h16m0 0l-6-6m6 6l-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+          <button type="button" id="notfound-search" class="btn">
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" /><path d="M20 20l-3.8-3.8" stroke-linecap="round" />
+            </svg>
+            Search the site
+          </button>
+          <a href="/blog" class="link-arrow ml-1 mt-1">Read the writing</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="u-container">
+        <div class="section-head">
+          <div>
+            <p class="index-label mb-2" data-index="→">Instead</p>
+            <h2 class="heading text-[clamp(1.5rem,3.5vw,2.25rem)]">Popular destinations</h2>
+          </div>
+          <p class="mono-meta max-w-[32ch] leading-relaxed">
+            The four pages most people are looking for.
+          </p>
+        </div>
+
+        <ul class="border-t border-line">
+          {links.map((l) => (
+            <li class="border-b border-line">
+              <a href={l.href} class="group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 py-4 no-underline">
+                <div class="min-w-0">
+                  <p class="text-[14px] font-medium text-text transition-colors group-hover:text-accent">{l.label}</p>
+                  <p class="mono-meta mt-0.5">{l.note}</p>
+                </div>
+                <svg class="h-3.5 w-3.5 text-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <ScrollToTop />
+</BaseLayout>
+
+<script>
+  document.getElementById("notfound-search")?.addEventListener("click", () => {
+    (window as any).__toggleSearch?.();
+  });
+</script>

@@ -22,7 +22,11 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 - **Blog** — Tag filtering, card grid, and article pages with TOC, reading progress, and copy-code buttons
 - **Command palette** — `Ctrl/Cmd + K` search across pages and articles (Pagefind)
 - **Dark mode** — Dark by default, light supported; 3-state toggle (dark → system → light) with no first-paint flash
-- **SEO** — Canonical URLs, OG/Twitter cards, JSON-LD (`Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `BreadcrumbList`), sitemap, `noindex` on filtered views
+- **Dynamic OG images** — Per-article 1200×630 cards generated at build time with Satori + resvg (no headless browser), plus a site-wide card
+- **RSS feed** — `/rss.xml`, advertised via `<link rel="alternate">` and linked in the footer
+- **404 page** — On-brand not-found page with search and popular destinations, `noindex`
+- **Image optimisation** — `astro:assets` + sharp: local blog covers are emitted as WebP with responsive `srcset`
+- **SEO** — Canonical URLs, OG/Twitter cards, JSON-LD (`Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `BreadcrumbList`), sitemap, `noindex` on filtered views and 404
 - **Responsive** — Mobile-first, fluid `clamp()` type, ≥44px touch targets, reduced-motion support
 - **Design system** — Swiss + monospace spec-sheet: hairline rules, one accent, zero decoration (see `DESIGN.md`)
 
@@ -34,6 +38,8 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 | **Styling** | [Tailwind CSS](https://tailwindcss.com) 4 |
 | **UI** | Custom components, `@fontsource/space-grotesk`, `@fontsource/inter`, `@fontsource/jetbrains-mono` |
 | **Content** | Astro Content Collections (Markdown) |
+| **Media** | `astro:assets` + sharp, Satori + `@resvg/resvg-js` for OG cards |
+| **Feeds** | `@astrojs/rss` |
 | **Deployment** | [Vercel](https://vercel.com) (static + serverless functions) |
 | **Package Manager** | [Bun](https://bun.sh) |
 
