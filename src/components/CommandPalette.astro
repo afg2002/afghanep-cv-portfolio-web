@@ -1,114 +1,121 @@
 ---
 ---
 
-<div id="cmd-palette" class="fixed inset-0 z-[200] hidden" role="dialog" aria-modal="true" aria-label="Command Palette">
+<div
+  id="cmd-palette"
+  class="fixed inset-0 z-[200] hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search"
+>
   <div id="cmd-backdrop" class="absolute inset-0 bg-black/55 backdrop-blur-[2px]"></div>
 
-  <div class="relative mx-auto mt-[10vh] max-w-2xl px-4">
+  <div class="relative mx-auto mt-[8vh] w-full max-w-2xl px-4 md:mt-[10vh]">
     <div class="overflow-hidden border border-line-strong bg-bg shadow-2xl shadow-black/40">
-      <!-- Input -->
+      <!-- Search input -->
       <div class="flex items-center gap-3 border-b border-line px-4 py-3.5">
         <svg class="h-4 w-4 shrink-0 text-muted" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="11" cy="11" r="6.5" /><path d="M20 20l-3.8-3.8" stroke-linecap="round" />
         </svg>
         <input
           id="cmd-input"
-          type="text"
-          placeholder="Search pages, articles, commands…"
-          class="min-w-0 flex-1 bg-transparent text-[14px] text-text placeholder:text-muted focus:outline-none"
+          type="search"
+          role="combobox"
+          aria-expanded="true"
+          aria-controls="cmd-results"
+          aria-autocomplete="list"
+          placeholder="Search articles and pages…"
+          class="min-w-0 flex-1 bg-transparent text-[14px] text-text placeholder:text-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
           autocomplete="off"
-          aria-label="Search"
+          spellcheck="false"
+          aria-label="Search articles and pages"
         />
         <kbd class="hidden rounded-[2px] border border-line bg-surface px-1.5 py-0.5 font-mono text-[10px] uppercase text-muted sm:block">esc</kbd>
       </div>
 
-      <!-- Results -->
-      <div id="cmd-results" class="max-h-[55vh] overflow-y-auto">
-        <div id="cmd-commands">
-          <div class="py-1.5">
-            <div class="px-4 pb-1 pt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted/70">Navigate</div>
-            <a href="/#home" data-cmd="home" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Home</span>
-              <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">ctrl+h</span>
-            </a>
-            <a href="/#work" data-cmd="work projects" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Work</span>
-            </a>
-            <a href="/#stack" data-cmd="stack skills" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Stack</span>
-            </a>
-            <a href="/#experience" data-cmd="experience history" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Experience</span>
-            </a>
-            <a href="/#about" data-cmd="about me" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">About</span>
-            </a>
-            <a href="/#education" data-cmd="education school" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Education</span>
-            </a>
-            <a href="/#contact" data-cmd="contact email" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Contact</span>
-            </a>
-            <a href="/blog" data-cmd="blog writing articles" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Writing</span>
-              <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">ctrl+b</span>
-            </a>
-          </div>
+      <div id="cmd-results" class="max-h-[60vh] overflow-y-auto overscroll-contain">
+        <!-- Idle state: quick links -->
+        <div id="cmd-idle">
+          <div class="px-4 pb-1 pt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted/70">Jump to</div>
+          <a href="/#work" data-cmd="work projects" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">Work</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">01</span>
+          </a>
+          <a href="/#stack" data-cmd="stack skills" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">Stack</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">02</span>
+          </a>
+          <a href="/#experience" data-cmd="experience history" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">Experience</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">03</span>
+          </a>
+          <a href="/#about" data-cmd="about me" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">About</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">04</span>
+          </a>
+          <a href="/#contact" data-cmd="contact email hire" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">Contact</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">07</span>
+          </a>
+          <a href="/blog" data-cmd="blog writing articles posts" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">Writing</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">blog</span>
+          </a>
 
-          <div class="border-t border-line py-1.5">
-            <div class="px-4 pb-1 pt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted/70">Actions</div>
-            <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" data-cmd="cv resume download" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Download CV</span>
-              <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">ctrl+d</span>
-            </a>
-            <a href="https://github.com/afg2002" target="_blank" rel="noopener" data-cmd="github code" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">GitHub</span>
-              <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">ctrl+g</span>
-            </a>
-            <a href="https://www.linkedin.com/in/afghan-eka-pangestu/" target="_blank" rel="noopener" data-cmd="linkedin" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">LinkedIn</span>
-            </a>
-            <a href="mailto:afghanekapangestu@gmail.com" data-cmd="email mail contact" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
-              <span class="text-[13px] text-text">Send an email</span>
-            </a>
-          </div>
+          <div class="border-t border-line px-4 pb-1 pt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted/70">Actions</div>
+          <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" data-cmd="cv resume download" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">Download CV</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">ctrl+d</span>
+          </a>
+          <a href="https://github.com/afg2002" target="_blank" rel="noopener" data-cmd="github code" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">GitHub</span>
+            <span class="ml-auto font-mono text-[10px] uppercase text-muted/60">ctrl+g</span>
+          </a>
+          <a href="https://www.linkedin.com/in/afghan-eka-pangestu/" target="_blank" rel="noopener" data-cmd="linkedin" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">LinkedIn</span>
+          </a>
+          <a href="mailto:afghanekapangestu@gmail.com" data-cmd="email mail contact" class="cmd-item flex items-center gap-3 px-4 py-2.5 no-underline transition-colors hover:bg-surface">
+            <span class="text-[13px] text-text">Send an email</span>
+          </a>
         </div>
 
-        <div id="cmd-search-results" class="hidden"></div>
+        <!-- Search results -->
+        <div id="cmd-search-results" class="hidden" role="listbox" aria-label="Search results"></div>
 
-        <div id="cmd-loading" class="hidden py-10 text-center">
-          <div class="mx-auto h-5 w-5 animate-spin rounded-full border-2 border-line-strong border-t-accent"></div>
+        <!-- Loading -->
+        <div id="cmd-loading" class="hidden items-center justify-center gap-3 py-10">
+          <span class="h-4 w-4 animate-spin rounded-full border-2 border-line-strong border-t-accent"></span>
+          <span class="font-mono text-[11px] text-muted">Searching…</span>
         </div>
 
+        <!-- Empty -->
         <div id="cmd-empty" class="hidden px-4 py-10 text-center">
           <p class="font-mono text-[11px] text-muted">No results found</p>
         </div>
       </div>
 
       <div class="flex items-center justify-between gap-3 border-t border-line bg-surface px-4 py-2 font-mono text-[10px] uppercase tracking-[0.08em] text-muted">
-        <span id="cmd-footer-left">Navigate</span>
+        <span id="cmd-footer-left">Jump to</span>
         <span class="hidden sm:inline">↑↓ move · ↵ open · esc close</span>
       </div>
     </div>
   </div>
 </div>
 
-<script is:inline src="/pagefind/pagefind.js"></script>
-
 <script>
+  import { searchSite, loadPagefind, type SearchHit } from "../lib/search";
+
   (function () {
-    const palette = document.getElementById("cmd-palette");
+    const palette = document.getElementById("cmd-palette")!;
     const input = document.getElementById("cmd-input") as HTMLInputElement | null;
     const backdrop = document.getElementById("cmd-backdrop");
-    const commandsContainer = document.getElementById("cmd-commands");
-    const searchResults = document.getElementById("cmd-search-results");
+    const idle = document.getElementById("cmd-idle");
+    const resultsEl = document.getElementById("cmd-search-results");
     const loadingEl = document.getElementById("cmd-loading");
     const emptyEl = document.getElementById("cmd-empty");
     const footerLeft = document.getElementById("cmd-footer-left");
 
     if (!palette || !input) return;
-
-    let pagefindReady = false;
 
     const escapeHtml = (text: string) => {
       const div = document.createElement("div");
@@ -116,188 +123,218 @@
       return div.innerHTML;
     };
 
-    const highlightMatch = (text: string, query: string) => {
-      if (!text || !query) return escapeHtml(text);
-      const safe = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return escapeHtml(text).replace(
-        new RegExp(`(${safe})`, "gi"),
+    const highlight = (text: string, query: string) => {
+      const safeText = escapeHtml(text);
+      const terms = query.trim().split(/\s+/).filter(Boolean);
+      if (!terms.length) return safeText;
+      const pattern = terms
+        .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        .join("|");
+      return safeText.replace(
+        new RegExp(`(${pattern})`, "gi"),
         '<mark class="bg-accent-soft text-accent rounded-[2px] px-0.5">$1</mark>'
       );
     };
 
-    function togglePalette() {
-      const isOpen = palette.classList.contains("hidden");
-      palette.classList.toggle("hidden", !isOpen);
-      document.body.classList.toggle("overflow-hidden", isOpen);
-      if (isOpen) {
+    // ── Open / close ────────────────────────────────────────────
+    function togglePalette(force?: boolean) {
+      const isHidden = palette.classList.contains("hidden");
+      const open = force ?? isHidden;
+      palette.classList.toggle("hidden", !open);
+      document.body.classList.toggle("overflow-hidden", open);
+      if (open) {
         input.value = "";
-        showCommands();
+        renderIdle();
         input.focus();
       }
     }
 
-    function showCommands() {
-      commandsContainer?.classList.remove("hidden");
-      searchResults?.classList.add("hidden");
-      if (searchResults) searchResults.innerHTML = "";
+    // ── States ──────────────────────────────────────────────────
+    function renderIdle() {
+      idle?.classList.remove("hidden");
+      resultsEl?.classList.add("hidden");
       loadingEl?.classList.add("hidden");
       emptyEl?.classList.add("hidden");
-      if (footerLeft) footerLeft.textContent = "Navigate";
-      document.querySelectorAll("#cmd-commands .cmd-item").forEach((i) => i.classList.remove("hidden"));
+      if (footerLeft) footerLeft.textContent = "Jump to";
+      document.querySelectorAll("#cmd-idle .cmd-item").forEach((i) => i.classList.remove("hidden"));
+      setCursor(-1);
     }
 
-    function showSearchResults() {
-      commandsContainer?.classList.add("hidden");
-      searchResults?.classList.remove("hidden");
-      loadingEl?.classList.add("hidden");
-      emptyEl?.classList.add("hidden");
-    }
-
-    function showLoading() {
-      commandsContainer?.classList.add("hidden");
-      searchResults?.classList.add("hidden");
-      if (searchResults) searchResults.innerHTML = "";
+    function renderLoading() {
+      idle?.classList.add("hidden");
+      resultsEl?.classList.add("hidden");
       loadingEl?.classList.remove("hidden");
+      loadingEl?.classList.add("flex");
       emptyEl?.classList.add("hidden");
     }
 
-    function showEmpty() {
-      commandsContainer?.classList.add("hidden");
-      searchResults?.classList.add("hidden");
-      if (searchResults) searchResults.innerHTML = "";
+    function renderEmpty(query: string) {
+      idle?.classList.add("hidden");
+      resultsEl?.classList.add("hidden");
       loadingEl?.classList.add("hidden");
       emptyEl?.classList.remove("hidden");
+      if (footerLeft) footerLeft.textContent = `No results for “${query}”`;
     }
 
-    input.addEventListener("input", () => {
-      const q = input.value.trim().toLowerCase();
+    function renderResults(hits: SearchHit[], query: string) {
+      idle?.classList.add("hidden");
+      loadingEl?.classList.add("hidden");
+      emptyEl?.classList.add("hidden");
+      resultsEl?.classList.remove("hidden");
+      if (!resultsEl) return;
 
-      if (q.length === 0) {
-        showCommands();
-        return;
+      resultsEl.innerHTML = "";
+
+      // Group posts above pages — articles are what people search for.
+      const groups: Array<{ label: string; kind: SearchHit["kind"] }> = [
+        { label: "Writing", kind: "post" },
+        { label: "Pages", kind: "page" },
+      ];
+
+      for (const group of groups) {
+        const items = hits.filter((h) => h.kind === group.kind);
+        if (!items.length) continue;
+
+        const heading = document.createElement("div");
+        heading.className =
+          "px-4 pb-1 pt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted/70";
+        heading.textContent = group.label;
+        resultsEl.appendChild(heading);
+
+        for (const hit of items) {
+          const a = document.createElement("a");
+          a.href = hit.url;
+          a.className =
+            "cmd-item flex items-start gap-3 border-l-2 border-transparent px-4 py-2.5 no-underline transition-colors hover:border-accent hover:bg-surface";
+          a.setAttribute("role", "option");
+          a.innerHTML =
+            `<svg class="mt-1 h-3.5 w-3.5 shrink-0 text-muted" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">` +
+            (group.kind === "post"
+              ? `<path d="M6 3h9l4 4v14H6z" stroke-linejoin="round"/><path d="M14 3v5h5" stroke-linejoin="round"/>`
+              : `<path d="M4 5h16v14H4z" stroke-linejoin="round"/><path d="M4 9h16"/>`) +
+            `</svg>` +
+            `<div class="min-w-0 flex-1">` +
+            `<p class="text-[13px] font-medium leading-snug text-text">${highlight(hit.title, query)}</p>` +
+            (hit.excerpt
+              ? `<p class="mt-1 line-clamp-2 text-[11.5px] leading-relaxed text-muted">${highlight(hit.excerpt, query)}</p>`
+              : "") +
+            `</div>` +
+            `<svg class="mt-1 h-3 w-3 shrink-0 text-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+          resultsEl.appendChild(a);
+        }
       }
 
-      if (q.length < 2) {
+      if (footerLeft) {
+        footerLeft.textContent = `${hits.length} result${hits.length === 1 ? "" : "s"} for “${query}”`;
+      }
+      setCursor(-1);
+    }
+
+    // ── Query handling ──────────────────────────────────────────
+    let requestId = 0;
+
+    async function runSearch(query: string) {
+      const id = ++requestId;
+
+      if (query.length < 2) {
+        // Short queries: filter the static quick-links instead of hitting the index.
         let visible = false;
-        document.querySelectorAll<HTMLAnchorElement>("#cmd-commands .cmd-item").forEach((item) => {
+        document.querySelectorAll<HTMLElement>("#cmd-idle .cmd-item").forEach((item) => {
           const haystack = `${item.dataset.cmd || ""} ${item.textContent || ""}`.toLowerCase();
-          const match = haystack.includes(q);
+          const match = haystack.includes(query.toLowerCase());
           item.classList.toggle("hidden", !match);
           if (match) visible = true;
         });
-        commandsContainer?.classList.remove("hidden");
-        searchResults?.classList.add("hidden");
-        if (searchResults) searchResults.innerHTML = "";
+        idle?.classList.remove("hidden");
+        resultsEl?.classList.add("hidden");
         loadingEl?.classList.add("hidden");
         emptyEl?.classList.toggle("hidden", visible);
         return;
       }
 
-      debouncedPagefindSearch(q);
-    });
+      renderLoading();
+      const hits = await searchSite(query, 10);
+      if (id !== requestId) return; // a newer keystroke won
 
-    let debounceTimer: number | undefined;
-
-    function debouncedPagefindSearch(q: string) {
-      if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = window.setTimeout(() => pagefindSearch(q), 180);
+      if (!hits.length) renderEmpty(query);
+      else renderResults(hits, query);
     }
 
-    async function pagefindSearch(q: string) {
-      showLoading();
-      const w = window as any;
-      if (!pagefindReady && typeof w.pagefind !== "undefined") pagefindReady = true;
-
-      if (!w.pagefind) {
-        let retries = 0;
-        while (!w.pagefind && retries < 30) {
-          await new Promise((r) => setTimeout(r, 100));
-          retries++;
-        }
-        if (w.pagefind) pagefindReady = true;
-      }
-
-      if (!w.pagefind) {
-        showCommands();
+    let debounce: number | undefined;
+    input.addEventListener("input", () => {
+      const q = input.value.trim();
+      window.clearTimeout(debounce);
+      if (!q) {
+        renderIdle();
         return;
       }
+      debounce = window.setTimeout(() => runSearch(q), 140);
+    });
 
-      try {
-        const search = await w.pagefind.search(q);
-        const hits = search.results;
+    // Preload the index as soon as the palette is first opened.
+    let preloaded = false;
+    const preload = () => {
+      if (preloaded) return;
+      preloaded = true;
+      loadPagefind();
+    };
+    input.addEventListener("focus", preload, { once: true });
 
-        if (!hits || hits.length === 0) {
-          showEmpty();
-          if (footerLeft) footerLeft.textContent = `No results for “${q}”`;
-          return;
-        }
+    // ── Keyboard: cursor over visible items ─────────────────────
+    let cursor = -1;
 
-        const loaded = await Promise.all(hits.slice(0, 20).map((r: any) => r.data()));
-        if (footerLeft) footerLeft.textContent = `${hits.length} result${hits.length > 1 ? "s" : ""} for “${q}”`;
-        showSearchResults();
+    function visibleItems(): HTMLElement[] {
+      const scope = idle && !idle.classList.contains("hidden") ? idle : resultsEl;
+      return Array.from(scope?.querySelectorAll<HTMLElement>(".cmd-item") ?? []).filter(
+        (el) => !el.classList.contains("hidden")
+      );
+    }
 
-        const frag = document.createDocumentFragment();
-        for (const hit of loaded) {
-          const hitTitle = (hit.meta && hit.meta.title) || "Untitled";
-          const hitUrl = hit.url || (hit.meta && hit.meta.url) || "/";
-          const hitExcerpt = hit.excerpt || (hit.meta && hit.meta.description) || "";
-          const isBlog = hitUrl.indexOf("/blog/") !== -1;
-
-          const itemEl = document.createElement("a");
-          itemEl.href = hitUrl;
-          itemEl.className = "flex items-start gap-3 border-b border-line px-4 py-3 no-underline transition-colors last:border-0 hover:bg-surface";
-          itemEl.innerHTML =
-            `<span class="mt-0.5 shrink-0 font-mono text-[9px] uppercase tracking-[0.08em] text-muted">${isBlog ? "Post" : "Page"}</span>` +
-            `<div class="min-w-0">` +
-            `<p class="text-[13px] font-medium text-text">${highlightMatch(hitTitle, q)}</p>` +
-            (hitExcerpt ? `<div class="mt-1 line-clamp-2 text-[11.5px] leading-relaxed text-muted">${hitExcerpt}</div>` : "") +
-            `</div>`;
-          frag.appendChild(itemEl);
-        }
-        if (searchResults) {
-          searchResults.innerHTML = "";
-          searchResults.appendChild(frag);
-        }
-      } catch (err) {
-        console.warn("[cmd] Pagefind error:", err);
-        showCommands();
+    function setCursor(next: number) {
+      const items = visibleItems();
+      items.forEach((el) => {
+        el.classList.remove("bg-surface", "border-accent");
+        el.setAttribute("aria-selected", "false");
+      });
+      cursor = next;
+      if (next >= 0 && items[next]) {
+        items[next].classList.add("bg-surface", "border-accent");
+        items[next].setAttribute("aria-selected", "true");
+        items[next].scrollIntoView({ block: "nearest" });
       }
     }
 
-    let cursor = -1;
-    function visibleItems() {
-      const scope = commandsContainer?.classList.contains("hidden") ? searchResults : commandsContainer;
-      return Array.from(scope?.querySelectorAll<HTMLAnchorElement>("a.cmd-item, a") ?? []);
-    }
-    function moveCursor(delta: number) {
-      const items = visibleItems();
-      if (!items.length) return;
-      items.forEach((i) => i.classList.remove("bg-surface", "text-accent"));
-      cursor = (cursor + delta + items.length) % items.length;
-      const el = items[cursor];
-      el.classList.add("bg-surface");
-      el.scrollIntoView({ block: "nearest" });
-    }
-
-    backdrop?.addEventListener("click", togglePalette);
+    backdrop?.addEventListener("click", () => togglePalette(false));
 
     document.addEventListener("keydown", (e) => {
       const open = !palette.classList.contains("hidden");
 
-      if (e.key === "Escape" && open) togglePalette();
-
-      if (open && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
-        e.preventDefault();
-        moveCursor(e.key === "ArrowDown" ? 1 : -1);
+      if (e.key === "Escape" && open) {
+        togglePalette(false);
         return;
       }
-      if (open && e.key === "Enter") {
-        const items = visibleItems();
-        if (cursor >= 0 && items[cursor]) {
+
+      if (open) {
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
-          items[cursor].click();
+          preload();
+          const items = visibleItems();
+          if (!items.length) return;
+          setCursor(
+            e.key === "ArrowDown"
+              ? (cursor + 1) % items.length
+              : (cursor - 1 + items.length) % items.length
+          );
+          return;
         }
-        return;
+        if (e.key === "Enter") {
+          const items = visibleItems();
+          if (cursor >= 0 && items[cursor]) {
+            e.preventDefault();
+            items[cursor].click();
+          }
+          return;
+        }
       }
 
       if (!(e.ctrlKey || e.metaKey)) return;
@@ -320,10 +357,10 @@
       }
     });
 
-    input.addEventListener("input", () => {
-      cursor = -1;
-    });
-
-    (window as any).__toggleSearch = togglePalette;
+    // Exposed for the header buttons.
+    (window as any).__toggleSearch = () => {
+      preload();
+      togglePalette();
+    };
   })();
 </script>

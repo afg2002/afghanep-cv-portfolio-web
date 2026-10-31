@@ -13,6 +13,7 @@ export interface Props {
 }
 
 import CommandPalette from "../components/CommandPalette.astro";
+import SearchManifest from "../components/SearchManifest.astro";
 import "../styles/global.css";
 
 const {
@@ -154,6 +155,7 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
   <body class="min-h-screen flex flex-col bg-bg text-text antialiased">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
+    <SearchManifest />
     <CommandPalette />
   </body>
 </html>
