@@ -3,73 +3,123 @@ const isHome = Astro.url.pathname === "/";
 const base = isHome ? "" : "/";
 
 const navLinks = [
-  { href: `${base}#home`, label: "Home" },
-  { href: `${base}#about`, label: "About" },
-  { href: `${base}#skills`, label: "Skills" },
+  { href: `${base}#work`, label: "Work" },
+  { href: `${base}#skills`, label: "Stack" },
   { href: `${base}#experience`, label: "Experience" },
-  { href: `${base}#projects`, label: "Projects" },
-  { href: `${base}#education`, label: "Education" },
-  { href: `${base}#certifications`, label: "Certifications" },
+  { href: `${base}#about`, label: "About" },
   { href: `${base}#contact`, label: "Contact" },
 ];
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-bg-primary/80 border-b border-border-subtle" data-pagefind-ignore>
-  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
-    <a href="/" class="font-mono font-bold text-lg text-accent-primary tracking-tight hover:text-accent-secondary transition-colors">
-      AEP
+<header
+  class="sticky top-0 z-50 bg-paper/95 backdrop-blur-sm border-b-2 border-ink"
+  data-pagefind-ignore
+>
+  <nav class="u-container flex h-16 items-center justify-between gap-4 md:h-[72px]" aria-label="Main navigation">
+    <!-- Logo -->
+    <a
+      href="/"
+      class="group flex items-center gap-2.5 no-underline"
+      aria-label="Afghan Eka Pangestu — home"
+    >
+      <span
+        class="flex h-9 w-9 items-center justify-center border-2 border-ink bg-acid font-display text-[13px] leading-none text-ink shadow-brut-xs transition-transform duration-150 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 md:h-10 md:w-10 md:text-sm"
+      >
+        AEP
+      </span>
+      <span class="hidden leading-[1.05] sm:block">
+        <span class="block font-mono text-[10px] uppercase tracking-[0.16em] text-ink-3">Afghan Eka</span>
+        <span class="block font-mono text-[10px] uppercase tracking-[0.16em] text-ink">Pangestu</span>
+      </span>
     </a>
 
     <!-- Desktop nav -->
-    <ul class="hidden lg:flex items-center gap-1">
+    <ul class="hidden items-center gap-1 lg:flex">
       {navLinks.map((link) => (
         <li>
           <a
             href={link.href}
-            class="px-3 py-2 text-sm text-text-secondary hover:text-text-primary transition-colors rounded-md hover:bg-bg-elevated"
+            class="nav-link group px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3 no-underline transition-colors hover:text-ink"
+            data-section={link.href.split("#")[1]}
           >
-            {link.label}
+            <span class="block border-b-2 border-transparent pb-px transition-colors group-hover:border-ink">{link.label}</span>
           </a>
         </li>
       ))}
     </ul>
 
-    <div class="hidden lg:flex items-center gap-2">
-      <button id="search-btn" class="p-2 text-text-secondary hover:text-text-primary hover:bg-bg-elevated rounded-lg transition-colors" aria-label="Search (Ctrl+K)">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <div class="flex items-center gap-2">
+      <button
+        id="search-btn"
+        class="hidden h-9 w-9 items-center justify-center border-2 border-ink bg-paper text-ink transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-acid hover:shadow-brut-xs md:flex"
+        aria-label="Search site (Ctrl+K)"
+        title="Search (Ctrl+K)"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" /><path stroke-linecap="square" d="M20 20l-3.6-3.6" />
+        </svg>
       </button>
-      <a href="/blog" class="px-4 py-2 text-sm font-medium bg-accent-primary/10 text-accent-primary rounded-full hover:bg-accent-primary/20 transition-colors">
-        Blog
-      </a>
-    </div>
 
-    <!-- Mobile nav trigger -->
-    <button id="mobile-menu-btn" class="lg:hidden p-2 text-text-secondary hover:text-text-primary transition-colors" aria-label="Toggle menu">
-      <svg class="w-6 h-6 block" id="menu-icon-open" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      <svg class="w-6 h-6 hidden" id="menu-icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
+      <a href="/blog" class="hidden md:inline-flex btn btn-sm btn-ink">
+        Writing
+        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="square" d="M7 17L17 7M9 7h8v8" />
+        </svg>
+      </a>
+
+      <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" rel="noopener" class="hidden btn btn-sm btn-acid lg:inline-flex">
+        CV
+        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="square" d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14" />
+        </svg>
+      </a>
+
+      <!-- Mobile trigger -->
+      <button
+        id="mobile-menu-btn"
+        class="flex h-9 w-9 items-center justify-center border-2 border-ink bg-acid text-ink lg:hidden"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg id="menu-icon-open" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="square" d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+        <svg id="menu-icon-close" class="hidden h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="square" d="M5 5l14 14M19 5L5 19" />
+        </svg>
+      </button>
+    </div>
   </nav>
 
   <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden lg:hidden border-t border-border-subtle bg-bg-primary/95 backdrop-blur-xl">
-    <ul class="px-6 py-4 space-y-1">
-      {navLinks.map((link) => (
-        <li>
+  <div id="mobile-menu" class="hidden border-t-2 border-ink bg-paper lg:hidden">
+    <ul class="u-container grid grid-cols-2 gap-2 py-4">
+      {navLinks.map((link, i) => (
+        <li class={i === navLinks.length - 1 ? "col-span-2" : ""}>
           <a
             href={link.href}
-            class="block px-3 py-2.5 text-sm text-text-secondary hover:text-text-primary transition-colors rounded-md hover:bg-bg-elevated mobile-nav-link"
+            class="mobile-nav-link flex items-center border-2 border-ink bg-paper px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink no-underline transition-colors hover:bg-acid"
           >
             {link.label}
           </a>
         </li>
       ))}
-      <li class="pt-2 flex gap-2">
-        <button id="search-btn-mobile" class="flex-1 px-4 py-2.5 text-sm text-text-secondary border border-border-subtle rounded-lg hover:text-text-primary hover:border-accent-primary/30 transition-colors text-center inline-flex items-center justify-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <li class="col-span-2 grid grid-cols-2 gap-2 pt-2">
+        <button
+          id="search-btn-mobile"
+          class="flex items-center justify-center gap-1.5 border-2 border-ink bg-paper px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-acid"
+        >
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" /><path stroke-linecap="square" d="M20 20l-3.6-3.6" />
+          </svg>
           Search
         </button>
-        <a href="/blog" class="flex-1 px-4 py-2.5 text-sm font-medium bg-accent-primary/10 text-accent-primary rounded-lg text-center hover:bg-accent-primary/20 transition-colors mobile-nav-link">
-          Blog
+        <a
+          href="/blog"
+          class="mobile-nav-link flex items-center justify-center gap-1.5 border-2 border-ink bg-ink px-3 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-paper no-underline"
+        >
+          Writing
         </a>
       </li>
     </ul>
@@ -77,33 +127,72 @@ const navLinks = [
 </header>
 
 <script>
-  const btn = document.getElementById("mobile-menu-btn")!;
-  const menu = document.getElementById("mobile-menu")!;
-  const iconOpen = document.getElementById("menu-icon-open")!;
-  const iconClose = document.getElementById("menu-icon-close")!;
-  const links = menu.querySelectorAll(".mobile-nav-link");
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  const iconOpen = document.getElementById("menu-icon-open");
+  const iconClose = document.getElementById("menu-icon-close");
+  const links = menu?.querySelectorAll(".mobile-nav-link") ?? [];
 
-  btn.addEventListener("click", () => {
-    const isOpen = !menu.classList.contains("hidden");
-    menu.classList.toggle("hidden", isOpen);
-    iconOpen.classList.toggle("hidden", !isOpen);
-    iconClose.classList.toggle("hidden", isOpen);
+  btn?.addEventListener("click", () => {
+    const isOpen = !menu?.classList.contains("hidden");
+    menu?.classList.toggle("hidden", isOpen);
+    iconOpen?.classList.toggle("hidden", !isOpen);
+    iconClose?.classList.toggle("hidden", isOpen);
+    btn.setAttribute("aria-expanded", String(!isOpen));
   });
 
   links.forEach((link) => {
     link.addEventListener("click", () => {
-      menu.classList.add("hidden");
-      iconOpen.classList.remove("hidden");
-      iconClose.classList.add("hidden");
+      menu?.classList.add("hidden");
+      iconOpen?.classList.remove("hidden");
+      iconClose?.classList.add("hidden");
+      btn?.setAttribute("aria-expanded", "false");
     });
   });
 
-  // Search button triggers
   document.getElementById("search-btn")?.addEventListener("click", () => (window as any).__toggleSearch?.());
   document.getElementById("search-btn-mobile")?.addEventListener("click", () => {
-    menu.classList.add("hidden");
-    iconOpen.classList.remove("hidden");
-    iconClose.classList.add("hidden");
+    menu?.classList.add("hidden");
+    iconOpen?.classList.remove("hidden");
+    iconClose?.classList.add("hidden");
+    btn?.setAttribute("aria-expanded", "false");
     (window as any).__toggleSearch?.();
   });
+
+  // ── Scroll spy: highlight the section currently in view ──
+  const spyLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".nav-link"));
+  const sections = spyLinks
+    .map((l) => document.getElementById(l.dataset.section || ""))
+    .filter((el): el is HTMLElement => Boolean(el));
+
+  const setActive = (id: string | null) => {
+    spyLinks.forEach((l) => {
+      const active = l.dataset.section === id;
+      l.classList.toggle("text-ink", active);
+      l.classList.toggle("text-ink-3", !active);
+      const underline = l.querySelector("span");
+      underline?.classList.toggle("border-ink", active);
+      underline?.classList.toggle("border-transparent", !active);
+    });
+  };
+
+  if (sections.length && "IntersectionObserver" in window) {
+    const visible = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => visible.set(e.target.id, e.isIntersecting ? e.intersectionRatio : 0));
+        let best: string | null = null;
+        let bestRatio = 0;
+        visible.forEach((ratio, id) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            best = id;
+          }
+        });
+        if (best) setActive(best);
+      },
+      { rootMargin: "-20% 0px -55% 0px", threshold: [0.05, 0.25, 0.5] }
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
 </script>

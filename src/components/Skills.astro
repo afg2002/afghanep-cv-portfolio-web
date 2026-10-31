@@ -1,69 +1,112 @@
 ---
-const categories = [
+const groups = [
   {
+    num: "A",
     label: "Frontend",
-    skills: ["HTML", "CSS", "JavaScript", "Vue.js", "Vue.js 2", "Vuetify", "React"],
-    accent: "accent-primary",
+    blurb: "Interfaces that stay fast under real data.",
+    skills: ["HTML", "CSS", "JavaScript", "Vue.js 2", "Vuetify", "React"],
+    bg: "bg-acid",
   },
   {
+    num: "B",
     label: "Backend",
+    blurb: "Services, integrations, and business logic.",
     skills: ["PHP", "Laravel", "Java", "Spring Boot", "Golang", "Express"],
-    accent: "accent-secondary",
+    bg: "bg-paper",
   },
   {
-    label: "Database & Tools",
-    skills: ["MongoDB", "MySQL", "Git", "Terminal", "VS Code"],
-    accent: "accent-primary",
+    num: "C",
+    label: "Data & Tooling",
+    blurb: "Storage, versioning, and the daily workflow.",
+    skills: ["MySQL", "MongoDB", "Git", "Terminal", "VS Code"],
+    bg: "bg-paper",
   },
   {
-    label: "Professional Strengths",
-    skills: ["Clean Architecture", "Scalability", "Maintainability", "Teamwork", "Communication", "Problem Solving", "Adaptation"],
-    accent: "accent-secondary",
+    num: "D",
+    label: "Engineering craft",
+    blurb: "How the work actually gets done.",
+    skills: ["Clean Architecture", "Scalability", "Maintainability", "Problem Solving", "Teamwork"],
+    bg: "bg-paper",
   },
-  {
-    label: "Languages",
-    skills: ["Indonesia (Active)", "English (Passive)"],
-    accent: "accent-primary",
-  },
+];
+
+const languages = [
+  { name: "Indonesian", level: "Native / Active", pct: 100 },
+  { name: "English", level: "Passive / Reading", pct: 65 },
 ];
 ---
 
-<section id="skills" class="py-24 border-t border-border-subtle">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="mb-12">
-      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">02.</p>
-      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tighter leading-tight">Skills</h2>
+<section id="skills" class="scroll-mt-24 border-b-2 border-ink bg-ink py-16 text-paper md:py-24">
+  <div class="u-container">
+    <!-- Section head -->
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-paper/25 pb-6 md:mb-14">
+      <div>
+        <p class="mono-label mb-3 flex items-center gap-2 text-paper/50">
+          <span class="index-num">02</span> Capabilities
+        </p>
+        <h2 class="display text-[clamp(2.25rem,6.5vw,4.5rem)] text-paper">
+          The stack<br class="sm:hidden" /> I work in
+        </h2>
+      </div>
+      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-paper/45">
+        Pragmatic choices over hype.<br />
+        Boring, proven tools that hold up<br />
+        in production for years.
+      </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {categories.map((cat) => (
-        <div class="group p-6 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/30 transition-colors">
-          <div class="flex items-center gap-3 mb-4">
-            <div class={cat.accent === "accent-primary" ? "p-2 rounded-lg bg-accent-primary/10 text-accent-primary" : "p-2 rounded-lg bg-accent-secondary/10 text-accent-secondary"}>
-              {cat.label === "Frontend" && (
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              )}
-              {cat.label === "Backend" && (
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
-              )}
-              {cat.label === "Database & Tools" && (
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
-              )}
-              {cat.label === "Professional Strengths" && (
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-              )}
-              {cat.label === "Languages" && (
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
-              )}
-            </div>
-            <h3 class="font-semibold text-text-primary">{cat.label}</h3>
+    <!-- Capability grid -->
+    <div class="grid border-2 border-paper/30 md:grid-cols-2">
+      {groups.map((g, i) => (
+        <div
+          class:list={[
+            "group relative border-b-2 border-paper/30 p-6 transition-colors duration-200 last:border-b-0 md:border-b-0 md:p-8 hover:bg-paper/5",
+            i < 2 && "md:border-b-2",
+            i % 2 === 0 && "md:border-r-2 md:border-paper/30",
+          ]}
+        >
+          <div class="mb-5 flex items-baseline gap-3">
+            <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center border-2 border-paper/40 font-mono text-[11px] text-paper/70">
+              {g.num}
+            </span>
+            <h3 class="display-tight text-xl text-paper md:text-2xl">{g.label}</h3>
           </div>
-          <div class="flex flex-wrap gap-2">
-            {cat.skills.map((skill) => (
-              <span class="inline-block px-3 py-1.5 text-xs font-mono text-text-secondary border border-border-subtle rounded-full group-hover:border-accent-primary/20 transition-colors">
-                {skill}
-              </span>
+
+          <p class="mb-5 max-w-sm text-sm leading-relaxed text-paper/55">{g.blurb}</p>
+
+          <ul class="flex flex-wrap gap-1.5">
+            {g.skills.map((s) => (
+              <li class="border-2 border-paper/35 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-paper/85 transition-colors group-hover:border-paper/60">
+                {s}
+              </li>
             ))}
+          </ul>
+
+          <span
+            class:list={[
+              "pointer-events-none absolute right-6 top-6 hidden h-10 w-10 items-center justify-center border-2 border-ink opacity-0 transition-opacity duration-200 group-hover:opacity-100 md:flex",
+              g.bg,
+            ]}
+            aria-hidden="true"
+          >
+            <svg class="h-4 w-4 text-ink" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="square" d="M7 17L17 7M9 7h8v8" />
+            </svg>
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Languages strip -->
+    <div class="mt-8 grid gap-6 border-2 border-paper/30 p-6 sm:grid-cols-2 md:p-8">
+      {languages.map((l) => (
+        <div>
+          <div class="mb-2 flex items-baseline justify-between gap-3">
+            <p class="font-mono text-[11px] uppercase tracking-[0.1em] text-paper">{l.name}</p>
+            <p class="font-mono text-[10px] uppercase tracking-[0.08em] text-paper/45">{l.level}</p>
+          </div>
+          <div class="h-3 w-full border-2 border-paper/40 p-[2px]" role="presentation">
+            <div class="h-full bg-acid" style={`width: ${l.pct}%`}></div>
           </div>
         </div>
       ))}

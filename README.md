@@ -1,4 +1,4 @@
-# 🇮🇩 Afghan Eka Pangestu — Portfolio
+# Afghan Eka Pangestu — Portfolio
 
 [![Vercel](https://img.shields.io/badge/deployed%20on-Vercel-000?logo=vercel)](https://www.aep.my.id)
 [![Astro](https://img.shields.io/badge/Astro-5.0-BC52EE?logo=astro)](https://astro.build)
@@ -12,16 +12,17 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 
 ## ✨ Features
 
-- **Hero** — Animated intro with orbiting rings, floating tech labels, and contact links
-- **Skills** — Categorized skill cards (Frontend, Backend, Database & Tools, etc.)
-- **Experience** — Timeline-based work history with company, role, and highlights
-- **Projects** — Featured projects grid + expandable list of more projects
-- **Education** — Academic background with GPA and achievements
-- **Certifications** — Course and certification cards
-- **Contact** — Contact info cards + "Let's Work Together" CTA
-- **Blog** — Blog index with tag filtering and individual article pages
-- **Responsive** — Fully responsive design, mobile-first with Tailwind CSS
-- **Dark theme** — GitHub-dark-inspired color scheme
+- **Hero** — Oversized display headline, live terminal profile card, stat strip and tech marquee
+- **Work** — Featured project grid (lead card spans full width) + expandable list of eight more builds
+- **Stack** — Capability grid on an ink band, with language proficiency bars
+- **Experience** — Rule-separated ledger of roles with type chips and highlights
+- **About** — Statement block + profile facts table
+- **Education / Certifications** — Score-badged cards and credential list
+- **Contact** — Acid CTA band with direct channel table and email/CV actions
+- **Blog** — Grid-paper masthead, tag filtering, card grid, and rich article pages (TOC, reading progress, code copy)
+- **Command palette** — `Ctrl/Cmd + K` search across pages and articles (Pagefind)
+- **Design system** — Neo-brutalist: paper canvas, 2px black rules, hard offset shadows, acid/coral/lilac accents (see `DESIGN.md`)
+- **Responsive** — Mobile-first, fluid display type via `clamp()`, reduced-motion support
 
 ## 🛠 Tech Stack
 
@@ -29,7 +30,7 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 |-------|-----------|
 | **Framework** | [Astro](https://astro.build) 5 |
 | **Styling** | [Tailwind CSS](https://tailwindcss.com) 4 |
-| **UI** | Custom components, `@phosphor-icons/web`, `@fontsource/*` |
+| **UI** | Custom components, `@fontsource/archivo-black`, `@fontsource/plus-jakarta-sans`, `@fontsource/jetbrains-mono` |
 | **Content** | Astro Content Collections (Markdown) |
 | **Deployment** | [Vercel](https://vercel.com) (static + serverless functions) |
 | **Package Manager** | [Bun](https://bun.sh) |

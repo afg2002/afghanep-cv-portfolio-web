@@ -1,9 +1,17 @@
-<section class="mt-16 pt-12 border-t border-border-subtle">
-  <h2 class="text-xl font-bold mb-6">💬 Comments</h2>
-  <div id="giscus-comments">
-    <p class="text-sm text-text-muted">
-      Loading comments...
+---
+---
+<section>
+  <div class="mb-6 flex items-end justify-between gap-4 border-b-2 border-ink pb-4">
+    <div>
+      <p class="mono-label mb-1 text-ink-3">Discussion</p>
+      <h2 class="display-tight text-2xl">Comments</h2>
+    </div>
+    <p class="hidden font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3 sm:block">
+      Powered by GitHub Discussions
     </p>
+  </div>
+  <div id="giscus-comments" class="border-2 border-ink bg-paper p-4 md:p-6">
+    <p class="font-mono text-[11px] uppercase tracking-[0.08em] text-ink-3">Loading comments…</p>
   </div>
 </section>
 
@@ -19,11 +27,15 @@
     script.setAttribute("data-strict", "0");
     script.setAttribute("data-reactions-enabled", "1");
     script.setAttribute("data-emit-metadata", "0");
-    script.setAttribute("data-input-position", "bottom");
-    script.setAttribute("data-theme", "dark");
+    script.setAttribute("data-input-position", "top");
+    script.setAttribute("data-theme", "light");
     script.setAttribute("data-lang", "en");
     script.setAttribute("crossorigin", "anonymous");
     script.async = true;
-    document.getElementById("giscus-comments")?.appendChild(script);
+    const target = document.getElementById("giscus-comments");
+    if (target) {
+      target.innerHTML = "";
+      target.appendChild(script);
+    }
   })();
 </script>

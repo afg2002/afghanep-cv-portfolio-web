@@ -1,255 +1,214 @@
+# DESIGN.md — Neo-Brutalist Portfolio System
+
+The visual system for **aep.my.id**. Replaces the earlier dark/teal "developer console"
+theme (the Cohere-derived notes that used to live in this file are no longer the target).
+
+---
+
 ## Overview
 
-Cohere's current web presence feels like a sober enterprise AI command center with editorial restraint. The home page opens on a huge typographic declaration over a white canvas, then uses photography, dark product mockups, trust logos, and generous empty space to make AI infrastructure feel controlled rather than speculative. Product pages invert the tone into deep green-black or dark navy bands, while blog and research pages move toward publishing-system clarity: large filters, thin rules, dense lists, and pale technical backgrounds.
+The site is built like a printed poster that happens to scroll: a warm paper canvas,
+heavy black rules, oversized condensed-in-spirit display type, and three flat accent
+colours used as ink stamps rather than gradients. Everything is a rectangle with a 2px
+border. Depth is a **hard offset shadow**, never a blur.
 
-What makes the system distinctive is the mix of austere black-and-white UI with bursts of tactile brand imagery. The site avoids decorative chrome in the normal interface; color arrives through photography, abstract 3D media, coral blog taxonomy chips, blue research links, and dark product environments. Cards are rounded but not cute. Type is large, tight, and almost monospaced in spirit, creating a research-lab cadence across marketing, product, and editorial surfaces.
+The tone is confident and editorial, not playful-cute: big claims, dense ledger-like
+metadata, mono-spaced labels doing the "technical document" work.
 
-**Key Characteristics:**
-- Monumental display headlines with very tight line height and negative tracking.
-- White editorial canvases interrupted by deep green, dark navy, and image-led CTA bands.
-- Rounded media cards and product cards, usually 8px to 22px.
-- Pill CTAs in near-black or white, with most secondary actions rendered as underlined text links.
-- Trust-logo strips with monochrome partner marks and very wide vertical spacing.
-- Agent-console mockups using dark panels, small status chips, and product integration badges.
-- Blog and research surfaces with prominent taxonomy chips, long rule-separated lists, and search fields.
+**Key characteristics**
+
+- 2px black borders on every raised surface; 0px radius everywhere (deliberately sharp).
+- Hard offset shadows (`6px 6px 0 #111`) that grow on hover and snap back on press.
+- Acid lime (`#d8ff3e`) as the primary action / highlight ink; electric blue for links;
+  coral and lilac as small marker colours.
+- Uppercase display type set tight (`line-height: 0.86`, negative tracking) for headlines,
+  paired with a mono face at 10–12px for all labels, metadata and buttons.
+- Section headers behave like a ledger: numbered chip + display heading + right-aligned
+  mono note, closed by a 2px rule.
+- Alternating surface rhythm: paper → paper → ink (dark band) → paper.
+
+---
 
 ## Colors
 
-### Brand & Accent
+### Surfaces
 
-- **Cohere Black** (`#000000`): Announcement bar, highest-contrast text, and the global brand anchor.
-- **Near-Black Primary** (`#17171c`): Primary CTA buttons, dark footer, and deep UI cards.
-- **Deep Enterprise Green** (`#003c33`): Product hero bands for North and Command-style dark sections.
-- **Dark Navy** (`#071829`): Financial-services and security-oriented solution bands.
-- **Action Blue** (`#1863dc`): Editorial links, pagination, and secondary action emphasis.
-- **Coral** (`#ff7759`): Blog category chips, taxonomy outlines, and warm product markers.
-- **Soft Coral** (`#ffad9b`): Pale chip borders and segmented article-label details.
+| Token | Value | Role |
+|---|---|---|
+| `--color-paper` | `#f4f1ea` | Default page canvas (warm off-white) |
+| `--color-paper-2` | `#eae5d8` | Secondary panels, table headers, form blocks |
+| `--color-paper-3` | `#ddd7c6` | Deeper inset areas |
+| `--color-ink` | `#111111` | Borders, body text, dark bands, primary buttons |
+| `--color-ink-2` | `#262624` | Body copy on paper |
+| `--color-ink-3` | `#55554f` | Muted metadata, mono labels |
 
-### Surface & Background
+### Accents
 
-- **Canvas White** (`#ffffff`): Dominant page background and form/card surface.
-- **Soft Stone** (`#eeece7`): Product cards, testimonial placeholders, and warm neutral surface blocks.
-- **Pale Green Wash** (`#edfce9`): North page section backdrop behind stacked dark capability panels.
-- **Pale Blue Wash** (`#f1f5ff`): Blog CTA surface behind abstract 3D imagery.
-- **Card Border** (`#f2f2f2`): Softest card containment line.
+| Token | Value | Role |
+|---|---|---|
+| `--color-acid` | `#d8ff3e` | Primary action, highlight stamp, marquee band, active states |
+| `--color-acid-2` | `#c2ea22` | Hover state for acid surfaces |
+| `--color-electric` | `#2b4eff` | Inline links, focus ring, "external" affordance |
+| `--color-coral` | `#ff5c2b` | Live/now markers, "Full Time" chip, alerts |
+| `--color-lilac` | `#c9b6ff` | Sticker badges, internship chips |
 
-### Text & Rules
+Rules of use: accents are **fills inside black borders**, never large page backgrounds
+except the single acid contact band. Never gradient-fill a UI surface.
 
-- **Ink** (`#212121`): Default body text and most link text on light backgrounds.
-- **Muted Slate** (`#93939f`): Footer links, dates, metadata, and de-emphasized labels.
-- **Slate** (`#75758a`): Research separators and tertiary text.
-- **Hairline** (`#d9d9dd`): Standard list rules and section dividers.
-- **Border Light** (`#e5e7eb`): Secondary divider and utility rule.
-
-### Semantic
-
-- **Focus Blue** (`#4c6ee6`): Keyboard focus and ring color.
-- **Form Focus Violet** (`#9b60aa`): Focus border for text inputs.
-- **Error Red** (`#b30000`): Extracted ring/shadow color associated with validation-like states.
-
-### Gradient System
-
-Cohere does not use gradients as a generic UI fill. Gradients and color fields are media-led: abstract 3D hero imagery, deep blue open-science particle fields, red-orange product video posters, and dark green-to-black product environments. Keep UI surfaces flat; reserve gradient richness for large media panels and CTA image bands.
+---
 
 ## Typography
 
-### Font Family
+| Role | Family | Size | Weight | Tracking | Notes |
+|---|---|---|---|---|---|
+| Display / h1–h3 | **Archivo Black** | `clamp(2rem, 6–12vw, 8rem)` | 400 | `-0.03em` | Uppercase, `line-height: 0.86–0.92` |
+| Outline display | Archivo Black | same | 400 | same | `-webkit-text-stroke: 2px ink`, transparent fill |
+| Body | **Plus Jakarta Sans** | 14–18px | 400–500 | 0 | `line-height: 1.7` |
+| Strong / labels | Plus Jakarta Sans | 600–700 | — | 0 | |
+| Mono labels & UI | **JetBrains Mono** | 10–12px | 500 | `0.08–0.14em` | Uppercase, used for buttons, chips, metadata |
+| Prose body | Plus Jakarta Sans | 17px | 400 | 0 | `max-width: 68ch` |
 
-- **Display**: `CohereText`, falling back to `Space Grotesk`, `Inter`, `ui-sans-serif`, and `system-ui`.
-- **Body/UI**: `Unica77 Cohere Web`, falling back to `Inter`, `Arial`, `ui-sans-serif`, and `system-ui`.
-- **Technical labels**: `CohereMono`, falling back to `Arial`, `ui-sans-serif`, and `system-ui`.
-- **Icons**: Cohere uses custom icon fonts and thin-line geometric illustrations.
+`.display` / `.display-tight` are the two headline classes. `.mono-label`, `.index-num`
+and `.chip` cover the technical-document voice. Outline type is reserved for one word per
+headline (e.g. "SYSTEMS" in the hero) to create two-tone depth without colour.
 
-### Hierarchy
-
-| Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
-|---|---|---:|---:|---:|---:|---|
-| Hero Display | CohereText | 96px | 400 | 1.00 | -1.92px | Home page declaration scale. |
-| Product Display | CohereText | 72px | 400 | 1.00 | -1.44px | Product and research hero headlines. |
-| Section Display | Unica77 | 60px | 400 | 1.00 | -1.2px | Large product-page headings. |
-| Section Heading | Unica77 | 48px | 400 | 1.20 | -0.48px | Split hero and CTA headings. |
-| Card Heading | Unica77 | 32px | 400 | 1.20 | -0.32px | Feature card and list section titles. |
-| Feature Heading | Unica77 | 24px | 400 | 1.30 | 0 | Cards, filters, and article titles. |
-| Body Large | Unica77 | 18px | 400 | 1.40 | 0 | Lead text and larger paragraphs. |
-| Body | Unica77 | 16px | 400 | 1.50 | 0 | Default copy and link text. |
-| Button | Unica77 | 14px | 500 | 1.71 | 0 | Compact CTA labels. |
-| Caption | Unica77 | 14px | 400 | 1.40 | 0 | Metadata and small explanatory text. |
-| Mono Label | CohereMono | 14px | 400 | 1.40 | 0.28px | Uppercase technical labels. |
-| Micro | Unica77 | 12px | 400 | 1.40 | 0 | Footer, nav microcopy, and small links. |
-
-### Principles
-
-- Use massive type sparingly; Cohere pages often have one oversized headline and then settle into restrained 16px-24px UI copy.
-- Keep display type tight. Hero copy should feel compact and carved, not airy.
-- Avoid heavy bold weights. Size, spacing, and surface contrast do most of the hierarchy work.
-- Use uppercase mono labels for category and system markers, especially on product and research pages.
-- Editorial pages can use coral chips and blue links, but the base typography remains black and measured.
+---
 
 ## Layout
 
-### Spacing System
+- Container: `max-width: 1240px`, 20px gutters (40px from `md`).
+- Vertical rhythm: sections use `py-16` (mobile) / `py-24` (desktop); section heads are
+  followed by `pb-6` + 2px rule.
+- Home section order: Hero → Work (01) → Stack (02) → Experience (03) → About (04) →
+  Education (05) → Certifications (06) → Contact (07) → Footer.
+- Grids are 2-column from `md`; the first project card spans both columns as a lead item.
+- Ledger rows (experience) use `grid-cols-[56px_1fr_220px]` on desktop and stack on mobile.
 
-The system uses an 8px base with many one-off alignment values: `2px`, `6px`, `8px`, `10px`, `12px`, `16px`, `20px`, `22px`, `24px`, `28px`, `32px`, `36px`, `40px`, `56px`, `60px`, `64px`, and `80px`.
+Spacing scale comes from Tailwind's default 4px base; the system adds no custom scale.
 
-Large sections rely on dramatic vertical breathing room. The home page places a trust-logo strip far below the hero media. Product pages often hold dark panels inside fields of empty white space, then transition to dense forms or footers only near the end.
-
-### Grid & Container
-
-- Global nav uses a three-zone layout: logo left, menu centered, sign-in/CTA right.
-- Home hero is centered text above a two-card media composition: a wide product mockup card beside a narrower photography card.
-- Feature sections commonly use 3-column cards on desktop.
-- Product pages alternate centered hero blocks, trust-logo strips, large single-feature bands, and 2- or 3-column card grids.
-- Research pages use full-width lists with date and chip columns instead of decorative cards.
-- Forms use two-column input rows inside a rounded white card on dark or stone section backgrounds.
-
-### Whitespace Philosophy
-
-Cohere uses whitespace as a trust signal. Large empty intervals separate the brand claim, customer proof, product proof, and CTA. Dense content appears only where it serves the information architecture: research paper rows, blog card grids, and contact form fields.
+---
 
 ## Elevation & Depth
 
-Cohere is mostly flat. Depth comes from surface alternation, media contrast, rounded corners, and thin borders rather than drop shadows.
+No blur, no transparency stacking. Depth = offset shadow + border.
 
-| Level | Treatment | Use |
+| Token | Value | Use |
 |---|---|---|
-| Flat | No shadow, white or dark field | Hero copy, research lists, editorial surfaces |
-| Bordered | 1px `#d9d9dd`, `#e5e7eb`, or dark translucent rules | Research rows, forms, pale cards, footer inputs |
-| Media Lift | Rounded image or video over contrasting section color | Hero photo cards, product videos, CTA imagery |
-| Dark Product Field | Deep green or navy full-width band | Command, North, financial services, security sections |
+| `--shadow-brut-xs` | `2px 2px 0 ink` | Small controls, logo tile |
+| `--shadow-brut-sm` | `4px 4px 0 ink` | Buttons, small cards |
+| `--shadow-brut` | `6px 6px 0 ink` | Cards, panels, profile table |
+| `--shadow-brut-lg` | `10px 10px 0 ink` | Hero terminal, command palette |
+| hover | `translate(-3px,-3px)` + shadow grows to 8–9px | Interactive cards & buttons |
+| active | `translate(0,0)` + shadow collapses to 1–2px | Press feedback |
 
-## Shapes
-
-### Radius Scale
-
-| Token | Value | Role |
-|---|---:|---|
-| `xs` | 4px | Small images, search fields, article thumbnails, utility elements |
-| `sm` | 8px | Blog chips, cards, small media, dialogs |
-| `md` | 16px | Medium product cards and grouped blocks |
-| `lg` | 22px | Signature media-card and soft placeholder radius |
-| `xl` | 30px | Research/topic filter pills |
-| `pill` | 32px | Primary CTA buttons |
-| `full` | 9999px | Round status elements and fully pill-shaped controls |
-
-### Image Treatment
-
-Images are not decorative backdrops for text except in CTA bands. Most imagery sits as rounded cards with visible corners: product videos, enterprise photography, article thumbnails, and abstract 3D renders. The dominant radii are 8px and 22px.
+---
 
 ## Components
 
-### **`button-primary`**
+**`button` (`.btn`)**
+2px border, mono 12px uppercase, `13px 22px` padding, `4px 4px` shadow. Variants:
+`.btn-acid` (primary), `.btn-ink` (secondary on light, dominant on light bands),
+`.btn-sm` (nav/utility). Hover lifts 3px, press collapses.
 
-Near-black or white pill CTA, depending on surface contrast. Uses 14px-16px Unica77, 12px 24px padding, and a 32px pill radius. This is the primary action style for "Request a demo", "Submit", and hero CTAs.
+**`highlight` (`.hl`)**
+Acid fill + 4px hard shadow behind a word or phrase. Must be an inline (non-`inline-block`)
+element with `box-decoration-break: clone` so it wraps safely at large sizes.
 
-### **`button-secondary`**
+**`chip`**
+1.5px border, mono 11px uppercase, no radius. Colour variants: `chip-acid`, `chip-ink`,
+`chip-coral`, `chip-lilac`. Used for stack tags, project tags, employment type.
 
-Text-only action link, usually underlined or rule-aligned, with no filled background. Used for "Explore products", "Try the Playground", newsletter signup, and secondary hero actions.
+**`index-num`**
+Acid tile with mono number in the section header (`01` … `07`), matching the nav order
+when the section is in the top five.
 
-### **`button-pill-outline`**
+**`section-head`**
+Flex row: `[index-num] + label` + display heading on the left, mono explanatory note on
+the right, closed with a 2px rule. Used by every home section.
 
-Outlined pill control with transparent fill, 1px dark border, and 30px radius. Used for research filters, topic tags, and lightweight taxonomy controls.
+**`hero-terminal`**
+Ink panel with a window bar (coral/lime/lilac squares), mono shell transcript, and a
+3-up stats strip (`6+ years`, `14+ projects`, `3.62 GPA`). A rotated lilac sticker sits
+outside the top-right corner.
 
-### **`announcement-bar`**
+**`marquee`**
+Full-bleed acid band with a duplicated track scrolling `-50%` on a 38s loop; pauses on
+hover; disabled under `prefers-reduced-motion`.
 
-Full-width black strip above the nav, 36px tall, centered microcopy with an underlined "Learn more" link and a close control at the far right.
+**`project-card`**
+Bordered card, numbered accent tile, display title, mono year chip, summary, tag chips,
+and a dashed-rule footer with a visit link or "case study on request".
 
-### **`hero-photo-card`**
+**`ledger-row`**
+Experience row: index number, company display heading + type chip + role, bullet list,
+period right-aligned in mono. Bottom border acts as the ledger rule.
 
-Rounded media card used in the home hero and solution pages. It combines photography or abstract imagery with an overlaid dark agent-console module. Radius is usually 22px on large cards and 8px on smaller thumbnails.
+**`profile-table`**
+Definition-list panel with dashed row separators and an acid CTA footer row.
 
-### **`agent-console-card`**
+**`contact-channel-row`**
+Full-width row inside a bordered table: mono label column, bold value + note, and a
+square arrow tile that inverts to ink on hover.
 
-Dark product mockup panel showing agent names, status chips, integration badges, prompt fields, and generated response cards. Background is near-black, text is white or muted, and small accent chips use product colors.
+**`command-palette`**
+Centered `max-w-2xl` panel, `shadow-brut-lg`, input row with `esc` kbd, grouped command
+list, arrow-key navigation, and Pagefind results with acid `<mark>` highlighting.
 
-### **`trust-logo-strip`**
+**`footer`**
+Ink band: brand statement, two mono link columns, availability strip with blinking acid
+dot, meta row, then an oversized `Afghan Eka Pangestu` wordmark clipped at 7% opacity.
 
-Centered copy above a row of monochrome customer logos. It is intentionally quiet: no cards, no borders, just large horizontal spacing and black or white logos depending on the background.
+---
 
-### **`capability-card`**
+## Do & Don't
 
-Content block with thin-line geometric illustration, 24px heading, body copy, and a text link. On light backgrounds, cards often have only a top rule or a subtle image/card relationship rather than full boxing.
+**Do**
+- Use paper + 2px black borders as the default surface language.
+- Give every interactive card a lift-and-grow-shadow hover and a collapse-on-press state.
+- Set labels, buttons and metadata in uppercase mono with wide tracking.
+- Use one outline word per display headline for contrast.
+- Alternate paper and ink sections to segment the page.
 
-### **`dark-feature-band`**
+**Don't**
+- Don't round corners — radius is 0 everywhere except nothing.
+- Don't use blurred or soft shadows.
+- Don't fill large page areas with accent colour (the contact band is the only exception).
+- Don't set body copy in the display face, or display copy in a thin weight.
+- Don't use `inline-block` for `.hl` inside wrapping headlines (causes horizontal overflow).
+- Don't introduce gradients, glassmorphism, or translucency as decoration.
 
-Deep green or navy full-width section used for product capabilities, security claims, and feature breakdowns. Text turns white; cards use darker translucent surfaces, pale borders, and abstract line illustrations.
+---
 
-### **`product-card`**
+## Motion
 
-Warm stone card used for product/model summaries. Typically 3-column on desktop, with 8px radius, generous padding, a small pill button, a divider line, and checkmark bullet rows.
+- Entrance: `fade-up` (18px rise, 0.6s, staggered 80ms via `.delay-1…4`).
+- Hover: 160ms transform/shadow transitions only.
+- Loops: marquee (38s), `blink` (1.1s steps) used only for status dots and the terminal caret.
+- `prefers-reduced-motion: reduce` disables marquee, shimmer and all transitions.
 
-### **`blog-filter-chip`**
+---
 
-Large coral taxonomy chip used on the blog index. Active chips invert to coral fill with dark text; inactive chips use coral outline and pale fill. Typography is oversized relative to typical filters, making the taxonomy a hero-level control.
+## Responsive
 
-### **`research-table`**
+| Breakpoint | Behaviour |
+|---|---|
+| `< 640px` | Single column; hero headline ~`3rem`; nav collapses to 2-col border grid; section notes hidden below the rule |
+| `640–768px` | Two-column card grids; footer link columns split |
+| `768–1024px` | Full nav buttons (search + Writing), 2-col skill grid |
+| `1024px+` | 5-link nav, 3-col writing grid, article TOC sidebar, 2-col contact layout |
 
-Rule-separated publication list with title left, topic pills centered, and date right. Rows are tall, white, and border-driven; filters above use many compact outlined pills.
+Touch targets: buttons ≥ 40px tall, icon buttons 36×36, chips are non-interactive by
+default so their 24px height is safe.
 
-### **`contact-form-card`**
+---
 
-Rounded white form panel set against dark green or warm stone sections. Inputs are rectangular with thin gray borders, 12px-16px padding, and compact labels/placeholders. Submit uses the same near-black pill style as primary CTAs.
+## Blog & Article Surfaces
 
-### **`footer-newsletter`**
-
-Dark footer subscription block with coral "AI moves fast" label, white headline, muted legal microcopy, a single-line email field, and arrow submit marker. Footer columns use white section labels and muted links.
-
-## Do's and Don'ts
-
-### Do
-
-- Use white canvas as the default surface; introduce dark green or navy as full-width product bands.
-- Keep primary CTAs pill-shaped and near-black on light surfaces.
-- Use 22px radius on major media cards and placeholders.
-- Use coral for editorial taxonomy and small warm accents, not as the main CTA system.
-- Use monochrome trust logos with wide spacing.
-- Use thin-line geometric illustrations for research and capability icons.
-- Let photography and product mockups carry color, while the UI shell stays restrained.
-
-### Don't
-
-- Do not turn coral or blue into broad decorative surface colors.
-- Do not add heavy drop shadows to cards.
-- Do not make every section card-based; Cohere often uses unframed rows, rules, and open space.
-- Do not use rounded cards below 8px for major media.
-- Do not replace the display/body type split with one generic sans-serif voice.
-- Do not render undocumented interaction variants in documentation or previews.
-- Do not use saturated gradients as normal UI backgrounds; keep gradients media-led.
-
-## Responsive Behavior
-
-### Breakpoints
-
-| Name | Width | Key Changes |
-|---|---:|---|
-| Small Mobile | <425px | Single-column cards, compact nav, reduced hero headline scale |
-| Mobile | 425-640px | Hero media stacks, card grids become one column, form rows stack |
-| Large Mobile | 640-768px | Wider one-column layouts with larger media cards |
-| Tablet | 768-1024px | Two-column cards begin, nav spacing tightens |
-| Desktop | 1024-1440px | Full nav, 3-column card grids, split hero compositions |
-| Large Desktop | 1440-2560px | Wide containers and large empty vertical intervals |
-
-### Touch Targets
-
-Primary CTAs and pills meet comfortable touch sizing through 12px-24px padding and pill radii. Research filter chips and blog category chips are larger than standard tags, making dense taxonomy surfaces usable on touch devices.
-
-### Collapsing Strategy
-
-- Nav collapses from full horizontal links to a compact mobile menu.
-- Hero media moves from split cards to stacked cards.
-- Product and capability grids collapse from 3 columns to 2 and then 1.
-- Form fields collapse from paired rows to a single column.
-- Research rows preserve their rule-separated structure but stack metadata below titles on smaller widths.
-
-## Iteration Guide
-
-1. Start from a white canvas or a full-width dark green/navy band; avoid mid-tone page backgrounds unless the screenshot shows a specific CTA/form section.
-2. Use `button-primary` for the single highest-priority action and `button-secondary` for the companion action.
-3. Use `hero-photo-card` or `agent-console-card` when a page needs visual energy; avoid invented dashboard data.
-4. For editorial pages, combine `blog-filter-chip`, `button-pill-outline`, and `research-table` instead of generic marketing cards.
-5. Keep component examples structurally honest: placeholder product frames are better than invented product content.
-
-## Known Gaps
-
-- Exact proprietary font files are not bundled; use the documented fallbacks when implementing externally.
-- Mobile screenshots were not regenerated in this public update, so mobile behavior is documented from the desktop system and existing responsive patterns.
-- Some live pages lazy-load content blocks late; blank testimonial placeholders are documented as placeholder skeleton surfaces rather than filled testimonial cards.
+- Blog index: grid-paper masthead with outline ampersand, mono tag filter row, 3-col card
+  grid, dashed empty state, acid CTA band.
+- Article: breadcrumb row, display headline + excerpt (left) beside a bordered metadata
+  panel (published / reading time / length / author), reading progress bar in ink,
+  prose with acid blockquotes, ink code blocks floating on a 6px acid shadow, author card,
+  related posts, then comments.
+- Prose specifics: list markers are `→`, `h2` carries a 2px underline, tables use an acid
+  header row, images get a 2px border + 6px hard shadow.

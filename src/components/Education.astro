@@ -1,55 +1,71 @@
 ---
+const education = [
+  {
+    school: "Universitas Indraprasta PGRI",
+    degree: "Bachelor of Informatics Engineering",
+    period: "2020 — 2024",
+    scoreLabel: "GPA",
+    score: "3.62 / 4.00",
+    notes: [
+      "Recommended as Laboratory Assistant",
+      "Participated in MSIB Batch 6",
+      "Published journal on DSS for gastric disease diagnosis using Forward Chaining",
+    ],
+  },
+  {
+    school: "SMK Negeri 1 Cibinong",
+    degree: "Software Engineering",
+    period: "2017 — 2020",
+    scoreLabel: "Score",
+    score: "84 / 100",
+    notes: [
+      "Earned LSP certification in Software Development with 23 competency units",
+    ],
+  },
+];
 ---
 
-<section id="education" class="py-24 border-t border-border-subtle">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="mb-12">
-      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">05.</p>
-      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tighter leading-tight">Education</h2>
+<section id="education" class="scroll-mt-24 border-b-2 border-ink bg-paper-2 py-16 md:py-24">
+  <div class="u-container">
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6 md:mb-14">
+      <div>
+        <p class="mono-label mb-3 flex items-center gap-2 text-ink-3">
+          <span class="index-num">05</span> Education
+        </p>
+        <h2 class="display text-[clamp(2rem,5.5vw,3.75rem)]">Foundations</h2>
+      </div>
+      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-ink-3">
+        Formal training in software<br />
+        engineering, then seven years of<br />
+        applying it.
+      </p>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="group p-8 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 transition-colors">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="text-lg font-bold text-text-primary">Universitas Indraprasta PGRI</h3>
-          <span class="text-xs font-mono text-text-muted shrink-0">2020 – 2024</span>
-        </div>
-        <p class="text-accent-primary text-sm font-medium mb-4">Bachelor of Informatics Engineering</p>
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-accent-primary/10 border border-accent-primary/20 rounded-lg mb-4">
-          <span class="text-xs font-mono text-accent-primary font-semibold">GPA 3.62 / 4.00</span>
-        </div>
-        <ul class="space-y-2">
-          <li class="flex items-start gap-2 text-sm text-text-secondary">
-            <svg class="w-4 h-4 mt-0.5 shrink-0 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            Recommended as Laboratory Assistant
-          </li>
-          <li class="flex items-start gap-2 text-sm text-text-secondary">
-            <svg class="w-4 h-4 mt-0.5 shrink-0 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            Participated in MSIB Batch 6
-          </li>
-          <li class="flex items-start gap-2 text-sm text-text-secondary">
-            <svg class="w-4 h-4 mt-0.5 shrink-0 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            Published journal on DSS for gastric disease diagnosis using Forward Chaining
-          </li>
-        </ul>
-      </div>
+    <div class="grid gap-5 md:grid-cols-2 md:gap-6">
+      {education.map((ed) => (
+        <article class="brut group flex flex-col p-6 transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--color-ink)] md:p-8">
+          <div class="mb-5 flex items-start justify-between gap-4">
+            <span class="chip">{ed.period}</span>
+            <span class="border-2 border-ink bg-acid px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.06em]">
+              {ed.scoreLabel} {ed.score}
+            </span>
+          </div>
 
-      <div class="group p-8 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 transition-colors">
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="text-lg font-bold text-text-primary">SMK Negeri 1 Cibinong</h3>
-          <span class="text-xs font-mono text-text-muted shrink-0">2017 – 2020</span>
-        </div>
-        <p class="text-accent-primary text-sm font-medium mb-4">Software Engineering</p>
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-accent-primary/10 border border-accent-primary/20 rounded-lg mb-4">
-          <span class="text-xs font-mono text-accent-primary font-semibold">Score 84 / 100</span>
-        </div>
-        <ul class="space-y-2">
-          <li class="flex items-start gap-2 text-sm text-text-secondary">
-            <svg class="w-4 h-4 mt-0.5 shrink-0 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            Earned LSP certification in Software Development with 23 competency units
-          </li>
-        </ul>
-      </div>
+          <h3 class="display-tight mb-2 text-xl md:text-2xl">{ed.school}</h3>
+          <p class="mb-5 font-mono text-[11px] uppercase tracking-[0.1em] text-electric">{ed.degree}</p>
+
+          <ul class="mt-auto space-y-2 border-t-2 border-dashed border-ink/25 pt-5">
+            {ed.notes.map((n) => (
+              <li class="flex gap-2.5 text-sm leading-relaxed text-ink-2">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-ink" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="square" d="M4 12l5 5L20 6" />
+                </svg>
+                <span>{n}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
     </div>
   </div>
 </section>

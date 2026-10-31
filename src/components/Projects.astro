@@ -1,103 +1,184 @@
 ---
 const projects = [
   {
+    index: "01",
     title: "SehatSegar.my.id",
-    year: "",
-    summary: "Laravel-based point-of-sale web application for product management, inventory tracking, cashier transactions, and sales reporting with dashboard and multi-user access.",
+    year: "Live",
+    summary:
+      "Laravel point-of-sale platform handling product management, inventory tracking, cashier transactions, and sales reporting — with a dashboard and multi-user access built for day-to-day shop operations.",
     tags: ["Laravel", "MySQL", "POS"],
-    featured: true,
+    accent: "acid",
+    href: "https://sehatsegar.my.id",
   },
   {
-    title: "Movie Ticket Booking Web",
+    index: "02",
+    title: "Movie Ticket Booking",
     year: "2024",
-    summary: "Movie ticket booking web application with intuitive browsing and booking flow.",
+    summary:
+      "End-to-end ticket booking flow with intuitive browsing, seat selection, and checkout — engineered for a frictionless path from discovery to payment confirmation.",
     tags: ["Vue.js 2", "Vuetify", "MongoDB"],
-    featured: true,
+    accent: "lilac",
+    href: "",
   },
   {
-    title: "Web Zero Waste Massive",
+    index: "03",
+    title: "Zero Waste API",
     year: "2024",
-    summary: "Developed API for a cleaning service booking application.",
-    tags: ["React", "Express", "API"],
-    featured: true,
+    summary:
+      "REST API powering a cleaning-service booking application: scheduling, service catalog, and order lifecycle designed for a React client.",
+    tags: ["React", "Express", "REST API"],
+    accent: "coral",
+    href: "",
   },
   {
-    title: "Project Management Application",
+    index: "04",
+    title: "Project Management System",
     year: "2023",
-    summary: "Laravel application with budgeting, project calculation, and vendor management features.",
+    summary:
+      "Internal Laravel application for project calculation, budget planning (RAB), and vendor management — replacing spreadsheet workflows with a single source of truth.",
     tags: ["Laravel", "PHP", "MySQL"],
-    featured: true,
+    accent: "paper",
+    href: "",
   },
   {
-    title: "Router Dashboard Application",
+    index: "05",
+    title: "Router Dashboard",
     year: "2024",
-    summary: "Built with Spring Boot and Vue.js 2 for dashboard listing and log monitoring.",
+    summary:
+      "Spring Boot + Vue.js 2 dashboard for router listing and real-time log monitoring at a national sharia bank.",
     tags: ["Spring Boot", "Vue.js 2", "Java"],
-    featured: true,
+    accent: "paper",
+    href: "",
   },
   {
+    index: "06",
     title: "Baca Komik",
     year: "2020",
-    summary: "Python-based comic scraping and PDF conversion tool with search feature.",
-    tags: ["Python", "Web Scraping"],
-    featured: true,
+    summary:
+      "Python tool that scrapes comic chapters, converts them into searchable PDFs, and packages them for offline reading.",
+    tags: ["Python", "Scraping", "PDF"],
+    accent: "paper",
+    href: "",
   },
 ];
 
 const moreProjects = [
   "Digital Library Web",
   "GYM Information System",
-  "Boarding House Selection DSS with AHP",
-  "Inventory Management Information System",
+  "Boarding House Selection DSS (AHP)",
+  "Inventory Management System",
   "Major Selection Expert System",
-  "Best Employee DSS with SAW",
-  "Dengue Fever and Typhoid Diagnosis Expert System",
-  "Java Swing Academic Information System",
+  "Best Employee DSS (SAW)",
+  "Dengue & Typhoid Diagnosis ES",
+  "Java Swing Academic System",
 ];
+
+const accentClass: Record<string, string> = {
+  acid: "bg-acid",
+  lilac: "bg-lilac",
+  coral: "bg-coral",
+  paper: "bg-paper-2",
+};
 ---
 
-<section id="projects" class="py-24 border-t border-border-subtle">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="mb-12">
-      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">04.</p>
-      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tighter leading-tight">Featured Projects</h2>
+<section id="work" class="scroll-mt-24 border-b-2 border-ink bg-paper py-16 md:py-24">
+  <div class="u-container">
+    <!-- Section head -->
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6 md:mb-14">
+      <div>
+        <p class="mono-label mb-3 flex items-center gap-2 text-ink-3">
+          <span class="index-num">01</span> Selected work
+        </p>
+        <h2 class="display text-[clamp(2.25rem,6.5vw,4.5rem)]">
+          Things I've<br class="sm:hidden" /> built
+        </h2>
+      </div>
+      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-ink-3">
+        06 featured builds out of 14+ shipped.<br />
+        Production systems, internal tools,<br />
+        and the occasional side quest.
+      </p>
     </div>
 
-    <!-- Featured -->
-    <div class="grid md:grid-cols-2 gap-6 mb-12">
-      {projects.map((p) => (
-        <div class="group p-6 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 hover:-translate-y-1 transition-all duration-300">
-          <div class="flex items-start justify-between mb-3">
-            <h3 class="text-lg font-bold text-text-primary group-hover:text-accent-primary transition-colors">{p.title}</h3>
-            {p.year && <span class="text-xs font-mono text-text-muted shrink-0 ml-2">{p.year}</span>}
+    <!-- Featured grid -->
+    <div class="grid gap-5 md:grid-cols-2 md:gap-6">
+      {projects.map((p, i) => (
+        <article
+          class:list={[
+            "brut group relative flex flex-col p-6 transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--color-ink)] md:p-8",
+            i === 0 && "md:col-span-2",
+          ]}
+        >
+          <div class="mb-5 flex items-start justify-between gap-4">
+            <span
+              class:list={[
+                "inline-flex h-11 w-11 shrink-0 items-center justify-center border-2 border-ink font-display text-sm",
+                accentClass[p.accent] ?? "bg-paper-2",
+              ]}
+            >
+              {p.index}
+            </span>
+            <span class="chip">{p.year}</span>
           </div>
-          <p class="text-sm text-text-secondary leading-relaxed mb-4">{p.summary}</p>
-          <div class="flex flex-wrap gap-2">
-            {p.tags.map((t) => (
-              <span class="px-2.5 py-1 text-xs font-mono text-text-secondary border border-border-accent rounded-full group-hover:border-accent-primary/30 transition-colors">
-                {t}
-              </span>
-            ))}
+
+          <h3 class:list={["display-tight mb-3", i === 0 ? "text-[clamp(1.6rem,4vw,2.75rem)]" : "text-2xl md:text-[28px]"]}>
+            {p.title}
+          </h3>
+
+          <p class:list={["mb-6 text-sm leading-relaxed text-ink-2", i === 0 ? "max-w-2xl md:text-base" : ""]}>
+            {p.summary}
+          </p>
+
+          <div class="mt-auto flex flex-wrap items-center justify-between gap-4 border-t-2 border-dashed border-ink/25 pt-4">
+            <div class="flex flex-wrap gap-1.5">
+              {p.tags.map((t) => <span class="chip">{t}</span>)}
+            </div>
+            {p.href ? (
+              <a
+                href={p.href}
+                target="_blank"
+                rel="noopener"
+                class="group/link inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink no-underline"
+              >
+                <span class="border-b-2 border-ink pb-0.5 group-hover/link:bg-acid">Visit</span>
+                <svg class="h-3 w-3 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="square" d="M7 17L17 7M9 7h8v8" />
+                </svg>
+              </a>
+            ) : (
+              <span class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3/70">Case study on request</span>
+            )}
           </div>
-        </div>
+        </article>
       ))}
     </div>
 
-    <!-- More Projects -->
-    <details class="group">
-      <summary class="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-text-secondary border border-border-accent rounded-full hover:border-accent-primary hover:text-accent-primary transition-colors select-none">
-        More Projects
-        <svg class="w-4 h-4 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    <!-- More projects -->
+    <details class="group mt-10 border-2 border-ink bg-paper-2/60">
+      <summary
+        class="flex cursor-pointer select-none items-center justify-between gap-4 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ink transition-colors hover:bg-acid md:px-6"
+      >
+        <span class="flex items-center gap-3">
+          <span class="text-ink-3">+08</span>
+          Eight more builds
+        </span>
+        <svg class="h-4 w-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="square" d="M6 9l6 6 6-6" />
         </svg>
       </summary>
-      <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {moreProjects.map((mp) => (
-          <div class="p-4 bg-bg-secondary border border-border-subtle rounded-lg text-sm text-text-secondary hover:border-accent-primary/20 transition-colors">
-            {mp}
-          </div>
+      <ul class="grid grid-cols-1 border-t-2 border-ink sm:grid-cols-2">
+        {moreProjects.map((mp, i) => (
+          <li class:list={[
+            "flex items-center gap-3 px-5 py-4 md:px-6",
+            i === 1 && "border-t-2 border-ink sm:border-t-0",
+            i >= 2 && "border-t-2 border-ink",
+            i % 2 === 1 && "sm:border-l-2 sm:border-ink",
+          ]}>
+            <span class="font-mono text-[10px] text-ink-3">{String(i + 7).padStart(2, "0")}</span>
+            <span class="text-sm font-medium text-ink-2">{mp}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </details>
   </div>
 </section>
