@@ -25,42 +25,34 @@ const education = [
 ];
 ---
 
-<section id="education" class="scroll-mt-24 border-b-2 border-ink bg-paper-2 py-16 md:py-24">
+<section id="education" class="section">
   <div class="u-container">
-    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6 md:mb-14">
+    <div class="section-head">
       <div>
-        <p class="mono-label mb-3 flex items-center gap-2 text-ink-3">
-          <span class="index-num">05</span> Education
-        </p>
-        <h2 class="display text-[clamp(2rem,5.5vw,3.75rem)]">Foundations</h2>
+        <p class="index-label mb-2" data-index="05">Education</p>
+        <h2 class="heading text-[clamp(1.75rem,4.5vw,2.75rem)]">Foundations</h2>
       </div>
-      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-ink-3">
-        Formal training in software<br />
-        engineering, then seven years of<br />
-        applying it.
+      <p class="mono-meta max-w-[34ch] leading-relaxed">
+        Formal training in software engineering, then applied in production systems.
       </p>
     </div>
 
-    <div class="grid gap-5 md:grid-cols-2 md:gap-6">
+    <div class="grid gap-4 md:grid-cols-2 md:gap-6">
       {education.map((ed) => (
-        <article class="brut group flex flex-col p-6 transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--color-ink)] md:p-8">
-          <div class="mb-5 flex items-start justify-between gap-4">
-            <span class="chip">{ed.period}</span>
-            <span class="border-2 border-ink bg-acid px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.06em]">
-              {ed.scoreLabel} {ed.score}
-            </span>
+        <article class="border border-line bg-surface p-5 md:p-6">
+          <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <span class="mono-meta">{ed.period}</span>
+            <span class="tag tag-accent">{ed.scoreLabel} {ed.score}</span>
           </div>
 
-          <h3 class="display-tight mb-2 text-xl md:text-2xl">{ed.school}</h3>
-          <p class="mb-5 font-mono text-[11px] uppercase tracking-[0.1em] text-electric">{ed.degree}</p>
+          <h3 class="heading mb-1 text-[16px] text-text md:text-[18px]">{ed.school}</h3>
+          <p class="mb-4 text-[13px] text-muted">{ed.degree}</p>
 
-          <ul class="mt-auto space-y-2 border-t-2 border-dashed border-ink/25 pt-5">
+          <ul class="space-y-1.5 border-t border-line pt-4">
             {ed.notes.map((n) => (
-              <li class="flex gap-2.5 text-sm leading-relaxed text-ink-2">
-                <svg class="mt-0.5 h-4 w-4 shrink-0 text-ink" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="square" d="M4 12l5 5L20 6" />
-                </svg>
-                <span>{n}</span>
+              <li class="relative pl-4 text-[13px] leading-relaxed text-text-2">
+                <span class="absolute left-0 top-[0.62em] h-[3px] w-[3px] rounded-full bg-accent" aria-hidden="true"></span>
+                {n}
               </li>
             ))}
           </ul>

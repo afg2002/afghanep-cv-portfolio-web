@@ -19,54 +19,43 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 ---
 
 <article class="group h-full">
-  <a href={`/blog/${slug}`} class="flex h-full flex-col border-2 border-ink bg-paper no-underline transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[8px_8px_0_var(--color-ink)]">
-    <!-- Cover / placeholder -->
-    <div class="relative aspect-[16/9] overflow-hidden border-b-2 border-ink bg-paper-2">
-      {coverImage ? (
+  <a
+    href={`/blog/${slug}`}
+    class="flex h-full flex-col border border-line bg-surface no-underline transition-colors hover:border-line-strong hover:bg-surface-2"
+  >
+    {coverImage && (
+      <div class="aspect-[16/9] overflow-hidden border-b border-line">
         <img
           src={coverImage}
           alt={title}
-          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          class="h-full w-full object-cover"
           loading="lazy"
           width="600"
           height="338"
         />
-      ) : (
-        <div class="bg-dots flex h-full w-full items-center justify-center">
-          <span class="border-2 border-ink bg-acid px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink">
-            Article
-          </span>
-        </div>
-      )}
-      <span class="absolute left-0 top-0 border-b-2 border-r-2 border-ink bg-paper px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-ink">
-        {readingTime} min
-      </span>
-    </div>
+      </div>
+    )}
 
-    <div class="flex flex-1 flex-col p-5">
-      <div class="mb-3 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">
+    <div class="flex flex-1 flex-col p-4 md:p-5">
+      <div class="mb-3 flex items-center gap-2 mono-meta">
         <time datetime={new Date(date).toISOString()}>{formattedDate}</time>
+        <span aria-hidden="true">·</span>
+        <span>{readingTime} min read</span>
       </div>
 
-      <h3 class="display-tight mb-2 text-lg leading-[1.08] text-ink transition-colors group-hover:text-electric md:text-xl">
+      <h3 class="heading mb-2 text-[15px] leading-snug text-text transition-colors group-hover:text-accent md:text-[16px]">
         {title}
       </h3>
 
-      <p class="mb-5 line-clamp-2 text-sm leading-relaxed text-ink-3">{excerpt}</p>
+      <p class="mb-4 line-clamp-3 text-[13px] leading-relaxed text-muted">{excerpt}</p>
 
-      <div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t-2 border-dashed border-ink/25 pt-3.5">
+      <div class="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
         <div class="flex flex-wrap gap-1.5">
-          {tags.slice(0, 3).map((tag) => (
-            <span class="border border-ink/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.04em] text-ink-3">
-              {tag}
-            </span>
-          ))}
+          {tags.slice(0, 2).map((tag) => <span class="tag">{tag}</span>)}
         </div>
-        <span class="flex h-7 w-7 items-center justify-center border-2 border-ink bg-paper transition-colors group-hover:bg-acid">
-          <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="square" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
-          </svg>
-        </span>
+        <svg class="h-3.5 w-3.5 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 12h16m0 0l-6-6m6 6l-6 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
       </div>
     </div>
   </a>

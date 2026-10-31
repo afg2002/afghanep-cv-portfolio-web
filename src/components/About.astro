@@ -2,90 +2,74 @@
 const facts = [
   { k: "Based in", v: "Bogor, West Java" },
   { k: "Current role", v: "Java Developer, Generali Indonesia" },
+  { k: "Experience", v: "2+ years professional" },
   { k: "Focus", v: "Backend, APIs, enterprise integration" },
   { k: "Availability", v: "Open to freelance & full-time" },
-  { k: "Working style", v: "Requirements → architecture → ship" },
   { k: "Response time", v: "Within 1 business day" },
 ];
 ---
 
-<section id="about" class="scroll-mt-24 border-b-2 border-ink bg-paper py-16 md:py-24">
+<section id="about" class="section">
   <div class="u-container">
-    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6 md:mb-14">
+    <div class="section-head">
       <div>
-        <p class="mono-label mb-3 flex items-center gap-2 text-ink-3">
-          <span class="index-num">04</span> About
-        </p>
-        <h2 class="display text-[clamp(2.25rem,6.5vw,4.5rem)]">
-          How I<br class="sm:hidden" /> work
-        </h2>
+        <p class="index-label mb-2" data-index="04">About</p>
+        <h2 class="heading text-[clamp(1.75rem,4.5vw,2.75rem)]">How I work</h2>
       </div>
-      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-ink-3">
-        No buzzwords. Just a developer<br />
-        who reads the requirement twice<br />
-        before writing code.
+      <p class="mono-meta max-w-[34ch] leading-relaxed">
+        No buzzwords — a developer who reads the requirement twice before writing code.
       </p>
     </div>
 
-    <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
-      <!-- Statement -->
+    <div class="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-16">
       <div>
-        <p class="display-tight text-[clamp(1.5rem,3.4vw,2.5rem)] leading-[1.28]">
-          I build software for teams who
-          <span class="hl mx-1">actually have to run it</span>
-          every day.
+        <p class="display text-[clamp(1.4rem,2.9vw,2.1rem)] text-text">
+          I build software for teams who have to
+          <span class="text-accent">run it</span> every day.
         </p>
 
-        <div class="mt-8 space-y-4 border-l-[6px] border-ink pl-5 text-base leading-relaxed text-ink-2 md:pl-6">
+        <div class="mt-7 space-y-4 border-l border-line pl-5 text-[14.5px] leading-relaxed text-text-2 md:pl-6">
           <p>
-            I'm a software developer with experience delivering modern web applications,
-            internal enterprise tools, chatbot platforms, and project-based systems. I work
-            comfortably on both ends of the stack — from Vue interfaces to Java and Laravel
-            services — and I collaborate closely with teams to translate business requirements
-            into reliable technical solutions.
+            I'm a software developer with experience delivering modern web applications, internal
+            enterprise tools, chatbot platforms, and project-based systems. I work comfortably on both
+            ends of the stack — from Vue interfaces to Java and Laravel services — and I collaborate
+            closely with teams to translate business requirements into reliable technical solutions.
           </p>
           <p>
             My bias is toward maintainable architecture, continuous improvement, and shipping
-            technology that earns its place. Not the flashiest answer: the one that still makes
-            sense to the next developer who opens the file.
+            technology that earns its place. Not the flashiest answer: the one that still makes sense
+            to the next developer who opens the file.
           </p>
         </div>
 
-        <div class="mt-8 flex flex-wrap gap-2">
-          <span class="chip chip-ink">Clean architecture</span>
-          <span class="chip">Enterprise systems</span>
-          <span class="chip">API design</span>
-          <span class="chip">Integration</span>
-          <span class="chip">Team collaboration</span>
+        <div class="mt-7 flex flex-wrap gap-1.5">
+          <span class="tag">Clean architecture</span>
+          <span class="tag">Enterprise systems</span>
+          <span class="tag">API design</span>
+          <span class="tag">Integration</span>
+          <span class="tag">Team collaboration</span>
         </div>
       </div>
 
-      <!-- Facts table -->
-      <div class="border-2 border-ink shadow-brut">
-        <div class="flex items-center justify-between border-b-2 border-ink bg-paper-2 px-4 py-3">
-          <p class="mono-label text-ink-3">Profile / facts</p>
-          <span class="h-2 w-2 bg-coral" aria-hidden="true"></span>
+      <div class="border border-line bg-surface">
+        <div class="border-b border-line px-4 py-2.5">
+          <p class="mono-label">Facts</p>
         </div>
         <dl>
-          {facts.map((f, i) => (
-            <div
-              class:list={[
-                "grid grid-cols-[110px_1fr] gap-3 px-4 py-3.5 transition-colors hover:bg-acid/40 sm:grid-cols-[130px_1fr]",
-                i !== facts.length - 1 && "border-b-2 border-dashed border-ink/25",
-              ]}
-            >
-              <dt class="font-mono text-[10px] uppercase leading-relaxed tracking-[0.08em] text-ink-3">{f.k}</dt>
-              <dd class="text-sm font-medium leading-snug text-ink">{f.v}</dd>
+          {facts.map((f) => (
+            <div class="grid grid-cols-[100px_1fr] gap-3 border-b border-line px-4 py-3 last:border-0">
+              <dt class="mono-meta uppercase tracking-[0.08em]">{f.k}</dt>
+              <dd class="text-[13px] leading-snug text-text">{f.v}</dd>
             </div>
           ))}
         </dl>
         <a
           href="mailto:afghanekapangestu@gmail.com"
-          class="flex items-center justify-between gap-3 border-t-2 border-ink bg-acid px-4 py-3.5 no-underline transition-colors hover:bg-acid-2"
+          class="group flex min-h-[44px] items-center justify-between gap-3 border-t border-line px-4 py-3 no-underline transition-colors hover:bg-surface-2"
         >
-          <span class="font-mono text-[11px] uppercase tracking-[0.1em] text-ink">Start a conversation</span>
-          <svg class="h-4 w-4 text-ink" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="square" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+          <span class="mono-meta uppercase tracking-[0.08em] transition-colors group-hover:text-accent">Start a conversation</span>
+          <svg class="h-3.5 w-3.5 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12h16m0 0l-6-6m6 6l-6 6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </a>
       </div>

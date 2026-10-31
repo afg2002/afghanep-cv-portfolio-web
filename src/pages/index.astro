@@ -11,12 +11,25 @@ import Certifications from "../components/Certifications.astro";
 import Contact from "../components/Contact.astro";
 import Footer from "../components/Footer.astro";
 import ScrollToTop from "../components/ScrollToTop.astro";
+
+const profilePageSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    "@id": `${Astro.site}#person`,
+    name: "Afghan Eka Pangestu",
+    jobTitle: "Software Developer",
+    url: Astro.site,
+  },
+};
 ---
 
 <BaseLayout
   title="Software Developer"
-  description="Afghan Eka Pangestu — software developer in Bogor, Indonesia. Backend systems, web applications, APIs, and enterprise solutions with Java, Laravel, Spring Boot, Vue.js, and Go."
+  description="Afghan Eka Pangestu — software developer in Bogor, Indonesia. 2+ years building backend systems, web applications, APIs, and enterprise solutions with Java, Spring Boot, Laravel, Vue.js, and Go."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(profilePageSchema)} />
   <Header />
   <main id="main-content" data-pagefind-body>
     <Hero />

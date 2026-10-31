@@ -1,40 +1,40 @@
 ---
 const certs = [
-  { title: "Pemrograman Go-Lang: Pemula sampai Mahir", issuer: "Udemy", year: "2022", mark: "GO" },
-  { title: "Kampus Merdeka — MSIB Batch 6", issuer: "PT BTPN Syariah Tbk", year: "2024", mark: "MB" },
-  { title: "Theoretical Understanding of HTML", issuer: "Sololearn", year: "2018", mark: "HT" },
-  { title: "Theoretical Understanding of PHP", issuer: "Sololearn", year: "2018", mark: "PH" },
+  { title: "Pemrograman Go-Lang: Pemula sampai Mahir", issuer: "Udemy", year: "2022" },
+  { title: "Kampus Merdeka — MSIB Batch 6", issuer: "PT BTPN Syariah Tbk", year: "2024" },
+  { title: "Theoretical Understanding of HTML", issuer: "Sololearn", year: "2018" },
+  { title: "Theoretical Understanding of PHP", issuer: "Sololearn", year: "2018" },
 ];
 ---
 
-<section class="border-b-2 border-ink bg-paper py-16 md:py-20">
+<section id="certifications" class="section">
   <div class="u-container">
-    <div class="grid gap-10 lg:grid-cols-[280px_1fr] lg:gap-16">
+    <div class="section-head">
       <div>
-        <p class="mono-label mb-3 flex items-center gap-2 text-ink-3">
-          <span class="index-num">06</span> Credentials
-        </p>
-        <h2 class="display-tight text-3xl md:text-4xl">Certified<br />basics</h2>
-        <p class="mt-4 max-w-xs text-sm leading-relaxed text-ink-3">
-          Formal certificates sit alongside the work itself — the projects are the real proof.
-        </p>
+        <p class="index-label mb-2" data-index="06">Credentials</p>
+        <h2 class="heading text-[clamp(1.75rem,4.5vw,2.75rem)]">Certifications</h2>
       </div>
-
-      <ul class="grid gap-3 sm:grid-cols-2">
-        {certs.map((c) => (
-          <li class="group flex items-start gap-4 border-2 border-ink bg-paper p-4 transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-acid hover:shadow-brut-sm">
-            <span class="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-ink bg-paper-2 font-display text-[11px] text-ink">
-              {c.mark}
-            </span>
-            <div class="min-w-0">
-              <h3 class="mb-1 text-sm font-bold leading-snug text-ink">{c.title}</h3>
-              <p class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">
-                {c.issuer} <span class="text-ink-3/50">/</span> {c.year}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <p class="mono-meta max-w-[34ch] leading-relaxed">
+        Formal certificates alongside the work itself — the projects are the real proof.
+      </p>
     </div>
+
+    <ul class="grid grid-cols-1 border-t border-line sm:grid-cols-2">
+      {certs.map((c, i) => (
+        <li
+          class:list={[
+            "border-b border-line py-4",
+            i % 2 === 1 && "sm:border-l sm:border-line sm:pl-6",
+            i % 2 === 0 && "sm:pr-6",
+          ]}
+        >
+          <div class="mb-1 flex items-baseline justify-between gap-3">
+            <h3 class="text-[13.5px] font-medium leading-snug text-text">{c.title}</h3>
+            <span class="mono-meta shrink-0">{c.year}</span>
+          </div>
+          <p class="mono-meta">{c.issuer}</p>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>
