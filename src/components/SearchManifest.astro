@@ -1,0 +1,33 @@
+---
+/**
+ * Renders a small JSON manifest of every indexable page.
+ * It doubles as the fallback dataset for the search UI when the Pagefind
+ * index is unavailable (astro dev, blocked request, failed build step).
+ */
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const docs = [
+  {
+    t: "Afghan Eka Pangestu — Software Developer",
+    d: "Backend-focused software developer in Bogor, Indonesia. Work, stack, experience, and contact.",
+    u: "/",
+    k: "page",
+  },
+  ...posts.map((post) => ({
+    t: post.data.title,
+    d: post.data.excerpt,
+    u: `/blog/${post.id.replace(/\.(md|mdx)$/, "")}/`,
+    k: "post",
+  })),
+  {
+    t: "Writing",
+    d: "Notes on software development, backend architecture, and building for the web.",
+    u: "/blog/",
+    k: "page",
+  },
+];
+---
+
+<script type="application/json" id="search-docs" set:html={JSON.stringify(docs)}></script>

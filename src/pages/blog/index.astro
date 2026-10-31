@@ -48,6 +48,22 @@ const hasTagParam = Astro.url.searchParams.has("tag");
     <!-- Posts -->
     <section class="section !pt-10 md:!pt-12">
       <div class="u-container">
+        <!-- Search -->
+        <div class="mb-6">
+          <button
+            type="button"
+            id="blog-search-trigger"
+            class="group flex w-full items-center gap-3 border border-line bg-surface px-4 py-3 text-left transition-colors hover:border-line-strong hover:bg-surface-2"
+            aria-label="Search articles"
+          >
+            <svg class="h-4 w-4 shrink-0 text-muted" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" /><path d="M20 20l-3.8-3.8" stroke-linecap="round" />
+            </svg>
+            <span class="flex-1 text-[13px] text-muted">Search articles…</span>
+            <span class="hidden font-mono text-[10px] uppercase tracking-[0.08em] text-muted/70 sm:inline">⌘K</span>
+          </button>
+        </div>
+
         {allTags.length > 0 && (
           <div class="mb-8 flex flex-wrap items-center gap-1.5 border-b border-line pb-5">
             <span class="mono-label mr-1">Filter</span>
@@ -113,6 +129,11 @@ const hasTagParam = Astro.url.searchParams.has("tag");
 </BaseLayout>
 
 <script>
+  // Open the search palette from the blog page search bar.
+  document.getElementById("blog-search-trigger")?.addEventListener("click", () => {
+    (window as any).__toggleSearch?.();
+  });
+
   (function () {
     const tag = new URLSearchParams(window.location.search).get("tag") || "";
     const cards = document.querySelectorAll("#posts-grid .post-card");
