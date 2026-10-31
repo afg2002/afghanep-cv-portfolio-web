@@ -78,6 +78,12 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
       content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
     />
     <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Afghan Eka Pangestu — Writing"
+      href={new URL("/rss.xml", Astro.site).href}
+    />
 
     <!-- Open Graph -->
     <meta property="og:type" content={type} />

@@ -21,6 +21,10 @@ export default defineConfig({
   },
   output: "static",
   adapter: vercel(),
+  image: {
+    // sharp powers build-time optimisation of blog covers (WebP/AVIF + srcset)
+    service: { entrypoint: "astro/assets/services/sharp" },
+  },
   server: {
     host: true,
     // Allow the sandbox preview proxy host during development
