@@ -5,121 +5,158 @@ const experiences = [
     role: "Java Developer",
     type: "Full Time",
     period: "Present",
+    current: true,
     highlights: [
-      "Developing and maintaining Java-based applications for insurance business needs",
-      "Building reliable backend services with a focus on maintainability and integration",
+      "Developing and maintaining Java-based applications for core insurance business needs",
+      "Building reliable backend services with a focus on maintainability and system integration",
     ],
   },
   {
     company: "PT Inmotion Inovasi Teknologi",
     role: "Web Developer",
     type: "Former",
-    period: "Previous role",
+    period: "Previous",
+    current: false,
     highlights: [
-      "Developed applications using Java and MVEL for chatbot, omni-channel, Generative AI, and SRM solutions",
+      "Built chatbot, omni-channel, Generative AI, and SRM solutions using Java and MVEL",
       "Integrated Salesforce with chat platforms for a major national bank",
-      "Built chatbot solutions for financial institution automation",
-      "Designed WhatsApp Flows integrated with hospital scheduling and digital services",
-      "Provided technical consultation directly to clients",
+      "Designed WhatsApp Flows connected to hospital scheduling and digital services",
+      "Delivered chatbot automation for financial institutions",
+      "Consulted directly with clients on technical solution design",
     ],
   },
   {
     company: "PT BTPN Syariah Tbk",
     role: "Web Developer",
     type: "Internship",
-    period: "Feb 2024 – Jun 2024",
+    period: "Feb — Jun 2024",
+    current: false,
     highlights: [
-      "Developed a router application using Spring Boot and Vue.js 2 for dashboard listing and log monitoring",
-      "Assisted the Product Owner in documenting user feedback surveys",
-      "Participated in the MSIB Batch 6 program",
+      "Built a router application with Spring Boot and Vue.js 2 for dashboard listing and log monitoring",
+      "Supported the Product Owner in documenting user feedback surveys",
+      "Completed the MSIB Batch 6 program",
     ],
   },
   {
     company: "PT Ciptanusa Nuansa Mulia",
     role: "Web Developer",
     type: "Freelance",
-    period: "Sep 2023 – Dec 2023",
+    period: "Sep — Dec 2023",
+    current: false,
     highlights: [
-      "Developed a project management application using Laravel",
-      "Implemented project calculation, budgeting (RAB), and vendor management features",
-      "Improved workflow efficiency across the project management process",
+      "Developed a project management application with Laravel",
+      "Implemented project calculation, budgeting (RAB), and vendor management",
+      "Cut workflow friction across the whole project management process",
     ],
   },
   {
-    company: "PT Bintang Bahagia Selalu — Royal Star",
+    company: "Royal Star — PT Bintang Bahagia Selalu",
     role: "Web Developer",
     type: "Freelance",
-    period: "Sep 2022 – Oct 2022",
+    period: "Sep — Oct 2022",
+    current: false,
     highlights: [
-      "Improved the front-end user interface by enhancing slider, video display, navigation menu, and WhatsApp button",
-      "Improved the overall user experience and visual appearance",
+      "Reworked the front-end experience: slider, video display, navigation menu, and WhatsApp CTA",
+      "Improved overall usability and visual consistency of the storefront",
     ],
   },
   {
     company: "CV Mitrasoft Global",
     role: "Web Developer",
     type: "Internship",
-    period: "Jan 2019 – Mar 2019",
+    period: "Jan — Mar 2019",
+    current: false,
     highlights: [
-      "Developed and migrated a desktop-based customer back-office application to a web platform using Java Spring",
-      "Improved operational efficiency by implementing new features and a more responsive user interface",
+      "Migrated a desktop customer back-office application to the web using Java Spring",
+      "Added new features and a more responsive UI, improving operational efficiency",
     ],
   },
 ];
 
-const typeColors: Record<string, string> = {
-  "Full Time": "bg-accent-primary/10 text-accent-primary border-accent-primary/20",
-  "Freelance": "bg-accent-secondary/10 text-accent-secondary border-accent-secondary/20",
-  "Internship": "bg-text-muted/20 text-text-secondary border-text-muted/20",
-  "Former": "bg-text-muted/20 text-text-secondary border-text-muted/20",
+const typeChip: Record<string, string> = {
+  "Full Time": "chip-coral",
+  Internship: "chip-lilac",
+  Former: "chip",
+  Freelance: "chip-acid",
 };
 ---
 
-<section id="experience" class="py-24 border-t border-border-subtle">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="mb-12">
-      <p class="font-mono text-accent-primary text-sm tracking-wider mb-2">03.</p>
-      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tighter leading-tight">Experience</h2>
+<section id="experience" class="scroll-mt-24 border-b-2 border-ink bg-paper py-16 md:py-24">
+  <div class="u-container">
+    <!-- Section head -->
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink pb-6 md:mb-14">
+      <div>
+        <p class="mono-label mb-3 flex items-center gap-2 text-ink-3">
+          <span class="index-num">03</span> Track record
+        </p>
+        <h2 class="display text-[clamp(2.25rem,6.5vw,4.5rem)]">
+          Where I've<br class="sm:hidden" /> worked
+        </h2>
+      </div>
+      <p class="max-w-xs font-mono text-[11px] uppercase leading-relaxed tracking-[0.06em] text-ink-3">
+        Six roles across insurance, banking,<br />
+        agency work, and freelance builds.<br />
+        Newest first.
+      </p>
     </div>
 
-    <div class="relative">
-      <!-- Timeline line -->
-      <div class="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-border-subtle hidden sm:block"></div>
-
-      <div class="space-y-8">
-        {experiences.map((exp) => (
-          <div class="relative pl-0 sm:pl-16">
-            <!-- Timeline dot -->
-            <div class="hidden sm:block absolute left-[30px] top-6 w-[5px] h-[5px] rounded-full bg-accent-primary ring-4 ring-bg-primary z-10"></div>
-
-            <div class="group p-6 sm:p-8 bg-bg-secondary border border-border-subtle rounded-xl hover:border-accent-primary/20 transition-colors">
-              <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
-                <div>
-                  <h3 class="text-lg font-bold text-text-primary group-hover:text-accent-primary transition-colors">{exp.company}</h3>
-                  <p class="text-text-secondary text-sm mt-0.5">{exp.role}</p>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class={`px-2.5 py-1 text-[11px] font-mono font-medium border rounded-full ${typeColors[exp.type] || ""}`}>
-                    {exp.type}
+    <!-- Ledger -->
+    <ol class="border-t-2 border-ink">
+      {experiences.map((exp, i) => (
+        <li class="group border-b-2 border-ink">
+          <div class="grid gap-4 py-6 md:grid-cols-[56px_1fr_220px] md:gap-8 md:py-8">
+            <!-- Index -->
+            <div class="flex items-start gap-3 md:block">
+              <span class="font-display text-lg leading-none text-ink-3/50 transition-colors group-hover:text-ink">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {exp.current && (
+                <span class="md:mt-2 md:block">
+                  <span class="mono-label inline-flex items-center gap-1.5 text-ink">
+                    <span class="h-1.5 w-1.5 bg-coral" aria-hidden="true"></span>Now
                   </span>
-                  <span class="text-xs font-mono text-text-muted">{exp.period}</span>
-                </div>
-              </div>
+                </span>
+              )}
+            </div>
 
-              <ul class="space-y-2">
+            <!-- Main -->
+            <div>
+              <div class="mb-3 flex flex-wrap items-center gap-2">
+                <h3 class="display-tight text-xl transition-colors group-hover:text-electric md:text-[26px]">
+                  {exp.company}
+                </h3>
+                <span class:list={["chip", typeChip[exp.type] ?? "chip"]}>{exp.type}</span>
+              </div>
+              <p class="mb-4 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3">{exp.role}</p>
+              <ul class="space-y-1.5">
                 {exp.highlights.map((h) => (
-                  <li class="flex items-start gap-2 text-sm text-text-secondary">
-                    <svg class="w-4 h-4 mt-0.5 shrink-0 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                    </svg>
-                    {h}
+                  <li class="flex gap-2.5 text-sm leading-relaxed text-ink-2">
+                    <span class="mt-[7px] h-1.5 w-1.5 shrink-0 bg-ink" aria-hidden="true"></span>
+                    <span>{h}</span>
                   </li>
                 ))}
               </ul>
             </div>
+
+            <!-- Period -->
+            <div class="md:text-right">
+              <p class="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3">{exp.period}</p>
+            </div>
           </div>
-        ))}
-      </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
+      <p class="font-mono text-[11px] uppercase tracking-[0.08em] text-ink-3">
+        Full history available in the CV.
+      </p>
+      <a href="/cv-afghan-eka-pangestu.pdf" target="_blank" rel="noopener" class="btn btn-acid btn-sm">
+        Download CV
+        <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="square" d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14" />
+        </svg>
+      </a>
     </div>
   </div>
 </section>

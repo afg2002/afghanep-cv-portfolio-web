@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0d1117"/>
-  <text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="18" font-weight="700" fill="#14b8a6">AE</text>
+  <rect width="32" height="32" fill="#d8ff3e"/>
+  <rect x="1" y="1" width="30" height="30" fill="none" stroke="#111111" stroke-width="2"/>
+  <text x="16" y="16.5" dominant-baseline="central" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="13" font-weight="900" fill="#111111">AE</text>
 </svg>

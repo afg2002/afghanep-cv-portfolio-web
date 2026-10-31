@@ -21,6 +21,11 @@ export default defineConfig({
   },
   output: "static",
   adapter: vercel(),
+  server: {
+    host: true,
+    // Allow the sandbox preview proxy host during development
+    allowedHosts: true,
+  },
   markdown: {
     shikiConfig: {
       theme: "github-dark-default",
