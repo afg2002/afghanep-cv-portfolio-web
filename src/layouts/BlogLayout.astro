@@ -8,8 +8,10 @@ export interface Props {
   readingTime?: number;
   ogImage?: string;
   canonical?: string;
+  /** Raw Markdown mirror of this post, advertised via Link: rel="alternate". */
+  markdownUrl?: string;
 }
-const { title, description, date, tags = [], readingTime, ogImage, canonical } = Astro.props;
+const { title, description, date, tags = [], readingTime, ogImage, canonical, markdownUrl } = Astro.props;
 ---
 
 <BaseLayout
@@ -22,6 +24,7 @@ const { title, description, date, tags = [], readingTime, ogImage, canonical } =
   publishedTime={date}
   modifiedTime={date}
   keywords={tags}
+  markdownUrl={markdownUrl}
 >
   <slot />
 </BaseLayout>

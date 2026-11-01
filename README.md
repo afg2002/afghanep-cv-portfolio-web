@@ -26,10 +26,31 @@ Personal portfolio website for **Afghan Eka Pangestu** — a Java Developer at G
 - **RSS feed** — `/rss.xml`, advertised via `<link rel="alternate">` and linked in the footer
 - **404 page** — On-brand not-found page with search and popular destinations, `noindex`
 - **Status page** — `/status` reports the site's real build telemetry: per-route page weight, source size, content stats. Nothing is hardcoded; an `astro:build:done` hook measures `dist/` and writes `/status.json`, which the page fetches. Metrics that cannot be verified (e.g. commit count in a shallow clone) are omitted rather than faked
+- **Agent-readable** — every article is mirrored as raw Markdown at `/blog/<slug>.md` (92% smaller than the rendered page) and advertised via `<link rel="alternate" type="text/markdown">`; `/llms.txt` is generated at build time from the content collections; `robots.txt` names each AI crawler explicitly
+
 - **Image optimisation** — `astro:assets` + sharp: local blog covers are emitted as WebP with responsive `srcset`
 - **SEO** — Canonical URLs, OG/Twitter cards, JSON-LD (`Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `BreadcrumbList`), sitemap, `noindex` on filtered views and 404
 - **Responsive** — Mobile-first, fluid `clamp()` type, ≥44px touch targets, reduced-motion support
 - **Design system** — Swiss + monospace spec-sheet: hairline rules, one accent, zero decoration (see `DESIGN.md`)
+
+### Notes on AI visibility
+
+Content is fully server-rendered, so nothing here depends on a crawler executing
+JavaScript. Beyond that:
+
+| Layer | Where | Verified by |
+| --- | --- | --- |
+| Raw Markdown mirror | `/blog/<slug>.md` (`text/markdown`) | build output |
+| Discovery of that mirror | `<link rel="alternate" type="text/markdown">` | built HTML |
+| Curated index | `/llms.txt` (build-time, ~370 tokens) | build output |
+| Entity graph | JSON-LD `Person` with `sameAs`, `knowsAbout`, `worksFor`, `alumniOf`, `hasOccupation` | built HTML |
+| Crawl policy | `robots.txt`, AI agents named explicitly | file contents |
+
+`llms.txt` is published because it is cheap and some crawlers reportedly read
+it — **not** because any provider has confirmed it as a ranking or citation
+signal. Google has stated it does not use it. The things that actually matter
+(crawlable server-rendered HTML, valid schema, dates, a sitemap) were already
+in place, and they carry the weight.
 
 ## 🛠 Tech Stack
 

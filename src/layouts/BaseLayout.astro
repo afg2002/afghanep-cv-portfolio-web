@@ -10,6 +10,16 @@ export interface Props {
   modifiedTime?: Date;
   noindex?: boolean;
   keywords?: string[];
+  /**
+   * Markdown mirror for this page, emitted as `<link rel="alternate">` so an
+   * agent can reach the plain-text version without parsing the rendered page.
+   *
+   * Discovery rides entirely on the HTML <link> plus /llms.txt and the sitemap.
+   * An equivalent HTTP `Link` header was considered and dropped: Astro sets
+   * response headers only for on-demand routes, and a hand-written vercel.json
+   * for it could not be verified from the build environment.
+   */
+  markdownUrl?: string;
 }
 
 import CommandPalette from "../components/CommandPalette.astro";
@@ -26,6 +36,7 @@ const {
   publishedTime,
   modifiedTime,
   noindex = false,
+  markdownUrl,
   keywords = [
     "Afghan Eka Pangestu",
     "software developer",
@@ -41,6 +52,7 @@ const {
 const siteName = "Afghan Eka Pangestu";
 const fullTitle = title.includes(siteName) ? title : `${title} — ${siteName}`;
 const ogImageUrl = new URL(ogImage, Astro.site).href;
+
 ---
 
 <!doctype html>
@@ -84,6 +96,14 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
       title="Afghan Eka Pangestu — Writing"
       href={new URL("/rss.xml", Astro.site).href}
     />
+    {markdownUrl && (
+      <link
+        rel="alternate"
+        type="text/markdown"
+        title={`${title} — Markdown`}
+        href={new URL(markdownUrl, Astro.site).href}
+      />
+    )}
 
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
@@ -142,6 +162,23 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
       },
       email: "afghanekapangestu@gmail.com",
       telephone: "+62-851-5628-3645",
+      // Employers and degrees resolve disambiguated entities for knowledge
+      // graphs, which is what lets an agent answer "where does he work?"
+      // instead of only "what does his page say?"
+      worksFor: {
+        "@type": "Organization",
+        name: "Generali Indonesia",
+      },
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "Universitas Indraprasta PGRI",
+      },
+      hasOccupation: {
+        "@type": "Occupation",
+        name: "Software Developer",
+        occupationLocation: { "@type": "City", name: "Bogor" },
+        skills: "Java, Spring Boot, Laravel, PHP, Golang, REST APIs",
+      },
     })} />
 
     <script type="application/ld+json" set:html={JSON.stringify({

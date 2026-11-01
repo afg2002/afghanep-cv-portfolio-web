@@ -40,6 +40,8 @@ const related = allPosts
   .slice(0, 3);
 
 const canonical = new URL(`/blog/${currentSlug}`, Astro.site).href;
+// Raw Markdown mirror for agents: same content, no navigation or comment embed.
+const markdownPath = `/blog/${currentSlug}.md`;
 const tocHeadings = headings.filter((h: any) => h.depth >= 2 && h.depth <= 3);
 // Dynamic OG image generated at build time (src/pages/og/[...slug].png.ts)
 const isLocalCover = Boolean(coverImage) && typeof coverImage === "object";
@@ -47,7 +49,15 @@ const coverSrc = typeof coverImage === "string" ? coverImage : (coverImage as an
 const ogImage = (typeof coverImage === "string" ? coverImage : undefined) || `/og/${currentSlug}.png`;
 ---
 
-<BlogLayout title={title} description={excerpt} date={date} tags={tags} ogImage={ogImage} canonical={canonical}>
+<BlogLayout
+  title={title}
+  description={excerpt}
+  date={date}
+  tags={tags}
+  ogImage={ogImage}
+  canonical={canonical}
+  markdownUrl={markdownPath}
+>
   <Header />
 
   <main id="main-content" class="flex-1" data-pagefind-body>
