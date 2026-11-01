@@ -1,4 +1,51 @@
+# robots.txt — https://aep.my.id
+# Both search engines and AI agents are welcome: this is a personal portfolio
+# and being cited is the entire point of publishing it.
+
 User-agent: *
 Allow: /
 
-Sitemap: https://aep.my.id/sitemap.xml
+# --- AI crawlers, explicitly allowed for search and citation ---
+# Listed separately from * so the intent survives if the default ever changes.
+
+# OpenAI: ChatGPT search + live fetch
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic: Claude search + user-initiated fetch
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google and Microsoft AI surfaces (Google-Extended governs Gemini/AI use of
+# indexed content; it does not affect Search ranking either way)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# OpenAI / Anthropic training crawlers. Allowed deliberately: the writing is
+# meant to be read, and attribution matters more than restriction here.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+Sitemap: https://aep.my.id/sitemap-index.xml
+
+# Curated index for language models (not a crawler directive)
+# https://aep.my.id/llms.txt
